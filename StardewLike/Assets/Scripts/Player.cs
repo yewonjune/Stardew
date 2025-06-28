@@ -5,18 +5,20 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     float moveSpeed = 3.0f;
+    Animator animator;
 
     Rigidbody2D player;
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         player = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        //this.animator.SetTrigger("AM Player Idle");
     }
 
     private void FixedUpdate()
