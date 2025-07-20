@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlaceEntrance : MonoBehaviour
 {
+    public Transform entranceViewTarget;
+
+    private bool isInside = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +29,17 @@ public class PlaceEntrance : MonoBehaviour
                 if (hit.collider.gameObject == this.gameObject)
                 {
                     Debug.Log("¡˝ ¿‘¿Â");
+
+                    if (!isInside)
+                    {
+                        CameraManager.Instance.MoveToStaticView(entranceViewTarget);
+                        isInside = true;
+                    }
+                    else
+                    {
+                        CameraManager.Instance.FollowPlayer();
+                        isInside = false;
+                    }
                 }
             }
         }
