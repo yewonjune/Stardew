@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class PlaceEntrance : MonoBehaviour
 {
-    public Transform entranceViewTarget;
+    public Transform player;
+    public Vector3 playerIndoorPosition;
 
     private bool isInside = false;
+
+    private CameraManager cameraManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        cameraManager = CameraManager.Instance;
     }
 
     // Update is called once per frame
@@ -28,20 +31,24 @@ public class PlaceEntrance : MonoBehaviour
             {
                 if (hit.collider.gameObject == this.gameObject)
                 {
-                    Debug.Log("Áý ÀÔÀå");
-
-                    if (!isInside)
-                    {
-                        CameraManager.Instance.MoveToStaticView(entranceViewTarget);
-                        isInside = true;
-                    }
-                    else
-                    {
-                        CameraManager.Instance.FollowPlayer();
-                        isInside = false;
-                    }
+                    EnterHouse();
                 }
             }
         }
+    }
+
+    void EnterHouse()
+    {
+        if (cameraManager == null || player == null)
+        {
+            Debug.LogError("cameraManager or player is null!");
+            return;
+        }
+
+        FadeManager.Instance.FadeOutIn(() =>
+        {
+            cameraManager.SwitchToHouse();
+            player.position = playerIndoorPosition;
+        });
     }
 }

@@ -8,6 +8,8 @@ public class CameraManager : MonoBehaviour
     public static CameraManager Instance;
 
     public Cinemachine.CinemachineVirtualCamera mainCam;
+    public Cinemachine.CinemachineVirtualCamera houseCam;
+
     public CinemachineConfiner2D confiner2D;
     public Transform player;
 
@@ -15,31 +17,16 @@ public class CameraManager : MonoBehaviour
     {
         Instance = this;
     }
-    public void FollowPlayer()
-    {
-        mainCam.Follow = player;
-        mainCam.LookAt = player;
 
-        if (confiner2D != null)
-        {
-            confiner2D.enabled = true; // 제한 다시 활성화
-        }
-    
+    public void SwitchToFarm()
+    {
+        mainCam.Priority = 11;
+        houseCam.Priority = 0;
     }
 
-    public void MoveToStaticView(Transform view)
+    public void SwitchToHouse()
     {
-        mainCam.Follow = null;
-        mainCam.LookAt = null;
-
-        // 제한 끄기
-        if (confiner2D != null)
-        {
-            confiner2D.enabled = false;
-        }
-
-        mainCam.transform.position = view.position;
-        mainCam.transform.rotation = view.rotation;
+        mainCam.Priority = 0;
+        houseCam.Priority = 11;
     }
-
 }
