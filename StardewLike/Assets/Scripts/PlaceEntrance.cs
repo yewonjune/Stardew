@@ -4,17 +4,27 @@ using UnityEngine;
 
 public class PlaceEntrance : MonoBehaviour
 {
+    [Header("References")]
     public Transform player;
+
+    [Header("Positions")]
     public Vector3 playerIndoorPosition;
 
-    private bool isInside = false;
+    [Header("Interaction")]
+    public float interactDistance = 1.5f;
 
     private CameraManager cameraManager;
+    private int entranceLayerMask;
+    private Collider2D selfCol;
+
 
     // Start is called before the first frame update
     void Start()
     {
         cameraManager = CameraManager.Instance;
+        entranceLayerMask = LayerMask.GetMask("Entrance");
+        selfCol = GetComponent<Collider2D>();
+
     }
 
     // Update is called once per frame
@@ -22,17 +32,19 @@ public class PlaceEntrance : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
+            if (Camera.main == null) return;
+
             Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-            int entranceLayerMask = LayerMask.GetMask("Entrance");
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 0f, entranceLayerMask);
-
-            if (hit.collider != null)
+            
+            if (hit.collider != null && hit.collider == selfCol && InRange())
             {
-                if (hit.collider.gameObject == this.gameObject)
-                {
-                    EnterHouse();
-                }
+                EnterHouse();
+            }
+
+            if (Input.GetKeyDown(KeyCode.E) && InRange())
+            {
+                EnterHouse();
             }
         }
     }
@@ -50,5 +62,17 @@ public class PlaceEntrance : MonoBehaviour
             cameraManager.SwitchToHouse();
             player.position = playerIndoorPosition;
         });
+    }
+
+    bool InRange()
+    {
+        float sqr = ((Vector2)player.position - (Vector2)transform.position).sqrMagnitude;
+        return sqr <= interactDistance * interactDistance;
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, interactDistance);
     }
 }
