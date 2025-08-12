@@ -7,8 +7,10 @@ using DG.Tweening;
 public class FadeManager : MonoBehaviour
 {
     public static FadeManager Instance;
-
+    
+    [Header("Refs")]
     public CanvasGroup fadeCanvasGroup;
+
     public float fadeDuration = 1f;
 
     void Awake()
