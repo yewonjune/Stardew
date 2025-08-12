@@ -387,6 +387,12 @@ MonoBehaviour:
   m_CameraActivatedEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &203289627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7458104359877964771, guid: c1037e29090479b4c9fe2983a2250f08,
+    type: 3}
+  m_PrefabInstance: {fileID: 8313146596897566266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &314488875
 GameObject:
   m_ObjectHideFlags: 0
@@ -6988,7 +6994,7 @@ GameObject:
   - component: {fileID: 1141087451}
   - component: {fileID: 1141087453}
   - component: {fileID: 1141087452}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: Water
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46859,6 +46865,34 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 8313146596897566266}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4779530038453897472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203289627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 703bc936e917ca845acbfd7d65b267bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 4779530038453897474}
+  feet: {fileID: 4779530038453897471}
+  fishKey: 101
+  waterLayer:
+    serializedVersion: 2
+    m_Bits: 16
+  detectRadius: 0.9
+  bypassWaterCheck: 0
+  startToLoopDelay: 0.5
+  fishingDurationRange: {x: 1.5, y: 3.5}
+--- !u!95 &4779530038453897474 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 7396829028301032735, guid: c1037e29090479b4c9fe2983a2250f08,
+    type: 3}
+  m_PrefabInstance: {fileID: 8313146596897566266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8313146596897566266
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -46925,7 +46959,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7458104359877964771, guid: c1037e29090479b4c9fe2983a2250f08,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4779530038453897472}
   m_SourcePrefab: {fileID: 100100000, guid: c1037e29090479b4c9fe2983a2250f08, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
