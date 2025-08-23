@@ -11,7 +11,7 @@ public class PlayerFishingController : MonoBehaviour
     [SerializeField] KeyCode fishKey = KeyCode.E;
 
     [Header("Water Detect")]
-    [SerializeField] LayerMask waterLayer;       // Water 레이어 체크
+    [SerializeField] LayerMask fishingZoneLayer;       // Water 레이어 체크
     [SerializeField] float detectRadius = 0.9f;  // 감지 반경
 
     [Header("Timing")]
@@ -26,15 +26,15 @@ public class PlayerFishingController : MonoBehaviour
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!feet) feet = transform;
 
-        if (waterLayer.value == 0)
-            waterLayer = LayerMask.GetMask("Water");
+        if (fishingZoneLayer.value == 0)
+            fishingZoneLayer = LayerMask.GetMask("FishingZone");
     }
 
     void Update()
     {
         if (!isFishing)
         {
-            if (Input.GetKeyDown(fishKey) && IsNearWater())
+            if (Input.GetKeyDown(fishKey) && IsInFishingZone())
             {
                 StartCoroutine(FishRoutine());
             }
@@ -48,10 +48,10 @@ public class PlayerFishingController : MonoBehaviour
         }
     }
 
-    bool IsNearWater()
+    bool IsInFishingZone()
     {
         Vector2 pos = feet ? (Vector2)feet.position : (Vector2)transform.position;
-        int count = Physics2D.OverlapCircleNonAlloc(pos, detectRadius, _hits, waterLayer);
+        int count = Physics2D.OverlapCircleNonAlloc(pos, detectRadius, _hits, fishingZoneLayer);
         return count > 0;
     }
 
