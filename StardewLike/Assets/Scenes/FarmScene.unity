@@ -6330,7 +6330,13 @@ MonoBehaviour:
   - {fileID: 126222386}
   - {fileID: 1235694712}
   - {fileID: 1884145509}
-  startItems: []
+  startItems:
+  - {fileID: 11400000, guid: 6dcf6e6100d87604fb86eeb2b96e8f3e, type: 2}
+  - {fileID: 11400000, guid: ac780238486fa4d4d84eecfd6078f8f2, type: 2}
+  - {fileID: 11400000, guid: e0e29614bbd49c447913548b204c143c, type: 2}
+  - {fileID: 11400000, guid: b9142d099ee789e4188605992b469260, type: 2}
+  - {fileID: 11400000, guid: 8fd89ae7501ac2a45beca3c118df9088, type: 2}
+  - {fileID: 11400000, guid: 885d71842ed8a95439985ee21ed36999, type: 2}
 --- !u!4 &486922828
 Transform:
   m_ObjectHideFlags: 0
@@ -49036,6 +49042,20 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 8313146596897566266}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4779530038453897475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 203289627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be67dba6333f468408f8470984a3fec3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hotbarManager: {fileID: 486922827}
+  useToolPoint: {fileID: 4779530038453897471}
 --- !u!1001 &8313146596897566266
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -49112,6 +49132,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 4779530038453897472}
+    - targetCorrespondingSourceObject: {fileID: 7458104359877964771, guid: c1037e29090479b4c9fe2983a2250f08,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4779530038453897475}
   m_SourcePrefab: {fileID: 100100000, guid: c1037e29090479b4c9fe2983a2250f08, type: 3}
 --- !u!1001 &8968125872220976780
 PrefabInstance:

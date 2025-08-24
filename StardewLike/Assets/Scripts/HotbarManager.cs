@@ -55,6 +55,7 @@ public class HotbarManager : MonoBehaviour
 
         selectedIndex = index;
         HighlightSlot(index);
+        Debug.Log($"슬롯 {index} 선택됨. 아이템: {slots[index].GetItem()?.itemName ?? "없음"}");
     }
 
     void HighlightSlot(int index)
@@ -63,5 +64,12 @@ public class HotbarManager : MonoBehaviour
         {
             slots[i].SetHighlight(i == index);
         }
+    }
+
+    public Item GetSelectedItem()
+    {
+        Item selected = slots[selectedIndex].GetItem();
+        Debug.Log($"현재 선택된 슬롯: {selectedIndex}, 아이템: {selected?.itemName ?? "없음"}");
+        return selected;
     }
 }

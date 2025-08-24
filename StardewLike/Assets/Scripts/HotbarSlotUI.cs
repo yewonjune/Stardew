@@ -38,5 +38,9 @@ public class HotbarSlotUI : MonoBehaviour
             highlightBorder.enabled = isHighlighted;
         }
     }
+    public Item GetItem()
+    {
+        return currentItem;
+    }
 
 }
