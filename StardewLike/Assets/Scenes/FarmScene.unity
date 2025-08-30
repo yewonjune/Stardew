@@ -6290,6 +6290,18 @@ PolygonCollider2D:
       - {x: 2.0091262, y: -3.11257}
       - {x: 2.0783262, y: 3.6173115}
   m_UseDelaunayMesh: 0
+--- !u!114 &469147707 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8604888180216386921, guid: 7d42dd89b7158e2498603e08a5f6d8a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 1850378021}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &486922826
 GameObject:
   m_ObjectHideFlags: 0
@@ -6337,6 +6349,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b9142d099ee789e4188605992b469260, type: 2}
   - {fileID: 11400000, guid: 8fd89ae7501ac2a45beca3c118df9088, type: 2}
   - {fileID: 11400000, guid: 885d71842ed8a95439985ee21ed36999, type: 2}
+  - {fileID: 11400000, guid: de5bebace7c6574408d3b8c47aa71869, type: 2}
 --- !u!4 &486922828
 Transform:
   m_ObjectHideFlags: 0
@@ -14675,6 +14688,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8372944659315181597, guid: 7d42dd89b7158e2498603e08a5f6d8a3,
+        type: 3}
+      propertyPath: highlightBorder
+      value: 
+      objectReference: {fileID: 469147707}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -49036,6 +49054,8 @@ MonoBehaviour:
     m_Bits: 128
   detectRadius: 0.9
   startToLoopDelay: 0.5
+  isFishing: 0
+  inLoopPhase: 0
 --- !u!95 &4779530038453897474 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 7396829028301032735, guid: c1037e29090479b4c9fe2983a2250f08,
@@ -49250,11 +49270,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7814535142834733242, guid: 7d42dd89b7158e2498603e08a5f6d8a3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8372944659315181597, guid: 7d42dd89b7158e2498603e08a5f6d8a3,
+        type: 3}
+      propertyPath: highlightBorder
+      value: 
+      objectReference: {fileID: 8968125872220976781}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7d42dd89b7158e2498603e08a5f6d8a3, type: 3}
+--- !u!114 &8968125872220976781 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8604888180216386921, guid: 7d42dd89b7158e2498603e08a5f6d8a3,
+    type: 3}
+  m_PrefabInstance: {fileID: 8968125872220976780}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

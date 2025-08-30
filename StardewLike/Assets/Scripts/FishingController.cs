@@ -17,8 +17,9 @@ public class PlayerFishingController : MonoBehaviour
     [Header("Timing")]
     [SerializeField] float startToLoopDelay = 0.5f;                // Start → Loop 전환 대기
 
-    bool isFishing;
-    bool inLoopPhase;
+    public bool isFishing;
+    public bool inLoopPhase;
+
     readonly Collider2D[] _hits = new Collider2D[4];
 
     void Awake()
@@ -30,22 +31,19 @@ public class PlayerFishingController : MonoBehaviour
             fishingZoneLayer = LayerMask.GetMask("FishingZone");
     }
 
-    void Update()
+    public void TryStartFishing()
     {
-        if (!isFishing)
-        {
-            if (Input.GetKeyDown(fishKey) && IsInFishingZone())
-            {
-                StartCoroutine(FishRoutine());
-            }
-        }
-        else
-        {
-            if (inLoopPhase && Input.GetKeyDown(fishKey))
-            {
-                StopFishing();
-            }
-        }
+        if (isFishing) return;
+        if (!IsInFishingZone()) return;
+
+        StartCoroutine(FishRoutine());
+    }
+
+    public void TryStopFishing()
+    {
+        if (!isFishing) return;
+
+        StopFishing();
     }
 
     bool IsInFishingZone()

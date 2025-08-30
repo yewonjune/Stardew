@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 
 public class HotbarManager : MonoBehaviour
@@ -13,7 +13,7 @@ public class HotbarManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i=0; i<slots.Length; i++)
+        for (int i=0; i<slots.Length; i++)
         {
             if(i< startItems.Length && startItems[i] != null)
             {
@@ -31,7 +31,7 @@ public class HotbarManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < Mathf.Min(9, slots.Length); i++)
+        for (int i = 0; i < Mathf.Min(10, slots.Length); i++)
         {
             if(Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
@@ -42,7 +42,7 @@ public class HotbarManager : MonoBehaviour
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if(scroll != 0)
         {
-            int direction = scroll > 0 ? 1 : -1;
+            int direction = scroll > 0 ? -1 : 1;
             int newIndex = (selectedIndex + direction + slots.Length) % slots.Length;
             SelectSlot(newIndex);
         }

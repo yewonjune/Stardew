@@ -57,6 +57,10 @@ public class PlayerUseTool : MonoBehaviour
                 // 공격
                 AttackWithSword();
                 break;
+            case ToolType.Fishingrod:
+                //낚시
+                FishingWithFishingrod();
+                break;
         }
     }
 
@@ -117,5 +121,19 @@ public class PlayerUseTool : MonoBehaviour
         {
             Debug.Log("몬스터 공격하기");
         }
+    }
+    void FishingWithFishingrod()
+    {
+        PlayerFishingController fishingController = GetComponent<PlayerFishingController>();
+        if (fishingController == null)
+        {
+            Debug.LogWarning("PlayerFishingController가 없음! 낚시 불가능.");
+            return;
+        }
+
+        if (fishingController.isFishing)
+            fishingController.TryStopFishing();
+        else
+            fishingController.TryStartFishing();
     }
 }

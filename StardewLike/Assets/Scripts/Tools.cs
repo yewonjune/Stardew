@@ -17,5 +17,6 @@ public enum ToolType
     Axe,                // µµ³¢
     WateringCan,        // ¹°»Ñ¸®°³
     Scythe,             // ³´
-    Sword               // °Ë
+    Sword,              // °Ë
+    Fishingrod          // ³¬½Ã´ë    
 }

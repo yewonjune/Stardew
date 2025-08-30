@@ -13,6 +13,12 @@ public class HotbarSlotUI : MonoBehaviour
     private Item currentItem;
     private int count;
 
+    void Awake()
+    {
+        if (highlightBorder != null)
+            highlightBorder.enabled = false;
+    }
+
     public void SetItem(Item item, int count)
     {
         currentItem = item;
