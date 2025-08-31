@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Scythe
   m_EditorClassIdentifier: 
   itemName: Scythe
-  icon: {fileID: 21300000, guid: 6609d2d49b25c2b4ea7d0e85195138a2, type: 3}
+  icon: {fileID: -509095171, guid: 7a45b40d73b994d43a78d06cb8eca45f, type: 3}
   isStackable: 0
   toolType: 4
   power: 0
