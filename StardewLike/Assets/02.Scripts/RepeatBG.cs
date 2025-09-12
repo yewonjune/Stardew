@@ -8,15 +8,9 @@ public class RepeatBG : MonoBehaviour
 
     float repeatDistance;
 
-    Vector2 startPos;
-
-    float newPos;
-
     // Start is called before the first frame update
     void Start()
     {
-        startPos = transform.position;
-
         repeatDistance = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 

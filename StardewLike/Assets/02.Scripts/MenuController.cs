@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class MenuController : MonoBehaviour
 {
@@ -20,6 +21,9 @@ public class MenuController : MonoBehaviour
     {
         if (newBtn != null)
             newBtn.onClick.AddListener(OnNewGameClicked);
+
+        if (startBtn != null)
+            startBtn.onClick.AddListener(OnstartBtnClicked);
     }
 
     // Update is called once per frame
@@ -28,7 +32,7 @@ public class MenuController : MonoBehaviour
         
     }
 
-    public void OnNewGameClicked()
+    void OnNewGameClicked()
     {
         newGamePanel.gameObject.SetActive(true);
 
@@ -36,5 +40,10 @@ public class MenuController : MonoBehaviour
                                     transitionDuration);
         newGamePanel.DOAnchorPosX(newGamePanel.anchoredPosition.x + slideOffsetX,
                                     transitionDuration);
+    }
+
+    void OnstartBtnClicked()
+    {
+        SceneManager.LoadScene("FarmScene");
     }
 }
