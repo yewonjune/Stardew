@@ -7,16 +7,16 @@ public class PlayerUseTool : MonoBehaviour
     public HotbarManager hotbarManager;
     public Transform useToolPoint;
 
+    public Animator animator;
+
     [SerializeField] PlayerMovement playerMovement;
 
     [SerializeField] float hitRadius = 0.15f;                 // 칸 판정 여유
     [SerializeField] LayerMask resourceLayer = ~0;            // 자원만 맞추고 싶으면 레이어 지정
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    const string ParamToolIndex = "ToolIndex";
+    const string TrigStartTool = "StartAction_Tool";
+    const string StateToolAction = "PlayerAction";
 
     // Update is called once per frame
     void Update()
@@ -39,7 +39,7 @@ public class PlayerUseTool : MonoBehaviour
         switch (tool.toolType)
         {
             case ToolType.Hoe:
-                // 땅 파기
+              
                 DigSoilWithHoe();
                 break;
 
@@ -69,16 +69,15 @@ public class PlayerUseTool : MonoBehaviour
 
     void DigSoilWithHoe()
     {
-        SoilTilemapController soil = FindObjectOfType<SoilTilemapController>();
-        if (soil == null)
+        SoilTilemapController soilTilemapController = FindObjectOfType<SoilTilemapController>();
+        if (soilTilemapController == null)
         {
             Debug.LogWarning("[Hoe] SoilTilemapController가 씬에 없음");
             return;
         }
 
-        Vector3Int playerCell = soil.groundTilemap.WorldToCell(transform.position);
+        Vector3Int playerCell = soilTilemapController.groundTilemap.WorldToCell(transform.position);
 
-        // 4방 기준으로 바라보는 방향 결정
         Vector2 d = (playerMovement != null && playerMovement.lastDirection.sqrMagnitude > 0.0001f)
                     ? playerMovement.lastDirection
                     : Vector2.down;
@@ -90,10 +89,27 @@ public class PlayerUseTool : MonoBehaviour
             offset = (d.y >= 0) ? Vector3Int.up : Vector3Int.down;
 
         Vector3Int targetCell = playerCell + offset;
-        Vector3 center = soil.groundTilemap.GetCellCenterWorld(targetCell);
 
-        bool ok = soil.TryTillAtWorldPos(center);
-        Debug.Log(ok ? "[Hoe] 땅 갈기 성공" : "[Hoe] 갈 수 없는 위치");
+        Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorld.z = 0f;
+        Vector3Int clickedCell = soilTilemapController.groundTilemap.WorldToCell(mouseWorld);
+
+        int range = 1;
+        int dx = clickedCell.x - targetCell.x;
+        int dy = clickedCell.y - targetCell.y;
+        bool inRect = Mathf.Abs(dx) <= range && Mathf.Abs(dy) <= range;
+
+        if (!inRect)
+        {
+            Debug.Log("[Hoe] 허용 범위 밖 클릭");
+            return;
+        }
+
+        Vector3 center = soilTilemapController.groundTilemap.GetCellCenterWorld(clickedCell);
+        bool ok = soilTilemapController.TryTillAtWorldPos(center);
+        Debug.Log(ok ? $"[Hoe] 땅 갈기 성공: {clickedCell}" : "[Hoe] 갈 수 없는 위치");
+
+        if (ok) StartToolAction(ToolType.Hoe);
     }
 
     //void BreakRockWithPickaxe()
@@ -123,6 +139,7 @@ public class PlayerUseTool : MonoBehaviour
         if (hit.collider != null)
         {
             Debug.Log("물뿌리기");
+            StartToolAction(ToolType.WateringCan);
         }
     }
 
@@ -143,6 +160,7 @@ public class PlayerUseTool : MonoBehaviour
         if (hit.collider != null)
         {
             Debug.Log("몬스터 공격하기");
+            StartToolAction(ToolType.Sword);
         }
     }
     void FishingWithFishingrod()
@@ -169,6 +187,7 @@ public class PlayerUseTool : MonoBehaviour
             if (resourceNode != null)
             {
                 resourceNode.Hit(tool);
+                StartToolAction(tool.toolType);
                 return;
             }
         }
@@ -182,5 +201,14 @@ public class PlayerUseTool : MonoBehaviour
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(useToolPoint.position, hitRadius);
         }
+    }
+
+    void StartToolAction(ToolType toolType)
+    {
+        if (!animator) return;
+
+        animator.SetFloat(ParamToolIndex, (float)toolType);
+        animator.ResetTrigger(TrigStartTool);
+        animator.SetTrigger(TrigStartTool);
     }
 }

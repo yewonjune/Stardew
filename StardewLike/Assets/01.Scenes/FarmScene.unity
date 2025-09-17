@@ -31479,6 +31479,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock
       objectReference: {fileID: 0}
+    - target: {fileID: 6317455990490287575, guid: 188a5a682b6ae114f8bec7b96b162ff3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -66215,15 +66220,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stump
       objectReference: {fileID: 0}
+    - target: {fileID: 588474896257262439, guid: 17aaf935204ae4644a2c032d90cd9f19,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4523277798640276746, guid: 17aaf935204ae4644a2c032d90cd9f19,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.69
+      value: -1.6
       objectReference: {fileID: 0}
     - target: {fileID: 4523277798640276746, guid: 17aaf935204ae4644a2c032d90cd9f19,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.5
+      value: -0.83
       objectReference: {fileID: 0}
     - target: {fileID: 4523277798640276746, guid: 17aaf935204ae4644a2c032d90cd9f19,
         type: 3}
@@ -66654,6 +66664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hotbarManager: {fileID: 486922827}
   useToolPoint: {fileID: 711940848}
+  animator: {fileID: 4779530038453897474}
   playerMovement: {fileID: 4779530038453897476}
   hitRadius: 0.6
   resourceLayer:
