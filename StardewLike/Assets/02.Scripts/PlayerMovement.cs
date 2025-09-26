@@ -5,6 +5,10 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     float moveSpeed = 6.0f;
+    float speedLerp = 20f;
+
+    float setSpeed;
+    float currentSpeed;
 
     Animator animator;
     Rigidbody2D player;
@@ -16,12 +20,15 @@ public class PlayerMovement : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         player = GetComponent<Rigidbody2D>();
+
+        setSpeed = moveSpeed;
+        currentSpeed = moveSpeed;
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        currentSpeed = Mathf.Lerp(currentSpeed, setSpeed, Time.deltaTime * speedLerp);
     }
 
     private void FixedUpdate()
@@ -56,5 +63,10 @@ public class PlayerMovement : MonoBehaviour
         else if (animDir.x < -0.01f)
             transform.localScale = new Vector3(-1, 1, 1);
 
+    }
+
+    public void SetSpeed(float value)
+    {
+        moveSpeed = value;
     }
 }
