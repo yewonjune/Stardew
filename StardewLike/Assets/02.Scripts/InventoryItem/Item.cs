@@ -9,3 +9,5 @@ public class Item : ScriptableObject
     public Sprite icon;
     public bool isStackable;
 }
+
+
