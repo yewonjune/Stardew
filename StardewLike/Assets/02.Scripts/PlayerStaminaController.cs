@@ -9,11 +9,11 @@ public class PlayerStaminaController : MonoBehaviour
 
     [SerializeField] float drainPerSecond = 20f;
     [SerializeField] float regenPerSecond = 15f;
-    [SerializeField] KeyCode runKey = KeyCode.Space;
+    [SerializeField] KeyCode runKey = KeyCode.LeftShift;
 
     PlayerMovement playerMovement;
 
-    public float maxStamina;
+    public float maxStamina = 100f;
     public float stamina;
     bool isRunning;
     bool exhausted;

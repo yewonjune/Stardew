@@ -18,12 +18,6 @@ public class PlaceExit : MonoBehaviour
         cameraManager = CameraManager.Instance;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.transform == player)

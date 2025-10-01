@@ -1247,8 +1247,8 @@ GameObject:
   - component: {fileID: 314488878}
   - component: {fileID: 314488877}
   - component: {fileID: 314488881}
-  - component: {fileID: 314488880}
   - component: {fileID: 314488879}
+  - component: {fileID: 314488880}
   m_Layer: 0
   m_Name: Bound
   m_TagString: Untagged
@@ -8299,7 +8299,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainCam: {fileID: 1919207365}
   houseCam: {fileID: 868827498}
-  confiner2D: {fileID: 0}
   player: {fileID: 4779530038453897471}
 --- !u!4 &843484909
 Transform:
@@ -8441,7 +8440,7 @@ MonoBehaviour:
   m_Priority: 0
   m_StandbyUpdate: 2
   m_LookAt: {fileID: 0}
-  m_Follow: {fileID: 1365267142}
+  m_Follow: {fileID: 4779530038453897471}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 4.5
@@ -8470,7 +8469,7 @@ Transform:
   m_GameObject: {fileID: 868827497}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.35, y: 13.15, z: -10}
+  m_LocalPosition: {x: 0, y: 0, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33433,7 +33432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f453f694addf4275988fac205bc91968, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_BoundingShape2D: {fileID: 1428883554}
+  m_BoundingShape2D: {fileID: 314488881}
   m_Damping: 0.5
   m_MaxWindowSize: -1
   m_Padding: 0

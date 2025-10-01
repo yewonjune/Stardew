@@ -10,7 +10,6 @@ public class CameraManager : MonoBehaviour
     public Cinemachine.CinemachineVirtualCamera mainCam;
     public Cinemachine.CinemachineVirtualCamera houseCam;
 
-    public CinemachineConfiner2D confiner2D;
     public Transform player;
 
     void Awake()

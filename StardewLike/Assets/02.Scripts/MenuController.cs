@@ -25,13 +25,6 @@ public class MenuController : MonoBehaviour
         if (startBtn != null)
             startBtn.onClick.AddListener(OnstartBtnClicked);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     void OnNewGameClicked()
     {
         newGamePanel.gameObject.SetActive(true);
