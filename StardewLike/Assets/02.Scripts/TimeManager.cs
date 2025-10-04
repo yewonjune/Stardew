@@ -16,6 +16,8 @@ public class TimeManager : MonoBehaviour
     public Text dayText;
     public Text timeText;
 
+    public SoilTilemapController soilTilemapController;
+
     // Update is called once per frame
     void Update()
     {
@@ -48,6 +50,9 @@ public class TimeManager : MonoBehaviour
         minute = 0;
 
         Debug.Log($"Day {day} 시작!");
+
+        if (soilTilemapController) soilTilemapController.NewDay();
+        else Debug.LogWarning("[DayManager] SoilTilemapController 참조 안 됨");
     }
 
     void UpdateUI()

@@ -106,6 +106,7 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
+
     public void ForceRefresh()
     {
         onInventoryChanged?.Invoke();

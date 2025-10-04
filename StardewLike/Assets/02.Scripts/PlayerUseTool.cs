@@ -12,6 +12,11 @@ public class PlayerUseTool : MonoBehaviour
 
     [SerializeField] PlayerMovement playerMovement;
 
+    [SerializeField] SoilTilemapController soilTilemapController;
+    [SerializeField] Inventory inventory;
+
+    [SerializeField] bool useMouseTarget = false;
+
     [SerializeField] float hitRadius = 0.15f;                 // 칸 판정 여유
     [SerializeField] LayerMask resourceLayer = ~0;            // 자원만 맞추고 싶으면 레이어 지정
 
@@ -32,6 +37,15 @@ public class PlayerUseTool : MonoBehaviour
             {
                 UseTool(tool);
             }
+            else if (selectedItem is Seeds seed)
+            {
+                TryPlantSeed(seed);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            TryHarvestAtTarget();
         }
     }
 
@@ -72,12 +86,7 @@ public class PlayerUseTool : MonoBehaviour
 
     void DigSoilWithHoe()
     {
-        SoilTilemapController soilTilemapController = FindObjectOfType<SoilTilemapController>();
-        if (soilTilemapController == null)
-        {
-            Debug.LogWarning("[Hoe] SoilTilemapController가 씬에 없음");
-            return;
-        }
+        if (!soilTilemapController) { Debug.LogWarning("[Hoe] SoilTilemapController가 없음"); return; }
 
         Vector3Int playerCell = soilTilemapController.groundTilemap.WorldToCell(transform.position);
 
@@ -136,12 +145,16 @@ public class PlayerUseTool : MonoBehaviour
 
     void WaterCropWithWateringCan()
     {
-        RaycastHit2D hit = Physics2D.Raycast(useToolPoint.position, Vector2.zero);
-
-        if (hit.collider != null)
+        Vector3 world = GetTargetWorldPos();
+        if (soilTilemapController.TryWaterAtWorldPos(world))
         {
-            Debug.Log("물뿌리기");
+            Debug.Log("[Water] 물 주기 성공");
             StartToolAction(ToolType.WateringCan);
+            // (선택) 물통 용량 줄이려면 여기서 감소
+        }
+        else
+        {
+            Debug.Log("[Water] 물 주기 실패 (갈리지 않았거나 이미 물 먹음)");
         }
     }
 
@@ -232,5 +245,66 @@ public class PlayerUseTool : MonoBehaviour
 
         float flipFix = (transform.localScale.x < 0) ? -1f : 1f;
         useToolPoint.localPosition = new Vector3(offset.x * distance * flipFix, offset.y * distance, 0);
+    }
+    Vector3 GetTargetWorldPos()
+    {
+        if (useMouseTarget)
+        {
+            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            mouseWorld.z = 0f;
+            return mouseWorld;
+        }
+        else
+        {
+            // 플레이어 앞칸의 중심(현재 useToolPoint 위치 사용)
+            return useToolPoint ? useToolPoint.position : transform.position;
+        }
+    }
+
+    void TryPlantSeed(Seeds seed)
+    {
+        if (!soilTilemapController)
+        {
+            Debug.LogWarning("[Seed] SoilTilemapController가 없음");
+            return;
+        }
+
+        Vector3 world = GetTargetWorldPos();
+
+        // Soil 쪽에 TryPlantAtWorldPos 구현해둔 버전 (추천)
+        if (soilTilemapController.TryPlantAtWorldPos(world, seed))
+        {
+            Debug.Log("[Seed] 심기 성공");
+            // 인벤토리에서 씨앗 1개 차감 (너의 Inventory 규칙에 맞게)
+            inventory.RemoveItem(seed, 1);
+            StartToolAction(ToolType.Hoe); // 심을 때도 짧은 모션 쓰고 싶으면
+        }
+        else
+        {
+            Debug.Log("[Seed] 심기 실패 (갈리지 않았거나 이미 작물 있음)");
+        }
+    }
+
+    void TryHarvestAtTarget()
+    {
+        if (!soilTilemapController)
+        {
+            Debug.LogWarning("[Harvest] SoilTilemapController가 없음");
+            return;
+        }
+
+        Vector3 world = GetTargetWorldPos();
+        if (soilTilemapController.TryHarvestAtWorldPos(world, out var harvested))
+        {
+            Debug.Log("[Harvest] 수확 성공");
+            if (harvested != null)
+                inventory?.AddItem(harvested, 1);
+            // 낫 애니메이션을 쓰고 싶으면:
+            StartToolAction(ToolType.Scythe);
+        }
+        else
+        {
+            Debug.Log("[Harvest] 수확할 성숙 작물이 없음");
+        }
     }
 }

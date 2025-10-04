@@ -7,8 +7,14 @@ public class SoilTilemapController : MonoBehaviour
 {
     public Tilemap groundTilemap;
     public Tilemap soilTilemap;
+    public Tilemap wateredTilemap;
 
     public TileBase tilledSoilTile;
+    public TileBase wateredTile;
+
+    HashSet<Vector3Int> tilled = new HashSet<Vector3Int>();
+    HashSet<Vector3Int> watered = new HashSet<Vector3Int>();
+    Dictionary<Vector3Int, Crop> plantedCrop = new Dictionary<Vector3Int, Crop>();
 
     public bool TryTillAtWorldPos(Vector3 worldPos)
     {
@@ -21,6 +27,8 @@ public class SoilTilemapController : MonoBehaviour
             return false;
 
         soilTilemap.SetTile(cell, tilledSoilTile);
+
+        tilled.Add(cell);
 
         RefreshAround(soilTilemap, cell);
         return true;
@@ -36,5 +44,115 @@ public class SoilTilemapController : MonoBehaviour
                 tilemap.RefreshTile(pos);
             }
         }
+    }
+
+    public bool TryWaterAtWorldPos(Vector3 worldPos)
+    {
+        Vector3Int cell = groundTilemap.WorldToCell(worldPos);
+        return TryWaterAtCell(cell);
+    }
+
+    public bool TryWaterAtCell(Vector3Int cell)
+    {
+        // 갈린 땅이어야 하고, 아직 물 안 먹은 칸이어야 함
+        if (!tilled.Contains(cell)) return false;
+        if (watered.Contains(cell)) return false;
+
+        watered.Add(cell);
+        wateredTilemap.SetTile(cell, wateredTile);
+        RefreshAround(wateredTilemap, cell);
+
+        // 작물이 심어져 있으면 오늘 물 받았다고 알림
+        if (plantedCrop.TryGetValue(cell, out var crop))
+            crop.SetWateredToday();
+
+        return true;
+    }
+
+    // ---- 씨앗 심기 ----
+    public bool TryPlantAtWorldPos(Vector3 worldPos, Seeds seedData)
+    {
+        Vector3Int cell = groundTilemap.WorldToCell(worldPos);
+        return TryPlantAtCell(cell, seedData);
+    }
+
+    public bool TryPlantAtCell(Vector3Int cell, Seeds seedData, List<Sprite> growthSpritesOverride = null)
+    {
+        if (!tilled.Contains(cell)) return false;          // 갈린 땅만 심기 가능
+        if (plantedCrop.ContainsKey(cell)) return false;   // 이미 작물 있음
+
+        // 프리팹 생성
+        Vector3 world = groundTilemap.GetCellCenterWorld(cell);
+        var go = Instantiate(seedData.cropPrefab, world, Quaternion.identity);
+        var crop = go.GetComponent<Crop>();
+        if (!crop) { Destroy(go); return false; }
+
+        if (growthSpritesOverride != null && growthSpritesOverride.Count > 0)
+            crop.growthSprites = growthSpritesOverride;
+
+        // Crop 초기화(+ 역참조)
+        crop.Init(this, cell, seedData);
+
+        plantedCrop[cell] = crop;
+
+        if (watered.Contains(cell))
+            crop.SetWateredToday();
+
+        return true;
+    }
+
+    // ---- 수확 (성숙 시) ----
+    public bool TryHarvestAtWorldPos(Vector3 worldPos, out Item harvestedItem)
+    {
+        Vector3Int cell = groundTilemap.WorldToCell(worldPos);
+        return TryHarvestAtCell(cell, out harvestedItem);
+    }
+
+    public bool TryHarvestAtCell(Vector3Int cell, out Item harvestedItem)
+    {
+        harvestedItem = null;
+
+        if (!plantedCrop.TryGetValue(cell, out var crop)) return false;
+
+        if (crop.TryHarvest(out harvestedItem))
+        {
+            // 단발성 작물은 TryHarvest() 내부에서 파괴되고 여기서 칸 정리 필요
+            if (harvestedItem != null && !crop.seedData.regrowAfterHarvest)
+                plantedCrop.Remove(cell);
+            return true;
+        }
+
+        return false;
+    }
+
+    // ---- 하루 전환: 물 흔적 제거 + 모든 작물 NewDay 처리 ----
+    public void NewDay()
+    {
+        Debug.Log("[Soil] NewDay 호출됨: 물표시 초기화 + 작물 하루 경과 처리");
+
+        // 물 흔적 초기화
+        watered.Clear();
+        if (wateredTilemap) wateredTilemap.ClearAllTiles();
+        foreach (var kv in plantedCrop) kv.Value.OnNewDay();
+    }
+
+    // ---- 헬퍼 ----
+    public Vector3Int WorldToCell(Vector3 world) => groundTilemap.WorldToCell(world);
+    public Vector3 CellToWorldCenter(Vector3Int cell) => groundTilemap.GetCellCenterWorld(cell);
+
+    public bool IsTilledCell(Vector3Int cell) => tilled.Contains(cell);
+    public bool IsWateredCell(Vector3Int cell) => watered.Contains(cell);
+    public bool HasCropAtCell(Vector3Int cell) => plantedCrop.ContainsKey(cell);
+
+    public Crop TryGetCrop(Vector3Int cell)
+    {
+        plantedCrop.TryGetValue(cell, out var crop);
+        return crop;
+    }
+
+    // (선택) 칸 비우기: 단발성 작물 수확 직후 등에서 사용
+    public void ClearCropCell(Vector3Int cell)
+    {
+        plantedCrop.Remove(cell);
     }
 }
