@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerUseTool : MonoBehaviour
@@ -21,6 +22,8 @@ public class PlayerUseTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        UpdateUseToolPoint();
+
         if (Input.GetMouseButtonDown(0))
         {
             Item selectedItem = hotbarManager.GetSelectedItem();
@@ -107,7 +110,6 @@ public class PlayerUseTool : MonoBehaviour
 
         Vector3 center = soilTilemapController.groundTilemap.GetCellCenterWorld(clickedCell);
         bool ok = soilTilemapController.TryTillAtWorldPos(center);
-        Debug.Log(ok ? $"[Hoe] 땅 갈기 성공: {clickedCell}" : "[Hoe] 갈 수 없는 위치");
 
         if (ok) StartToolAction(ToolType.Hoe);
     }
@@ -210,5 +212,25 @@ public class PlayerUseTool : MonoBehaviour
         animator.SetFloat(ParamToolIndex, (float)toolType);
         animator.ResetTrigger(TrigStartTool);
         animator.SetTrigger(TrigStartTool);
+    }
+
+    void UpdateUseToolPoint()
+    {
+        if (useToolPoint == null || playerMovement == null) return;
+
+        Vector2 d = (playerMovement.lastDirection.sqrMagnitude > 0.0001f)
+      ? playerMovement.lastDirection
+      : Vector2.down;
+
+        Vector3 offset;
+        if (Mathf.Abs(d.x) >= Mathf.Abs(d.y))
+            offset = (d.x > 0) ? Vector3.right : Vector3.left;
+        else
+            offset = (d.y > 0) ? Vector3.up : Vector3.down;
+
+        float distance = 0.6f;
+
+        float flipFix = (transform.localScale.x < 0) ? -1f : 1f;
+        useToolPoint.localPosition = new Vector3(offset.x * distance * flipFix, offset.y * distance, 0);
     }
 }

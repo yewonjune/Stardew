@@ -7,7 +7,11 @@ public class Item : ScriptableObject
 {
     public string itemName;
     public Sprite icon;
-    public bool isStackable;
+    public bool isStackable = true;
+
+    public int maxStack = 99;
+
+    public GameObject worldPrefab;
 }
 
 

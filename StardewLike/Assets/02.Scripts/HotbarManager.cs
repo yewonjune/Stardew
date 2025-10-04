@@ -6,32 +6,43 @@ using UnityEngine;
 public class HotbarManager : MonoBehaviour
 {
     public HotbarSlotUI[] slots;
-    public Item[] startItems;
+    //public Item[] startItems;
 
     private int selectedIndex = 0;
+
+    Inventory inventory;
 
     // Start is called before the first frame update
     void Start()
     {
-        for (int i=0; i<slots.Length; i++)
+        inventory = Inventory.instance;
+
+        if (inventory != null)
         {
-            if(i< startItems.Length && startItems[i] != null)
-            {
-                slots[i].SetItem(startItems[i], 1);
-            }
-            else
-            {
-                slots[i].ClearSlot();
-            }
+            inventory.onInventoryChanged += RefreshFromInventory;
+            inventory.onSlotCountChange += _ => RefreshFromInventory();
         }
 
+        RefreshFromInventory();
         HighlightSlot(selectedIndex);
+    }
+
+    void OnDestroy()
+    {
+        // 구독 해제 (플레이 모드 종료/씬 전환 시 안전)
+        if (inventory != null)
+        {
+            inventory.onInventoryChanged -= RefreshFromInventory;
+            inventory.onSlotCountChange -= _ => RefreshFromInventory();
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < Mathf.Min(10, slots.Length); i++)
+        int maxHotbar = Mathf.Min(10, slots.Length);
+
+        for (int i = 0; i < maxHotbar; i++)
         {
             if(Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
@@ -40,12 +51,42 @@ public class HotbarManager : MonoBehaviour
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
-        if(scroll != 0)
+        if(Mathf.Abs(scroll) > 0.0001f)
         {
             int direction = scroll > 0 ? -1 : 1;
-            int newIndex = (selectedIndex + direction + slots.Length) % slots.Length;
+            int newIndex = (selectedIndex + direction + maxHotbar) % maxHotbar;
             SelectSlot(newIndex);
         }
+    }
+
+    void RefreshFromInventory()
+    {
+        int maxHotbar = Mathf.Min(10, slots.Length);
+        if (inventory == null)
+        {
+            for (int i = 0; i < maxHotbar; i++) slots[i].ClearSlot();
+            return;
+        }
+
+        for (int i = 0; i < maxHotbar; i++)
+        {
+            bool withinInvSlots = (i < inventory.SlotCnt);
+            bool hasItem = (i < inventory.items.Count);
+
+            if (withinInvSlots && hasItem && inventory.items[i] != null && inventory.items[i].item != null)
+            {
+                var st = inventory.items[i];
+                slots[i].SetItem(st.item, st.count);
+            }
+            else
+            {
+                slots[i].ClearSlot();
+            }
+        }
+
+        // 선택 하이라이트 범위 보정
+        selectedIndex = Mathf.Clamp(selectedIndex, 0, maxHotbar - 1);
+        HighlightSlot(selectedIndex);
     }
 
     void SelectSlot(int index)
@@ -55,12 +96,13 @@ public class HotbarManager : MonoBehaviour
 
         selectedIndex = index;
         HighlightSlot(index);
-        Debug.Log($"슬롯 {index} 선택됨. 아이템: {slots[index].GetItem()?.itemName ?? "없음"}");
     }
 
     void HighlightSlot(int index)
     {
-        for (int i = 0; i < slots.Length; i++)
+        int maxHotbar = Mathf.Min(10, slots.Length);
+
+        for (int i = 0; i < maxHotbar; i++)
         {
             slots[i].SetHighlight(i == index);
         }
@@ -68,8 +110,6 @@ public class HotbarManager : MonoBehaviour
 
     public Item GetSelectedItem()
     {
-        Item selected = slots[selectedIndex].GetItem();
-        Debug.Log($"현재 선택된 슬롯: {selectedIndex}, 아이템: {selected?.itemName ?? "없음"}");
-        return selected;
+        return slots[selectedIndex].GetItem();
     }
 }

@@ -102,8 +102,11 @@ MonoBehaviour:
   maxHp: 2
   requiredTool: 2
   minPower: 1
-  dropPrefab: {fileID: 0}
-  dropCount: 0
+  dropItem: {fileID: 11400000, guid: 9ba856f9a8230514690c282b7a141a0a, type: 2}
+  dropPrefab: {fileID: 4947106649741889800, guid: 6738836b697f30b42aafe4f05c698da1,
+    type: 3}
+  dropCount: 1
+  scatterRadius: 1
 --- !u!70 &4186947241573483400
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

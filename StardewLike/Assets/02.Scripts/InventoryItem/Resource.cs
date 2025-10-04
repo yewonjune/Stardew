@@ -15,5 +15,8 @@ public enum ResourceType
     Rock,
     Tree,
     Log,
-    Weed
+    Weed,
+    Ore,
+    Gem,
+    Magic
 }

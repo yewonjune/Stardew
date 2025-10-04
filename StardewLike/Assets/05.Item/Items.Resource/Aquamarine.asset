@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a28f9ea26c88e54b9949fb71380fa5d, type: 3}
-  m_Name: Sword
+  m_Script: {fileID: 11500000, guid: d9c23c0392b651f448eba1725f66b5e5, type: 3}
+  m_Name: Aquamarine
   m_EditorClassIdentifier: 
-  itemName: Sword
-  icon: {fileID: -635009911, guid: 7a45b40d73b994d43a78d06cb8eca45f, type: 3}
-  isStackable: 0
-  toolType: 5
-  power: 1
+  itemName: 
+  icon: {fileID: 1969484138, guid: 0c66aa529a220014d8cf4a84a708face, type: 3}
+  isStackable: 1
+  resourceType: 5
+  sellPrice: 120
