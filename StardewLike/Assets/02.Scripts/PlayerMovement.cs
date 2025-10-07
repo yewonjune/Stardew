@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Vector2 lastDirection = Vector2.down;
 
+    bool canControl = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +40,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
+        if (!canControl)
+        {
+            if (player) player.velocity = Vector2.zero;
+            if (animator)
+            {
+                animator.SetFloat("MoveX", lastDirection.x);
+                animator.SetFloat("MoveY", lastDirection.y);
+                animator.SetBool("isMoving", false);
+            }
+            return;
+        }
+
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         bool isMoving = input != Vector2.zero;
@@ -68,5 +82,11 @@ public class PlayerMovement : MonoBehaviour
     public void SetSpeed(float value)
     {
         moveSpeed = value;
+    }
+
+    public void SetControl(bool enable)
+    {
+        canControl = enable;
+        if (!enable && player) player.velocity = Vector2.zero;
     }
 }
