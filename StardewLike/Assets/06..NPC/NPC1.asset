@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41d3ddaf8ab30d478da4f87f9f25b23, type: 3}
   m_Name: NPC1
   m_EditorClassIdentifier: 
-  npcName: NPC1
+  npcData: {fileID: 11400000, guid: 7fd25ce53f02968429bb1d66e0526874, type: 2}
   lines:
-  - 1
-  - 2
-  - 3
+  - text: "\uB514\uD3F4\uD2B8"
+    emotion: 0
+  - text: "\uAE30\uC068"
+    emotion: 1
+  - text: "\uB180\uB78C"
+    emotion: 3

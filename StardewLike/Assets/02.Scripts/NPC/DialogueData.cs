@@ -2,10 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class DialogueLine
+{
+    [TextArea(2, 5)]
+    public string text;
+    public EmotionType emotion;
+}
+
+
 [CreateAssetMenu(fileName = "New Dialogue", menuName = "NPC/Dialogue")]
 public class DialogueData : ScriptableObject
 {
-    public string npcName;
-    [TextArea(3, 5)]
-    public string[] lines;
+    public NPCData npcData;
+    public DialogueLine[] lines;
 }

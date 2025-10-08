@@ -12,8 +12,11 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] GameObject dialoguePanel;
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text dialogueText;
+    [SerializeField] Image portraitImage;
 
-    string[] lines;
+    DialogueLine[] lines;
+    DialogueData currentData;
+
     int index;
     bool isDialogueActive;
     float lastAdvanceTime;
@@ -27,6 +30,7 @@ public class DialogueManager : MonoBehaviour
         Instance = this;
 
         if (dialoguePanel) dialoguePanel.SetActive(false);
+        if (portraitImage) portraitImage.enabled = false;
     }
     void Update()
     {
@@ -48,11 +52,24 @@ public class DialogueManager : MonoBehaviour
     public void StartDialogue(DialogueData data)
     {
         isDialogueActive = true;
+        currentData = data;
 
         dialoguePanel.SetActive(true);
-        nameText.text = data.npcName;
+
+        nameText.text = (data.npcData != null && !string.IsNullOrEmpty(data.npcData.displayName))
+                ? data.npcData.displayName
+                : "???";
+
         lines = data.lines;
         index = 0;
+
+        if (portraitImage != null)
+        {
+            Sprite s = (data.npcData != null) ? data.npcData.defaultPortrait : null;
+            portraitImage.sprite = s;
+            portraitImage.enabled = (s != null);
+        }
+
         ShowLine();
 
         FreezePlayer(true);
@@ -62,7 +79,18 @@ public class DialogueManager : MonoBehaviour
     {
         if (index < lines.Length)
         {
-            dialogueText.text = lines[index];
+            DialogueLine line = lines[index];
+
+            dialogueText.text = line.text;
+
+            if (portraitImage != null && currentData != null && currentData.npcData != null)
+            {
+                Sprite s = currentData.npcData.GetPortrait(line.emotion);
+                if (s == null) s = currentData.npcData.defaultPortrait;
+                portraitImage.sprite = s;
+                portraitImage.enabled = (s != null);
+            }
+
             index++;
         }
         else
