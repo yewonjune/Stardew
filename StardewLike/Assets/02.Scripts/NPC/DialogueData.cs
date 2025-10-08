@@ -10,10 +10,17 @@ public class DialogueLine
     public EmotionType emotion;
 }
 
+[System.Serializable]
+public class DialogueSequence
+{
+    public DialogueLine[] lines;
+}
+
 
 [CreateAssetMenu(fileName = "New Dialogue", menuName = "NPC/Dialogue")]
 public class DialogueData : ScriptableObject
 {
     public NPCData npcData;
-    public DialogueLine[] lines;
+    public DialogueSequence[] sequences;
+
 }

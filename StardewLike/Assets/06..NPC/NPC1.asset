@@ -13,10 +13,23 @@ MonoBehaviour:
   m_Name: NPC1
   m_EditorClassIdentifier: 
   npcData: {fileID: 11400000, guid: 7fd25ce53f02968429bb1d66e0526874, type: 2}
-  lines:
-  - text: "\uB514\uD3F4\uD2B8"
-    emotion: 0
-  - text: "\uAE30\uC068"
-    emotion: 1
-  - text: "\uB180\uB78C"
-    emotion: 3
+  sequences:
+  - lines:
+    - text: "\uC5B4, \uC654\uC5B4?"
+      emotion: 0
+    - text: "\uC624\uB298\uB3C4 \uC88B\uC740 \uBB3C\uAC74\uB4E4 \uB4E4\uC5B4\uC654\uC5B4."
+      emotion: 0
+  - lines:
+    - text: "\uC5B4\uC11C \uC640, \uC190\uB2D8! \uC624\uB298 \uD558\uB8E8\uB3C4 \uD798\uB4E4\uC5C8\uC9C0?"
+      emotion: 0
+    - text: "\uC0C8\uB85C \uB4E4\uC5B4\uC628 \uBB3C\uAC74\uC774 \uC788\uB294\uB370,
+        \uB124 \uCDE8\uD5A5\uC77C \uAC83 \uAC19\uC544."
+      emotion: 0
+    - text: "\uC548 \uBCF4\uACE0 \uAC00\uBA74 \uC544\uB9C8 \uD6C4\uD68C\uD560\uAC78?"
+      emotion: 1
+  - lines:
+    - text: "\uC5B4\uBA38, \uBC8C\uC368 \uC654\uAD6C\uB098?"
+      emotion: 3
+    - text: "\uBC16\uC740 \uB0A0\uC528\uB3C4 \uB365\uACE0 \uD798\uB4E4 \uD150\uB370
+        \uC640\uC918\uC11C \uACE0\uB9C8\uC6CC."
+      emotion: 1

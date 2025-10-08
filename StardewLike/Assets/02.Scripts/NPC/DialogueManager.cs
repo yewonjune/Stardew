@@ -51,17 +51,22 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(DialogueData data)
     {
+        DialogueLine[] selected = PickSequenceLines(data);
+        if (selected == null || selected.Length == 0)
+        {
+            return;
+        }
+
         isDialogueActive = true;
         currentData = data;
+        lines = selected;
+        index = 0;
 
         dialoguePanel.SetActive(true);
 
         nameText.text = (data.npcData != null && !string.IsNullOrEmpty(data.npcData.displayName))
                 ? data.npcData.displayName
                 : "???";
-
-        lines = data.lines;
-        index = 0;
 
         if (portraitImage != null)
         {
@@ -73,6 +78,18 @@ public class DialogueManager : MonoBehaviour
         ShowLine();
 
         FreezePlayer(true);
+    }
+
+    DialogueLine[] PickSequenceLines(DialogueData data)
+    {
+        if (data.sequences != null && data.sequences.Length > 0)
+        {
+            DialogueSequence dialogueSequence = data.sequences[Random.Range(0, data.sequences.Length)];
+            if (dialogueSequence != null && dialogueSequence.lines != null && dialogueSequence.lines.Length > 0)
+                return dialogueSequence.lines;
+        }
+
+        return null;
     }
 
     public void ShowLine()
