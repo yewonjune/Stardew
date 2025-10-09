@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class PlaceEntrance : MonoBehaviour
 {
-    [Header("References")]
     public Transform player;
 
-    [Header("Positions")]
     public Vector3 playerIndoorPosition;
 
-    [Header("Interaction")]
     public float interactDistance = 1.5f;
 
     private CameraManager cameraManager;
@@ -41,11 +38,11 @@ public class PlaceEntrance : MonoBehaviour
             {
                 EnterHouse();
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.E) && InRange())
-            {
-                EnterHouse();
-            }
+        if (Input.GetKeyDown(KeyCode.E) && InRange())
+        {
+            EnterHouse();
         }
     }
 
@@ -57,11 +54,22 @@ public class PlaceEntrance : MonoBehaviour
             return;
         }
 
+        var col = player.GetComponent<Collider2D>();
+        if (col) col.enabled = false;
+
         FadeManager.Instance.FadeOutIn(() =>
         {
             cameraManager.SwitchToHouse();
             player.position = playerIndoorPosition;
+
+            player.GetComponent<MonoBehaviour>().StartCoroutine(ReenableColliderNextFrame(col));
         });
+    }
+
+    System.Collections.IEnumerator ReenableColliderNextFrame(Collider2D col)
+    {
+        yield return null;
+        if (col) col.enabled = true;
     }
 
     bool InRange()

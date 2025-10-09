@@ -4,10 +4,8 @@ using UnityEngine;
 
 public class PlaceExit : MonoBehaviour
 {
-    [Header("References")]
     public Transform player;
 
-    [Header("Positions")]
     public Vector3 playerOutdoorPosition;
 
     private CameraManager cameraManager;
@@ -34,10 +32,20 @@ public class PlaceExit : MonoBehaviour
             return;
         }
 
+        var col = player.GetComponent<Collider2D>();
+        if (col) col.enabled = false;
+
         FadeManager.Instance.FadeOutIn(() =>
         {
             cameraManager.SwitchToFarm();
             player.position = playerOutdoorPosition;
+
+            player.GetComponent<MonoBehaviour>().StartCoroutine(ReenableColliderNextFrame(col));
         });
+    }
+    System.Collections.IEnumerator ReenableColliderNextFrame(Collider2D col)
+    {
+        yield return null;
+        if (col) col.enabled = true;
     }
 }

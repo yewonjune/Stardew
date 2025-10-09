@@ -28,4 +28,5 @@ public class CameraManager : MonoBehaviour
         mainCam.Priority = 0;
         houseCam.Priority = 11;
     }
+
 }
