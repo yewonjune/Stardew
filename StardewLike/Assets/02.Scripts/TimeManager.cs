@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 
@@ -62,4 +63,56 @@ public class TimeManager : MonoBehaviour
         int displayMinute = (minute / 10) * 10;
         timeText.text = $"{hour:00}:{displayMinute:00}";
     }
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged; // 추가
+        RebindSoilController();
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged; // 추가
+    }
+
+    void OnActiveSceneChanged(Scene prev, Scene next)
+    {
+        RebindSoilController();
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 새 씬이 활성화되면 그 씬의 SoilTilemapController로 갈아끼움
+        if (scene == SceneManager.GetActiveScene())
+            RebindSoilController();
+    }
+
+    void RebindSoilController()
+    {
+        soilTilemapController = null;
+
+        var all = FindObjectsOfType<SoilTilemapController>(includeInactive: false);
+        if (all == null || all.Length == 0)
+        {
+            Debug.Log("[PlayerUseTool] 씬 어디에도 SoilTilemapController가 없음");
+            return;
+        }
+
+        // 가장 가까운 컨트롤러 선택
+        float best = float.PositiveInfinity;
+        SoilTilemapController bestCtrl = null;
+        Vector3 p = transform.position;
+
+        foreach (var s in all)
+        {
+            if (!s.isActiveAndEnabled) continue;
+            float d = (s.transform.position - p).sqrMagnitude;
+            if (d < best) { best = d; bestCtrl = s; }
+        }
+
+        soilTilemapController = bestCtrl ?? all[0];
+        Debug.Log($"[PlayerUseTool] SoilTilemapController 바인딩: {soilTilemapController.name} (scene={soilTilemapController.gameObject.scene.name})");
+    }
+
 }

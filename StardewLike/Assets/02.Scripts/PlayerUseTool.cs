@@ -28,12 +28,19 @@ public class PlayerUseTool : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        RebindSoilController(); // 현재 이미 로드되어 있으면 즉시도 시도
+        SceneManager.activeSceneChanged += OnActiveSceneChanged; // 추가
+        RebindSoilController();
     }
 
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged; // 추가
+    }
+
+    void OnActiveSceneChanged(Scene prev, Scene next)
+    {
+        RebindSoilController();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -47,20 +54,27 @@ public class PlayerUseTool : MonoBehaviour
     {
         soilTilemapController = null;
 
-        // 활성 씬에 있는 것만 선택 (Additive 로드 시 다수 방지)
         var all = FindObjectsOfType<SoilTilemapController>(includeInactive: false);
-        var activeScene = SceneManager.GetActiveScene();
-        foreach (var s in all)
+        if (all == null || all.Length == 0)
         {
-            if (s.gameObject.scene == activeScene)
-            {
-                soilTilemapController = s;
-                break;
-            }
+            Debug.Log("[PlayerUseTool] 씬 어디에도 SoilTilemapController가 없음");
+            return;
         }
 
-        if (!soilTilemapController)
-            Debug.Log("[PlayerUseTool] 활성 씬에 SoilTilemapController 없음 (마을/집일 수 있음)");
+        // 가장 가까운 컨트롤러 선택
+        float best = float.PositiveInfinity;
+        SoilTilemapController bestCtrl = null;
+        Vector3 p = transform.position;
+
+        foreach (var s in all)
+        {
+            if (!s.isActiveAndEnabled) continue;
+            float d = (s.transform.position - p).sqrMagnitude;
+            if (d < best) { best = d; bestCtrl = s; }
+        }
+
+        soilTilemapController = bestCtrl ?? all[0];
+        Debug.Log($"[PlayerUseTool] SoilTilemapController 바인딩: {soilTilemapController.name} (scene={soilTilemapController.gameObject.scene.name})");
     }
 
     // Update is called once per frame
