@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlaceEntrance : MonoBehaviour
@@ -9,64 +8,72 @@ public class PlaceEntrance : MonoBehaviour
     public Vector3 playerIndoorPosition;
 
     public float interactDistance = 1.5f;
+    public string entranceLayerName = "Entrance";
 
-    private CameraManager cameraManager;
-    private int entranceLayerMask;
-    private Collider2D selfCol;
+    CameraManager cameraManager;
+    int entranceLayerMask;
+    Collider2D selfCol;
 
-
-    // Start is called before the first frame update
     void Start()
     {
-        cameraManager = CameraManager.Instance;
-        entranceLayerMask = LayerMask.GetMask("Entrance");
-        selfCol = GetComponent<Collider2D>();
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetMouseButtonDown(0))
+        if (!player)
         {
-            if (Camera.main == null) return;
-
-            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero, 0f, entranceLayerMask);
-            
-            if (hit.collider != null && hit.collider == selfCol && InRange())
-            {
-                EnterHouse();
-            }
+            var go = GameObject.FindGameObjectWithTag("Player");
+            if (go) player = go.transform;
         }
 
+        cameraManager = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        entranceLayerMask = LayerMask.GetMask(entranceLayerName);
+        selfCol = GetComponent<Collider2D>();
+    }
+
+    void Update()
+    {
         if (Input.GetKeyDown(KeyCode.E) && InRange())
-        {
             EnterHouse();
+
+        if (Input.GetMouseButtonDown(0) && selfCol)
+        {
+            var cam = Camera.main;
+            if (!cam) return;
+
+            Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
+            var hit = Physics2D.OverlapPoint(mouseWorld, entranceLayerMask);
+            if (hit == selfCol && InRange())
+                EnterHouse();
         }
     }
 
     void EnterHouse()
     {
-        if (cameraManager == null || player == null)
+        if (!cameraManager)
         {
-            Debug.LogError("cameraManager or player is null!");
+            cameraManager = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        }
+        var fade = FadeManager.Instance ?? FindObjectOfType<FadeManager>();
+
+        var col = player.GetComponent<Collider2D>();
+
+        if (!fade)
+        {
+            if (col) col.enabled = false;
+            cameraManager.SwitchToHouse();
+            player.position = playerIndoorPosition;
+            StartCoroutine(ReenableColliderNextFrame(col));
             return;
         }
 
-        var col = player.GetComponent<Collider2D>();
         if (col) col.enabled = false;
 
-        FadeManager.Instance.FadeOutIn(() =>
+        fade.FadeOutIn(() =>
         {
             cameraManager.SwitchToHouse();
             player.position = playerIndoorPosition;
-
-            player.GetComponent<MonoBehaviour>().StartCoroutine(ReenableColliderNextFrame(col));
+            StartCoroutine(ReenableColliderNextFrame(col));
         });
     }
 
-    System.Collections.IEnumerator ReenableColliderNextFrame(Collider2D col)
+    IEnumerator ReenableColliderNextFrame(Collider2D col)
     {
         yield return null;
         if (col) col.enabled = true;
@@ -74,13 +81,8 @@ public class PlaceEntrance : MonoBehaviour
 
     bool InRange()
     {
+        if (!player) return false;
         float sqr = ((Vector2)player.position - (Vector2)transform.position).sqrMagnitude;
         return sqr <= interactDistance * interactDistance;
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, interactDistance);
     }
 }

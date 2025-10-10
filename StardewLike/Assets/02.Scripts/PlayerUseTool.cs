@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerUseTool : MonoBehaviour
 {
@@ -23,6 +24,44 @@ public class PlayerUseTool : MonoBehaviour
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
     const string StateToolAction = "PlayerAction";
+
+    void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        RebindSoilController(); // 현재 이미 로드되어 있으면 즉시도 시도
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 새 씬이 활성화되면 그 씬의 SoilTilemapController로 갈아끼움
+        if (scene == SceneManager.GetActiveScene())
+            RebindSoilController();
+    }
+
+    void RebindSoilController()
+    {
+        soilTilemapController = null;
+
+        // 활성 씬에 있는 것만 선택 (Additive 로드 시 다수 방지)
+        var all = FindObjectsOfType<SoilTilemapController>(includeInactive: false);
+        var activeScene = SceneManager.GetActiveScene();
+        foreach (var s in all)
+        {
+            if (s.gameObject.scene == activeScene)
+            {
+                soilTilemapController = s;
+                break;
+            }
+        }
+
+        if (!soilTilemapController)
+            Debug.Log("[PlayerUseTool] 활성 씬에 SoilTilemapController 없음 (마을/집일 수 있음)");
+    }
 
     // Update is called once per frame
     void Update()

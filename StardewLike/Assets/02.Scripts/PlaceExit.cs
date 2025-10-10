@@ -13,6 +13,12 @@ public class PlaceExit : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!player)
+        {
+            var go = GameObject.FindGameObjectWithTag("Player");
+            if (go) player = go.transform;
+        }
+
         cameraManager = CameraManager.Instance;
     }
 
