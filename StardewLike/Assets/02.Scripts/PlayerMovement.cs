@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public bool debugLog = false;
+
+
     float moveSpeed = 6.0f;
     float speedLerp = 20f;
 
@@ -16,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
     public Vector2 lastDirection = Vector2.down;
 
     bool canControl = true;
+
+    public bool IsControllable => canControl;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +58,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        if (debugLog)
+            Debug.Log($"[PM] input=({input.x},{input.y}) canControl={canControl}");
 
         bool isMoving = input != Vector2.zero;
 
@@ -70,14 +77,15 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("MoveX", animDir.x);
         animator.SetFloat("MoveY", animDir.y);
 
-        player.velocity = isMoving ? animDir * moveSpeed : Vector2.zero;
+        if (isMoving)
+            player.MovePosition(player.position + animDir * moveSpeed * Time.fixedDeltaTime);
+        else
+            player.velocity = Vector2.zero;
 
-        if (animDir.x > 0.01f)
-            transform.localScale = new Vector3(1, 1, 1);
-        else if (animDir.x < -0.01f)
-            transform.localScale = new Vector3(-1, 1, 1);
-
+        if (animDir.x > 0.01f) transform.localScale = new Vector3(1, 1, 1);
+        else if (animDir.x < -0.01f) transform.localScale = new Vector3(-1, 1, 1);
     }
+
 
     public void SetSpeed(float value)
     {

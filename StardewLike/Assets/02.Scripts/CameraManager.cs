@@ -9,6 +9,7 @@ public class CameraManager : MonoBehaviour
 
     public Cinemachine.CinemachineVirtualCamera mainCam;
     public Cinemachine.CinemachineVirtualCamera houseCam;
+    public Cinemachine.CinemachineVirtualCamera villageCam;
 
     public Transform player;
 
@@ -28,5 +29,9 @@ public class CameraManager : MonoBehaviour
         mainCam.Priority = 0;
         houseCam.Priority = 11;
     }
-
+    public void SwitchToVillage()
+    {
+        mainCam.Priority = 0;
+        villageCam.Priority = 11;
+    }
 }

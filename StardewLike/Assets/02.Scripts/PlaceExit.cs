@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlaceExit : MonoBehaviour
 {
     public Transform player;
+    private CameraManager cameraManager;
 
     public Vector3 playerOutdoorPosition;
 
-    private CameraManager cameraManager;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,10 +25,8 @@ public class PlaceExit : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.transform == player)
-        {
+        if (collision.CompareTag("Player"))
             ExitHouse();
-        }
     }
 
     void ExitHouse()
@@ -38,7 +37,13 @@ public class PlaceExit : MonoBehaviour
             return;
         }
 
+
+        var rb = player.GetComponent<Rigidbody2D>();
         var col = player.GetComponent<Collider2D>();
+        var mover = player.GetComponent<PlayerMovement>();
+
+        if (mover) mover.enabled = false;
+        if (rb) { rb.velocity = Vector2.zero; rb.isKinematic = true; }
         if (col) col.enabled = false;
 
         FadeManager.Instance.FadeOutIn(() =>
@@ -46,12 +51,15 @@ public class PlaceExit : MonoBehaviour
             cameraManager.SwitchToFarm();
             player.position = playerOutdoorPosition;
 
-            player.GetComponent<MonoBehaviour>().StartCoroutine(ReenableColliderNextFrame(col));
+            StartCoroutine(RestoreNextFrame(rb, col, mover));
         });
     }
-    System.Collections.IEnumerator ReenableColliderNextFrame(Collider2D col)
+    IEnumerator RestoreNextFrame(Rigidbody2D rb, Collider2D col, PlayerMovement mover)
     {
         yield return null;
+
+        if (rb) rb.isKinematic = false;
         if (col) col.enabled = true;
+        if (mover) mover.enabled = true;
     }
 }
