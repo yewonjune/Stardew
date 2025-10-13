@@ -24430,7 +24430,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 4cdcb9811732af74ab070687b99a83b4, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
-    m_Data: {fileID: 7567204785897554596, guid: a977b3ac23ec5a744ae537c784c08ed3, type: 3}
+    m_Data: {fileID: 7567204785897554596, guid: a977b3ac23ec5a744ae537c784c08ed3,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1752782242, guid: a977b3ac23ec5a744ae537c784c08ed3, type: 3}
   - m_RefCount: 1
@@ -26298,7 +26299,8 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1434441360, guid: a977b3ac23ec5a744ae537c784c08ed3, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -3276809509469408922, guid: 6d4bc6434cf52404d9a950c0f458e818, type: 3}
+    m_Data: {fileID: -3276809509469408922, guid: 6d4bc6434cf52404d9a950c0f458e818,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 351560878568794475, guid: 6d4bc6434cf52404d9a950c0f458e818, type: 3}
   - m_RefCount: 1
@@ -27002,11 +27004,14 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1543793748, guid: 6d4bc6434cf52404d9a950c0f458e818, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 1692600059849252639, guid: 7496dede407d893438f920675bb2f9b4, type: 3}
+    m_Data: {fileID: 1692600059849252639, guid: 7496dede407d893438f920675bb2f9b4,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -4746319279346390489, guid: 7496dede407d893438f920675bb2f9b4, type: 3}
+    m_Data: {fileID: -4746319279346390489, guid: 7496dede407d893438f920675bb2f9b4,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -4118963104252158788, guid: 7496dede407d893438f920675bb2f9b4, type: 3}
+    m_Data: {fileID: -4118963104252158788, guid: 7496dede407d893438f920675bb2f9b4,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -420481704, guid: 7496dede407d893438f920675bb2f9b4, type: 3}
   - m_RefCount: 1
@@ -28556,13 +28561,10 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

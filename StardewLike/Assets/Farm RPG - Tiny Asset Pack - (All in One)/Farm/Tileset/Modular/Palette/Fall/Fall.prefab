@@ -24430,7 +24430,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 1e398b6897f64d149b5f77a0704dfaeb, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
-    m_Data: {fileID: -5551988514141425743, guid: f45df123fec460842bf502e822f4bb18, type: 3}
+    m_Data: {fileID: -5551988514141425743, guid: f45df123fec460842bf502e822f4bb18,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -735370260, guid: f45df123fec460842bf502e822f4bb18, type: 3}
   - m_RefCount: 1
@@ -26298,9 +26299,11 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: -1854837764, guid: f45df123fec460842bf502e822f4bb18, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -1645670522104568986, guid: 00360121f09fb5f43a1c84f82f285ce9, type: 3}
+    m_Data: {fileID: -1645670522104568986, guid: 00360121f09fb5f43a1c84f82f285ce9,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -6707692918522805682, guid: 00360121f09fb5f43a1c84f82f285ce9, type: 3}
+    m_Data: {fileID: -6707692918522805682, guid: 00360121f09fb5f43a1c84f82f285ce9,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1152137909, guid: 00360121f09fb5f43a1c84f82f285ce9, type: 3}
   - m_RefCount: 1
@@ -27002,11 +27005,14 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: 1092086166, guid: 00360121f09fb5f43a1c84f82f285ce9, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -7213219589564642987, guid: dd8be5e3e8495234d89cc9d6637a4209, type: 3}
+    m_Data: {fileID: -7213219589564642987, guid: dd8be5e3e8495234d89cc9d6637a4209,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -182363463884900151, guid: dd8be5e3e8495234d89cc9d6637a4209, type: 3}
+    m_Data: {fileID: -182363463884900151, guid: dd8be5e3e8495234d89cc9d6637a4209,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 3252280300170457178, guid: dd8be5e3e8495234d89cc9d6637a4209, type: 3}
+    m_Data: {fileID: 3252280300170457178, guid: dd8be5e3e8495234d89cc9d6637a4209,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -1921753026, guid: dd8be5e3e8495234d89cc9d6637a4209, type: 3}
   - m_RefCount: 1
@@ -28556,13 +28562,10 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

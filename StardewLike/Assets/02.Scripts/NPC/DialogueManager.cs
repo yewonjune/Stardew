@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime;
+using System;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] TMP_Text nameText;
     [SerializeField] TMP_Text dialogueText;
     [SerializeField] Image portraitImage;
+
+    [SerializeField] ConfirmDialog confirmDialog;
 
     DialogueLine[] lines;
     DialogueData currentData;
@@ -78,13 +81,14 @@ public class DialogueManager : MonoBehaviour
         ShowLine();
 
         FreezePlayer(true);
+        GamePause.Pause();
     }
 
     DialogueLine[] PickSequenceLines(DialogueData data)
     {
         if (data.sequences != null && data.sequences.Length > 0)
         {
-            DialogueSequence dialogueSequence = data.sequences[Random.Range(0, data.sequences.Length)];
+            DialogueSequence dialogueSequence = data.sequences[UnityEngine.Random.Range(0, data.sequences.Length)];
             if (dialogueSequence != null && dialogueSequence.lines != null && dialogueSequence.lines.Length > 0)
                 return dialogueSequence.lines;
         }
@@ -123,6 +127,7 @@ public class DialogueManager : MonoBehaviour
         dialoguePanel.SetActive(false);
 
         FreezePlayer(false);
+        GamePause.Resume();
     }
     public void OnClickNext()
     {
@@ -143,5 +148,31 @@ public class DialogueManager : MonoBehaviour
             foreach (var comp in extraToDisable)
                 if (comp) comp.enabled = !freeze;
         }
+    }
+
+    public void Confirm(string message, Action onOK, Action onCancel=null, bool pauseGame=true)
+    {
+        if(confirmDialog == null)
+        {
+            Debug.LogError("[DialogueManager] ConfirmDialog reference is missing.");
+            return;
+        }
+
+        FreezePlayer(true);
+
+        confirmDialog.Open(
+            message,
+            onOK: () =>
+            {
+                FreezePlayer(false);
+                onOK?.Invoke();
+            },
+            onCancel: () =>
+            {
+                FreezePlayer(false);
+                onCancel?.Invoke();
+            },
+            pauseGame: pauseGame
+        );
     }
 }

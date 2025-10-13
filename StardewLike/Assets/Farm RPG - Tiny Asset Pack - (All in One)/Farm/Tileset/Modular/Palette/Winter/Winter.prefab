@@ -21286,7 +21286,8 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: add2318a96a1d294cae983830e722649, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
-    m_Data: {fileID: -4069975249025081445, guid: b10014474ddc0cb42b69114b9293febf, type: 3}
+    m_Data: {fileID: -4069975249025081445, guid: b10014474ddc0cb42b69114b9293febf,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -777896672, guid: b10014474ddc0cb42b69114b9293febf, type: 3}
   - m_RefCount: 1
@@ -23150,7 +23151,8 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: -1555514260, guid: b10014474ddc0cb42b69114b9293febf, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -4643518442569408430, guid: 875a6b11ef6f8474e896f3e97bbfb59c, type: 3}
+    m_Data: {fileID: -4643518442569408430, guid: 875a6b11ef6f8474e896f3e97bbfb59c,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: 1726210041, guid: 875a6b11ef6f8474e896f3e97bbfb59c, type: 3}
   - m_RefCount: 1
@@ -24274,9 +24276,11 @@ Tilemap:
   - m_RefCount: 1
     m_Data: {fileID: -2091726644, guid: 875a6b11ef6f8474e896f3e97bbfb59c, type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: -7156023935426946007, guid: ac2a8b169156f354da0298dd981dc0d2, type: 3}
+    m_Data: {fileID: -7156023935426946007, guid: ac2a8b169156f354da0298dd981dc0d2,
+      type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 8938569083331457815, guid: ac2a8b169156f354da0298dd981dc0d2, type: 3}
+    m_Data: {fileID: 8938569083331457815, guid: ac2a8b169156f354da0298dd981dc0d2,
+      type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -123568953, guid: ac2a8b169156f354da0298dd981dc0d2, type: 3}
   - m_RefCount: 1
@@ -24888,13 +24892,10 @@ TilemapRenderer:
   m_ReflectionProbeUsage: 0
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
