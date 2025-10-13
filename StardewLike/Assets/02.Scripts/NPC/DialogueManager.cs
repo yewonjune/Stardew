@@ -22,11 +22,15 @@ public class DialogueManager : MonoBehaviour
 
     int index;
     bool isDialogueActive;
+    bool modalOpen;
     float lastAdvanceTime;
     const float advanceCooldown = 0.05f;
 
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] MonoBehaviour[] extraToDisable;
+
+    public static bool IsBusy =>
+        Instance != null && (Instance.isDialogueActive || Instance.modalOpen);
 
     void Awake()
     {
@@ -38,12 +42,13 @@ public class DialogueManager : MonoBehaviour
     void Update()
     {
         if (!isDialogueActive) return;
+        if (modalOpen) return;
 
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return))
         {
-            if (Time.time - lastAdvanceTime > advanceCooldown)
+            if (Time.unscaledTime - lastAdvanceTime > advanceCooldown)
             {
-                lastAdvanceTime = Time.time;
+                lastAdvanceTime = Time.unscaledTime;
                 ShowLine();
             }
         }
@@ -79,6 +84,8 @@ public class DialogueManager : MonoBehaviour
         }
 
         ShowLine();
+
+        lastAdvanceTime = Time.unscaledTime - advanceCooldown;
 
         FreezePlayer(true);
         GamePause.Pause();
@@ -122,19 +129,22 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
+        Debug.Log("[DialogueManager] EndDialogue called");
         isDialogueActive = false;
 
         dialoguePanel.SetActive(false);
 
         FreezePlayer(false);
         GamePause.Resume();
-    }
+        Debug.Log($"[DialogueManager] After EndDialogue: isPaused={GamePause.isPaused}, timeScale={Time.timeScale}");
+    
+}
     public void OnClickNext()
     {
-        if (!isDialogueActive) return;
-        if (Time.time - lastAdvanceTime > advanceCooldown)
+        if (!isDialogueActive || modalOpen) return;
+        if (Time.unscaledTime - lastAdvanceTime > advanceCooldown)
         {
-            lastAdvanceTime = Time.time;
+            lastAdvanceTime = Time.unscaledTime;
             ShowLine();
         }
     }
@@ -158,6 +168,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
+        modalOpen = true;
         FreezePlayer(true);
 
         confirmDialog.Open(
@@ -165,14 +176,27 @@ public class DialogueManager : MonoBehaviour
             onOK: () =>
             {
                 FreezePlayer(false);
+                modalOpen = false;
                 onOK?.Invoke();
             },
             onCancel: () =>
             {
                 FreezePlayer(false);
+                modalOpen = false;
                 onCancel?.Invoke();
             },
             pauseGame: pauseGame
         );
+    }
+
+    void OnDisable()   //  예비 안전장치: 씬 전환 중 UI 닫히면서 멈춤 방지
+    {
+        if (isDialogueActive || modalOpen)
+        {
+            isDialogueActive = false;
+            modalOpen = false;
+            GamePause.ResetAll();
+            FreezePlayer(false);
+        }
     }
 }

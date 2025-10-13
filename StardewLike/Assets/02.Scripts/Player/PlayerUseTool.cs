@@ -45,7 +45,6 @@ public class PlayerUseTool : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 새 씬이 활성화되면 그 씬의 SoilTilemapController로 갈아끼움
         if (scene == SceneManager.GetActiveScene())
             RebindSoilController();
     }
@@ -57,11 +56,9 @@ public class PlayerUseTool : MonoBehaviour
         var all = FindObjectsOfType<SoilTilemapController>(includeInactive: false);
         if (all == null || all.Length == 0)
         {
-            Debug.Log("[PlayerUseTool] 씬 어디에도 SoilTilemapController가 없음");
             return;
         }
 
-        // 가장 가까운 컨트롤러 선택
         float best = float.PositiveInfinity;
         SoilTilemapController bestCtrl = null;
         Vector3 p = transform.position;
@@ -74,13 +71,12 @@ public class PlayerUseTool : MonoBehaviour
         }
 
         soilTilemapController = bestCtrl ?? all[0];
-        Debug.Log($"[PlayerUseTool] SoilTilemapController 바인딩: {soilTilemapController.name} (scene={soilTilemapController.gameObject.scene.name})");
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (GamePause.isPaused) return;
+        if (GamePause.isPaused || DialogueManager.IsBusy) return;
 
         UpdateUseToolPoint();
 
@@ -140,8 +136,6 @@ public class PlayerUseTool : MonoBehaviour
 
     void DigSoilWithHoe()
     {
-        if (!soilTilemapController) { Debug.LogWarning("[Hoe] SoilTilemapController가 없음"); return; }
-
         Vector3Int playerCell = soilTilemapController.groundTilemap.WorldToCell(transform.position);
 
         Vector2 d = (playerMovement != null && playerMovement.lastDirection.sqrMagnitude > 0.0001f)
@@ -177,32 +171,11 @@ public class PlayerUseTool : MonoBehaviour
         if (ok) StartToolAction(ToolType.Hoe);
     }
 
-    //void BreakRockWithPickaxe()
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(useToolPoint.position, Vector2.zero);
-
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("돌깨기");
-    //    }
-    //}
-
-    //void ChopTreeWithAxe()
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(useToolPoint.position, Vector2.zero);
-
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("나무베기");
-    //    }
-    //}
-
     void WaterCropWithWateringCan()
     {
         Vector3 world = GetTargetWorldPos();
         if (soilTilemapController.TryWaterAtWorldPos(world))
         {
-            Debug.Log("[Water] 물 주기 성공");
             StartToolAction(ToolType.WateringCan);
             // (선택) 물통 용량 줄이려면 여기서 감소
         }
@@ -211,16 +184,6 @@ public class PlayerUseTool : MonoBehaviour
             Debug.Log("[Water] 물 주기 실패 (갈리지 않았거나 이미 물 먹음)");
         }
     }
-
-    //void HarvestCropWithScythe()
-    //{
-    //    RaycastHit2D hit = Physics2D.Raycast(useToolPoint.position, Vector2.zero);
-
-    //    if (hit.collider != null)
-    //    {
-    //        Debug.Log("작물 베기");
-    //    }
-    //}
 
     void AttackWithSword()
     {
@@ -319,23 +282,15 @@ public class PlayerUseTool : MonoBehaviour
     {
         if (!soilTilemapController)
         {
-            Debug.LogWarning("[Seed] SoilTilemapController가 없음");
             return;
         }
 
         Vector3 world = GetTargetWorldPos();
 
-        // Soil 쪽에 TryPlantAtWorldPos 구현해둔 버전 (추천)
         if (soilTilemapController.TryPlantAtWorldPos(world, seed))
         {
-            Debug.Log("[Seed] 심기 성공");
-            // 인벤토리에서 씨앗 1개 차감 (너의 Inventory 규칙에 맞게)
             inventory.RemoveItem(seed, 1);
-            StartToolAction(ToolType.Hoe); // 심을 때도 짧은 모션 쓰고 싶으면
-        }
-        else
-        {
-            Debug.Log("[Seed] 심기 실패 (갈리지 않았거나 이미 작물 있음)");
+            StartToolAction(ToolType.Hoe); // 모션 나중에 변경
         }
     }
 
@@ -343,7 +298,6 @@ public class PlayerUseTool : MonoBehaviour
     {
         if (!soilTilemapController)
         {
-            Debug.LogWarning("[Harvest] SoilTilemapController가 없음");
             return;
         }
 
@@ -353,12 +307,8 @@ public class PlayerUseTool : MonoBehaviour
             Debug.Log("[Harvest] 수확 성공");
             if (harvested != null)
                 inventory?.AddItem(harvested, 1);
-            // 낫 애니메이션을 쓰고 싶으면:
-            StartToolAction(ToolType.Scythe);
-        }
-        else
-        {
-            Debug.Log("[Harvest] 수확할 성숙 작물이 없음");
+            
+            StartToolAction(ToolType.Scythe);   // 나중에 추가
         }
     }
 }

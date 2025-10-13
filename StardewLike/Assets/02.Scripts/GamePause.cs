@@ -9,18 +9,21 @@ public static class GamePause
 
     public static void Pause()
     {
-        count = 0;
+        count++;
         Time.timeScale = 0;
+        Debug.Log($"[GamePause] Pause -> count={count}");
     }
 
     public static void Resume()
     {
         count = Mathf.Max(0, count - 1);
+        Debug.Log($"[GamePause] Resume -> count={count}");
         if (count == 0) Time.timeScale = 1f;
     }
     public static void ResetAll()
     {
         count = 0;
         Time.timeScale = 1f;
+        Debug.Log("[GamePause] ResetAll -> count=0");
     }
 }

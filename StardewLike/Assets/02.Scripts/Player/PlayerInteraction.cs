@@ -30,11 +30,11 @@ public class PlayerInteraction : MonoBehaviour
                 break;
             }
         }
+    }
 
-        void OnDrawGizmosSelected()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, interactRange);
-        }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, interactRange);
     }
 }

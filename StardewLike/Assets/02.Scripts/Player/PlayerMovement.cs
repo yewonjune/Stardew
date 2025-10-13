@@ -6,7 +6,6 @@ public class PlayerMovement : MonoBehaviour
 {
     public bool debugLog = false;
 
-
     float moveSpeed = 6.0f;
     float speedLerp = 20f;
 
@@ -35,6 +34,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GamePause.isPaused || DialogueManager.IsBusy) return;
+
         currentSpeed = Mathf.Lerp(currentSpeed, setSpeed, Time.deltaTime * speedLerp);
     }
 
