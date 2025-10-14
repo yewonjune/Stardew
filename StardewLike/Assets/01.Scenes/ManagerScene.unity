@@ -1677,7 +1677,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerStaminaController: {fileID: 964853094}
   staminaFill: {fileID: 721041352}
-  hideWhenFull: 0
+  hideWhenFull: 1
 --- !u!114 &436805684
 MonoBehaviour:
   m_ObjectHideFlags: 0

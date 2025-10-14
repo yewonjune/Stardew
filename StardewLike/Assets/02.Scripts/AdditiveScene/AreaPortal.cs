@@ -10,7 +10,6 @@ public class AreaPortal : MonoBehaviour
     public string targetScene;
     public string spawnPointId;
 
-    [Header("Options")]
     public bool freezePlayerDuringTransition = true;
     public float fadeDuration = 0.2f;
     public float gateCooldown = 0.6f;
@@ -90,8 +89,6 @@ public class AreaPortal : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.1f);
 
-        yield return FadeManager.Instance.FadeIn(fadeDuration);
-
         if (rb) { rb.simulated = true; rb.WakeUp(); }
         if (col) col.enabled = true;
         if (mover) mover.SetControl(true);
@@ -99,12 +96,15 @@ public class AreaPortal : MonoBehaviour
         yield return null;
         if (gateCol) gateCol.enabled = true;
 
+        FadeManager.Instance.FadeInCoroutine(fadeDuration);
+
         if (!string.IsNullOrEmpty(prevActiveName))
         {
             var unload = SceneManager.UnloadSceneAsync(prevActiveName);
             if (unload != null) yield return unload;
         }
         yield return Resources.UnloadUnusedAssets();
+
 
 
         isTransitioning = false;

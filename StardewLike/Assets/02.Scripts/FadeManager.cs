@@ -39,6 +39,7 @@ public class FadeManager : MonoBehaviour
            })
            .Play();
     }
+
     public IEnumerator FadeOut(float duration)
     {
         if (!fadeCanvasGroup) yield break;
@@ -73,12 +74,9 @@ public class FadeManager : MonoBehaviour
         fadeCanvasGroup.gameObject.SetActive(false);
     }
 
-    public IEnumerator FadeOutInRoutine(IEnumerator middle, float outDur = 0.2f, float hold = 0.1f, float inDur = 0.2f)
+    public void FadeInCoroutine(float duration)
     {
-        yield return FadeOut(outDur);                 // 완전 블랙 대기
-        if (middle != null)                           // 블랙 상태에서 씬 전환 등 실행
-            yield return middle;
-        if (hold > 0f) yield return new WaitForSecondsRealtime(hold); // 멈칫
-        yield return FadeIn(inDur);                   // 밝아짐
+        StartCoroutine(FadeIn(duration));
     }
+
 }
