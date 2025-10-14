@@ -14,6 +14,8 @@ public class ItemStack
         this.item = item;
         this.count = count;
     }
+
+    public bool IsEmpty => item == null || count <= 0;
 }
 
 public class Inventory : MonoBehaviour
@@ -31,6 +33,8 @@ public class Inventory : MonoBehaviour
         instance = this;
 
         if (SlotCnt <= 0) SlotCnt = 10;
+
+        EnsureSize(SlotCnt);
     }
     #endregion
 
@@ -47,6 +51,7 @@ public class Inventory : MonoBehaviour
         set
         {
             slotCnt = value;
+            EnsureSize(slotCnt);
             onSlotCountChange?.Invoke(slotCnt);
             onInventoryChanged?.Invoke();
         }
@@ -54,58 +59,73 @@ public class Inventory : MonoBehaviour
 
     public List<ItemStack> items = new List<ItemStack>();
 
+    void EnsureSize(int n)
+    {
+        while (items.Count < n) items.Add(new ItemStack(null, 0));
+        if (items.Count > n) items.RemoveRange(n, items.Count - n);
+    }
+
+
+
+    int FindEmptyIndex()
+    {
+        for (int i = 0; i < SlotCnt && i < items.Count; i++)
+            if (items[i] == null || items[i].IsEmpty) return i;
+        return -1;
+    }
+
+    bool HasEmptySlot() => FindEmptyIndex() >= 0;
+
     public bool AddItem(Item item, int amount = 1)
     {
-        if (item == null || amount <= 0)
-            return false;
+        if (item == null || amount <= 0) return false;
 
-        // 1) 스택 가능한 아이템이면 기존 스택을 먼저 채움
         if (item.isStackable)
         {
-            ItemStack stack = items.Find(s => s.item == item);
-            if (stack != null)
+            for (int i = 0; i < SlotCnt && i < items.Count; i++)
             {
-                stack.count += amount;
-                Debug.Log($"[Inventory] '{item.itemName}' 스택 +{amount} (총 {stack.count})");
-                onInventoryChanged?.Invoke();
-                return true;
+                var s = items[i];
+                if (!s.IsEmpty && s.item == item)
+                {
+                    s.count += amount;
+                    onInventoryChanged?.Invoke();
+                    return true;
+                }
             }
         }
 
-        // 2) 남는 슬롯이 있어야 새 스택/아이템 추가 가능
-        if (items.Count >= SlotCnt)
+        int idx = FindEmptyIndex();
+        if (idx == -1)
         {
             Debug.Log("[Inventory] 인벤토리가 가득 참!");
             return false;
         }
 
-        items.Add(new ItemStack(item, amount));
-        Debug.Log($"[Inventory] '{item.itemName}' 추가됨 (x{amount})");
-
+        items[idx] = new ItemStack(item, amount);
         onInventoryChanged?.Invoke();
         return true;
     }
 
     public bool RemoveItem(Item item, int amount = 1)
     {
-        if (item == null || amount <= 0)
-            return false;
+        if (item == null || amount <= 0) return false;
 
-        bool anyAdded = false;
-        int remaining = amount;
-
-        ItemStack stack = items.Find(s => s.item == item);
-        if (stack == null)
-            return false;
-
-        stack.count -= amount;
-        if (stack.count <= 0)
-            items.Remove(stack);
-
-        onInventoryChanged?.Invoke();
-        return true;
+        for (int i = 0; i < SlotCnt && i < items.Count; i++)
+        {
+            var s = items[i];
+            if (!s.IsEmpty && s.item == item)
+            {
+                s.count -= amount;
+                if (s.count <= 0)
+                {
+                    items[i] = new ItemStack(null, 0);
+                }
+                onInventoryChanged?.Invoke();
+                return true;
+            }
+        }
+        return false;
     }
-
 
     public void ForceRefresh()
     {
