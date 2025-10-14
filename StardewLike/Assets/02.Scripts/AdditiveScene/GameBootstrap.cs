@@ -13,12 +13,10 @@ public class GameBootstrap : MonoBehaviour
 
     IEnumerator Boot()
     {
-        AsyncOperation op = SceneManager.LoadSceneAsync("FarmScene", LoadSceneMode.Additive);
+        var op = SceneManager.LoadSceneAsync("FarmScene", LoadSceneMode.Additive);
+        yield return op;
 
-        while (!op.isDone)
-            yield return null;
-
-        Scene farm = SceneManager.GetSceneByName("FarmScene");
+        var farm = SceneManager.GetSceneByName("FarmScene");
         if (farm.IsValid())
             SceneManager.SetActiveScene(farm);
     }

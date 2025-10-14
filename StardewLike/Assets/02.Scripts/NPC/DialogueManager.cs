@@ -129,14 +129,12 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
-        Debug.Log("[DialogueManager] EndDialogue called");
         isDialogueActive = false;
 
         dialoguePanel.SetActive(false);
 
         FreezePlayer(false);
         GamePause.Resume();
-        Debug.Log($"[DialogueManager] After EndDialogue: isPaused={GamePause.isPaused}, timeScale={Time.timeScale}");
     
 }
     public void OnClickNext()
@@ -189,7 +187,7 @@ public class DialogueManager : MonoBehaviour
         );
     }
 
-    void OnDisable()   //  예비 안전장치: 씬 전환 중 UI 닫히면서 멈춤 방지
+    void OnDisable()
     {
         if (isDialogueActive || modalOpen)
         {

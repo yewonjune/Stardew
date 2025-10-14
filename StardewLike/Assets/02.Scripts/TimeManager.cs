@@ -54,7 +54,6 @@ public class TimeManager : MonoBehaviour
         Debug.Log($"Day {day} 시작!");
 
         if (soilTilemapController) soilTilemapController.NewDay();
-        else Debug.LogWarning("[DayManager] SoilTilemapController 참조 안 됨");
     }
 
     void UpdateUI()
@@ -84,7 +83,6 @@ public class TimeManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 새 씬이 활성화되면 그 씬의 SoilTilemapController로 갈아끼움
         if (scene == SceneManager.GetActiveScene())
             RebindSoilController();
     }
@@ -100,7 +98,6 @@ public class TimeManager : MonoBehaviour
             return;
         }
 
-        // 가장 가까운 컨트롤러 선택
         float best = float.PositiveInfinity;
         SoilTilemapController bestCtrl = null;
         Vector3 p = transform.position;
@@ -113,7 +110,6 @@ public class TimeManager : MonoBehaviour
         }
 
         soilTilemapController = bestCtrl ?? all[0];
-        Debug.Log($"[PlayerUseTool] SoilTilemapController 바인딩: {soilTilemapController.name} (scene={soilTilemapController.gameObject.scene.name})");
     }
 
 }

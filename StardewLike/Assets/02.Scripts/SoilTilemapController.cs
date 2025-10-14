@@ -54,7 +54,6 @@ public class SoilTilemapController : MonoBehaviour
 
     public bool TryWaterAtCell(Vector3Int cell)
     {
-        // 갈린 땅이어야 하고, 아직 물 안 먹은 칸이어야 함
         if (!tilled.Contains(cell)) return false;
         if (watered.Contains(cell)) return false;
 
@@ -62,14 +61,12 @@ public class SoilTilemapController : MonoBehaviour
         wateredTilemap.SetTile(cell, wateredTile);
         RefreshAround(wateredTilemap, cell);
 
-        // 작물이 심어져 있으면 오늘 물 받았다고 알림
         if (plantedCrop.TryGetValue(cell, out var crop))
             crop.SetWateredToday();
 
         return true;
     }
 
-    // ---- 씨앗 심기 ----
     public bool TryPlantAtWorldPos(Vector3 worldPos, Seeds seedData)
     {
         Vector3Int cell = groundTilemap.WorldToCell(worldPos);
@@ -81,7 +78,6 @@ public class SoilTilemapController : MonoBehaviour
         if (!tilled.Contains(cell)) return false;          // 갈린 땅만 심기 가능
         if (plantedCrop.ContainsKey(cell)) return false;   // 이미 작물 있음
 
-        // 프리팹 생성
         Vector3 world = groundTilemap.GetCellCenterWorld(cell);
         var go = Instantiate(seedData.cropPrefab, world, Quaternion.identity);
         var crop = go.GetComponent<Crop>();
@@ -90,7 +86,6 @@ public class SoilTilemapController : MonoBehaviour
         if (growthSpritesOverride != null && growthSpritesOverride.Count > 0)
             crop.growthSprites = growthSpritesOverride;
 
-        // Crop 초기화(+ 역참조)
         crop.Init(this, cell, seedData);
 
         plantedCrop[cell] = crop;
@@ -101,7 +96,6 @@ public class SoilTilemapController : MonoBehaviour
         return true;
     }
 
-    // ---- 수확 (성숙 시) ----
     public bool TryHarvestAtWorldPos(Vector3 worldPos, out Item harvestedItem)
     {
         Vector3Int cell = groundTilemap.WorldToCell(worldPos);
@@ -116,7 +110,6 @@ public class SoilTilemapController : MonoBehaviour
 
         if (crop.TryHarvest(out harvestedItem))
         {
-            // 단발성 작물은 TryHarvest() 내부에서 파괴되고 여기서 칸 정리 필요
             if (harvestedItem != null && !crop.seedData.regrowAfterHarvest)
                 plantedCrop.Remove(cell);
             return true;
@@ -125,18 +118,15 @@ public class SoilTilemapController : MonoBehaviour
         return false;
     }
 
-    // ---- 하루 전환: 물 흔적 제거 + 모든 작물 NewDay 처리 ----
     public void NewDay()
     {
         Debug.Log("[Soil] NewDay 호출됨: 물표시 초기화 + 작물 하루 경과 처리");
 
-        // 물 흔적 초기화
         watered.Clear();
         if (wateredTilemap) wateredTilemap.ClearAllTiles();
         foreach (var kv in plantedCrop) kv.Value.OnNewDay();
     }
 
-    // ---- 헬퍼 ----
     public Vector3Int WorldToCell(Vector3 world) => groundTilemap.WorldToCell(world);
     public Vector3 CellToWorldCenter(Vector3Int cell) => groundTilemap.GetCellCenterWorld(cell);
 
@@ -150,7 +140,6 @@ public class SoilTilemapController : MonoBehaviour
         return crop;
     }
 
-    // (선택) 칸 비우기: 단발성 작물 수확 직후 등에서 사용
     public void ClearCropCell(Vector3Int cell)
     {
         plantedCrop.Remove(cell);

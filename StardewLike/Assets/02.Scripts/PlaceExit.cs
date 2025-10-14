@@ -9,8 +9,6 @@ public class PlaceExit : MonoBehaviour
 
     public Vector3 playerOutdoorPosition;
 
-
-
     // Start is called before the first frame update
     void Start()
     {
@@ -33,7 +31,6 @@ public class PlaceExit : MonoBehaviour
     {
         if (cameraManager == null || player == null)
         {
-            Debug.LogError("cameraManager or player is null!");
             return;
         }
 

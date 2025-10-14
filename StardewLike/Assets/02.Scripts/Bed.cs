@@ -17,17 +17,21 @@ public class Bed : MonoBehaviour
             if (Input.GetKeyDown(interactKey))
             {
                 lastInteractTime = Time.time;
-                //Sleep();
 
                 DialogueManager.Instance.Confirm(
                    "잠을 자면 다음날 아침 6시가 됩니다.\n잘까요?",
                    onOK: () =>
                    {
-                       var tm = FindObjectOfType<TimeManager>();
-                       if (tm != null)
+                       var timeManager = FindObjectOfType<TimeManager>();
+                       if (timeManager != null)
                        {
-                           tm.EndDay();
-                           Debug.Log("플레이어가 잠을 자서 다음날 아침 6시가 되었습니다!");
+                           FadeManager.Instance.FadeOutIn(() =>
+                           {
+                               timeManager.EndDay();
+
+                               Debug.Log("플레이어가 잠을 자서 다음날 아침 6시가 되었습니다!");
+                           });
+
                        }
                    },
                    onCancel: () =>
@@ -51,19 +55,4 @@ public class Bed : MonoBehaviour
         if (other.CompareTag("Player"))
             playerInRange = false;
     }
-
-    //void Sleep()
-    //{
-    //    TimeManager timeManager = FindObjectOfType<TimeManager>();
-
-    //    if (timeManager != null)
-    //    {
-    //        timeManager.EndDay();
-    //        Debug.Log("플레이어가 잠을 자서 다음날 아침 6시가 되었습니다!");
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("[Bed] TimeManager를 찾을 수 없음");
-    //    }
-    //}
 }

@@ -50,6 +50,7 @@ public class PlaceEntrance : MonoBehaviour
         {
             cameraManager = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
         }
+
         var fade = FadeManager.Instance ?? FindObjectOfType<FadeManager>();
 
         var col = player.GetComponent<Collider2D>();

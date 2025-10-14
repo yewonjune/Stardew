@@ -18,8 +18,8 @@ public class PlayerUseTool : MonoBehaviour
 
     [SerializeField] bool useMouseTarget = false;
 
-    [SerializeField] float hitRadius = 0.15f;                 // 칸 판정 여유
-    [SerializeField] LayerMask resourceLayer = ~0;            // 자원만 맞추고 싶으면 레이어 지정
+    [SerializeField] float hitRadius = 0.15f;
+    [SerializeField] LayerMask resourceLayer = ~0;
 
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
@@ -28,14 +28,14 @@ public class PlayerUseTool : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.activeSceneChanged += OnActiveSceneChanged; // 추가
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         RebindSoilController();
     }
 
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.activeSceneChanged -= OnActiveSceneChanged; // 추가
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
     void OnActiveSceneChanged(Scene prev, Scene next)

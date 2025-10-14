@@ -8152,6 +8152,51 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &969496688
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 969496689}
+  - component: {fileID: 969496690}
+  m_Layer: 0
+  m_Name: FarmEntrancePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &969496689
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969496688}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.1, y: -17.8, z: -1.9451436}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &969496690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 969496688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae26528df7465b14f95536168f7556fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnId: FarmEntrancePoint
 --- !u!1 &973111617
 GameObject:
   m_ObjectHideFlags: 0
@@ -9525,7 +9570,7 @@ GameObject:
   - component: {fileID: 1102806374}
   - component: {fileID: 1102806376}
   m_Layer: 0
-  m_Name: PlaceSceneGate
+  m_Name: FarmToVillageGate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9585,7 +9630,7 @@ Transform:
   m_GameObject: {fileID: 1102806373}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -19.99, z: -1.9451436}
+  m_LocalPosition: {x: -1.1, y: -20.21, z: -1.9451436}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9600,15 +9645,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1102806373}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 032e6ed6c1bc0ea4baa59be23c6cdddb, type: 3}
+  m_Script: {fileID: 11500000, guid: 579cef6c96dd3ef47ac9a033828f4a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  cameraManager: {fileID: 0}
-  targetSceneName: VillageScene
-  targetSpawnPointName: VillageEntrancePoint
-  unloadActiveMapScene: 1
+  targetScene: VillageScene
+  spawnPointId: VillageEntrancePoint
   freezePlayerDuringTransition: 1
+  fadeDuration: 0.2
+  gateCooldown: 0.6
 --- !u!1 &1134211196
 GameObject:
   m_ObjectHideFlags: 0
@@ -17849,37 +17893,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1020576520}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1465724110
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1465724111}
-  m_Layer: 0
-  m_Name: FarmToVillageGate
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1465724111
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1465724110}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.4379858, y: -18.57, z: -2.0144591}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1558047582
 GameObject:
   m_ObjectHideFlags: 0
@@ -17919,7 +17932,7 @@ Transform:
   m_GameObject: {fileID: 1558047582}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1, z: 0}
+  m_LocalPosition: {x: -3.56, y: -0.22, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -26593,4 +26606,4 @@ SceneRoots:
   - {fileID: 950649874}
   - {fileID: 1134211198}
   - {fileID: 1102806375}
-  - {fileID: 1465724111}
+  - {fileID: 969496689}

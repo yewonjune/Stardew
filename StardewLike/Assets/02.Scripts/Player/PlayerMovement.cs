@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public bool debugLog = false;
-
     float moveSpeed = 6.0f;
     float speedLerp = 20f;
 
@@ -59,8 +57,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (debugLog)
-            Debug.Log($"[PM] input=({input.x},{input.y}) canControl={canControl}");
 
         bool isMoving = input != Vector2.zero;
 
