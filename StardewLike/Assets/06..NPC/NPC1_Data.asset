@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b01f6e04a5adc6d4095a2ff8b980077e, type: 3}
   m_Name: NPC1_Data
   m_EditorClassIdentifier: 
-  npcId: NPC1
-  displayName: NPC1
-  defaultPortrait: {fileID: 259593881, guid: d95fd0d5ac5ef9540800f711971f4a5e, type: 3}
-  happyPortrait: {fileID: -67721988, guid: d95fd0d5ac5ef9540800f711971f4a5e, type: 3}
-  angryPortrait: {fileID: -401243341, guid: d95fd0d5ac5ef9540800f711971f4a5e, type: 3}
-  surprisedPortrait: {fileID: -1418014602, guid: d95fd0d5ac5ef9540800f711971f4a5e,
-    type: 3}
+  npcId: Soyeon
+  displayName: Soyeon
+  defaultPortrait: {fileID: 1298313460, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
+  happyPortrait: {fileID: -1560046056, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
+  angryPortrait: {fileID: -81851698, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
+  surprisedPortrait: {fileID: 266124187, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
