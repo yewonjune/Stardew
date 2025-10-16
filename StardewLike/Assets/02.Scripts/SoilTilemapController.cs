@@ -82,6 +82,7 @@ public class SoilTilemapController : MonoBehaviour
     {
         if (!tilled.Contains(cell)) return false;          // 갈린 땅만 심기 가능
         if (plantedCrop.ContainsKey(cell)) return false;   // 이미 작물 있음
+        if (seedData == null || seedData.cropPrefab == null) return false;
 
         Vector3 world = groundTilemap.GetCellCenterWorld(cell);
         var go = Instantiate(seedData.cropPrefab, world, Quaternion.identity);
@@ -108,7 +109,7 @@ public class SoilTilemapController : MonoBehaviour
                 cell = cell,
                 growthStage = crop.CurrentStage,
                 isWateredToday = watered.Contains(cell),
-                //harvestedOnce = crop.HasBeenHarvestedOnce()
+                harvestedOnce = crop.HasBeenHarvestedOnce()
             });
         }
 
@@ -144,7 +145,7 @@ public class SoilTilemapController : MonoBehaviour
                         cell = cell,
                         growthStage = crop.CurrentStage,
                         isWateredToday = watered.Contains(cell),
-                        //harvestedOnce = crop.HasBeenHarvestedOnce()
+                        harvestedOnce = crop.HasBeenHarvestedOnce()
                     });
                 }
             }
@@ -178,7 +179,7 @@ public class SoilTilemapController : MonoBehaviour
                     cell = kv.Key,
                     growthStage = c.CurrentStage,
                     isWateredToday = false,
-                    //harvestedOnce = c.HasBeenHarvestedOnce()
+                    harvestedOnce = c.HasBeenHarvestedOnce()
                 });
             }
         }
@@ -227,14 +228,14 @@ public class SoilTilemapController : MonoBehaviour
         // tilled 복원
         foreach (Vector3Int c in st.tilled)
         {
-            soilTilemap.SetTile(c, tilledSoilTile);
+            if (soilTilemap) soilTilemap.SetTile(c, tilledSoilTile);
             tilled.Add(c);
         }
 
         // watered 복원
         foreach (Vector3Int c in st.watered)
         {
-            wateredTilemap.SetTile(c, wateredTile);
+            if (wateredTilemap) wateredTilemap.SetTile(c, wateredTile);
             watered.Add(c);
         }
 
@@ -244,15 +245,15 @@ public class SoilTilemapController : MonoBehaviour
             Vector3Int cell = kv.Key;
             CropSave save = kv.Value;
 
-            GameObject prefab = FindCropPrefabById(save.prefabId);
-            if (prefab == null)
+            var seed = FindSeedById(save.prefabId);
+            if (seed == null)
             {
-                Debug.LogWarning($"[Soil] Crop prefab '{save.prefabId}' 를 찾을 수 없습니다.");
+                Debug.LogWarning($"[Soil] Seed '{save.prefabId}' 를 찾을 수 없습니다.");
                 continue;
             }
 
             Vector3 world = groundTilemap.GetCellCenterWorld(cell);
-            GameObject go = Object.Instantiate(prefab, world, Quaternion.identity);
+            var go = Instantiate(seed.cropPrefab, world, Quaternion.identity);
             Crop crop = go.GetComponent<Crop>();
             
             if (crop == null)
@@ -261,9 +262,9 @@ public class SoilTilemapController : MonoBehaviour
                 continue;
             }
 
-            crop.Init(this, cell, crop.seedData); // seedData를 prefab에 붙여뒀다는 가정
+            crop.Init(this, cell, seed);
 
-            //if (save.harvestedOnce) crop.SetHarvestedOnce(true);
+            if (save.harvestedOnce) crop.SetHarvestedOnce(true);
             crop.ForceSetStage(save.growthStage);
             if (save.isWateredToday)
             {
@@ -274,11 +275,12 @@ public class SoilTilemapController : MonoBehaviour
         }
     }
 
-    private GameObject FindCropPrefabById(string prefabId)
+
+    Seeds FindSeedById(string seedId)
     {
-        if (string.IsNullOrEmpty(prefabId)) return null;
-        // 예: Assets/Resources/Crops/Tomato.prefab
-        return Resources.Load<GameObject>($"Crops/{prefabId}");
+        if (string.IsNullOrEmpty(seedId)) return null;
+
+        return Resources.Load<Seeds>($"Item/Item.Seeds/{seedId}");
     }
 }
 
