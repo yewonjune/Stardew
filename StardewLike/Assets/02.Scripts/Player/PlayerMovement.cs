@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
         animator.SetFloat("MoveY", animDir.y);
 
         if (isMoving)
-            player.MovePosition(player.position + animDir * moveSpeed * Time.fixedDeltaTime);
+            player.MovePosition(player.position + animDir * currentSpeed * Time.fixedDeltaTime);
         else
             player.velocity = Vector2.zero;
 
@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetSpeed(float value)
     {
-        moveSpeed = value;
+        currentSpeed = value;
     }
 
     public void SetControl(bool enable)

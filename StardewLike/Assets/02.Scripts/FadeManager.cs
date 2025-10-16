@@ -27,7 +27,7 @@ public class FadeManager : MonoBehaviour
         fadeCanvasGroup.gameObject.SetActive(true);
         fadeCanvasGroup.blocksRaycasts = true;
 
-        var seq = DG.Tweening.DOTween.Sequence().SetUpdate(true); // unscaled
+        var seq = DG.Tweening.DOTween.Sequence().SetUpdate(true);
         seq.Append(fadeCanvasGroup.DOFade(1f, fadeDuration))
            .AppendCallback(() => onFadeMiddle?.Invoke())
            .AppendInterval(0.5f)

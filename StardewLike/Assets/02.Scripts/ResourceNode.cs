@@ -17,9 +17,37 @@ public class ResourceNode : MonoBehaviour
     public int dropCount = 1;             // 몇 개 떨어뜨릴지
     public float scatterRadius = 0.2f;    // 살짝 흩뿌리기
 
+    public string prefabId;
+
     private void Awake()
     {
         hp = maxHp;
+
+        if (string.IsNullOrEmpty(prefabId))
+        {
+            prefabId = gameObject.name.Replace("(Clone)", "").Trim();
+        }
+    }
+    void Start()
+    {
+        WorldStateManager worldStateManager = WorldStateManager.Instance;
+        if (worldStateManager == null)
+        {
+            Debug.LogWarning("[Soil] WorldStateManager.Instance 가 없습니다. 복원을 생략합니다.");
+            return;
+        }
+
+        var st = worldStateManager.GetOrCreate(gameObject.scene.name);
+        // 이미 동일 위치/ID가 등록된 경우는 무시
+        if (!st.resources.Exists(r => r.prefabId == prefabId && (r.position - transform.position).sqrMagnitude < 0.0001f))
+        {
+            worldStateManager.AddResource(gameObject.scene.name, new ResourceSave
+            {
+                prefabId = prefabId,
+                position = transform.position,
+                harvestedOrRemoved = false
+            });
+        }
     }
 
     public void Hit(Tools tool)
@@ -39,17 +67,58 @@ public class ResourceNode : MonoBehaviour
         hp -= Mathf.Max(1, tool.power);
         Debug.Log($"[Resource] {resourceType} 맞음! 남은 HP = {hp}");
 
-        if (hp <= 0) 
+        if (hp <= 0)
+        {
             Break();
+        }
+    }
+    public void Harvest()
+    {
+        Break();
     }
 
     void Break()
     {
-        Debug.Log($"[Resource] {resourceType} 파괴됨!");
+        SpawnDrops();
 
+        WorldStateManager worldStateManager = WorldStateManager.Instance;
+        if (worldStateManager != null)
+        {
+            string sceneName = gameObject.scene.name;
+            worldStateManager.MarkResourceRemoved(sceneName, transform.position);
+        }
+        else
+        {
+            Debug.LogWarning("[Resource] WorldStateManager.Instance 가 null 입니다. 파괴 상태가 저장되지 않습니다.");
+        }
+
+        Destroy(gameObject);
+    }
+
+    //public void Harvest()
+    //{
+    //    SpawnDrops();
+
+    //    WorldStateManager worldStateManager = WorldStateManager.Instance;
+    //    if (worldStateManager != null)
+    //    {
+    //        string sceneName = gameObject.scene.name;
+    //        worldStateManager.MarkResourceRemoved(sceneName, transform.position);
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("[Resource] WorldStateManager.Instance 가 null 입니다. 수확 상태가 저장되지 않습니다.");
+    //    }
+
+    //    Destroy(gameObject);
+    //}
+
+    void SpawnDrops()
+    {
         if (dropPrefab == null)
         {
             Debug.LogWarning("[Resource] dropPrefab이 비어있어 드랍을 생성할 수 없습니다.");
+            return;
         }
         else
         {
@@ -65,7 +134,6 @@ public class ResourceNode : MonoBehaviour
                 }
             }
         }
-        Destroy(gameObject);
     }
 
 }

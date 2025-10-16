@@ -17,6 +17,6 @@ public class StaminaBarUI : MonoBehaviour
         staminaFill.fillAmount = fillValue;
 
         if (hideWhenFull)
-            gameObject.SetActive(fillValue < 0.999f);
+            gameObject.SetActive(fillValue > 0.999f);
     }
 }
