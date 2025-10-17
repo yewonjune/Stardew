@@ -9,6 +9,8 @@ public class PlaceExit : MonoBehaviour
 
     public Vector3 playerOutdoorPosition;
 
+    [SerializeField] string targetCamKey = "Farm";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,16 +26,15 @@ public class PlaceExit : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
-            ExitHouse();
+            ExitPlace();
     }
 
-    void ExitHouse()
+    void ExitPlace()
     {
         if (cameraManager == null || player == null)
         {
             return;
         }
-
 
         var rb = player.GetComponent<Rigidbody2D>();
         var col = player.GetComponent<Collider2D>();
@@ -45,7 +46,7 @@ public class PlaceExit : MonoBehaviour
 
         FadeManager.Instance.FadeOutIn(() =>
         {
-            cameraManager.SwitchToFarm();
+            cameraManager.SwitchTo(targetCamKey);
             player.position = playerOutdoorPosition;
 
             StartCoroutine(RestoreNextFrame(rb, col, mover));

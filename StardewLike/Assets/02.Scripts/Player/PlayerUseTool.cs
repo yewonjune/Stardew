@@ -223,7 +223,6 @@ public class PlayerUseTool : MonoBehaviour
                 return;
             }
         }
-        Debug.Log("[Tool] 맞출 자원이 없음");
     }
 
     void OnDrawGizmosSelected()
@@ -304,7 +303,6 @@ public class PlayerUseTool : MonoBehaviour
         Vector3 world = GetTargetWorldPos();
         if (soilTilemapController.TryHarvestAtWorldPos(world, out var harvested))
         {
-            Debug.Log("[Harvest] 수확 성공");
             if (harvested != null)
                 inventory?.AddItem(harvested, 1);
             

@@ -4,8 +4,9 @@ using UnityEngine;
 public class PlaceEntrance : MonoBehaviour
 {
     public Transform player;
-
     public Vector3 playerIndoorPosition;
+
+    [SerializeField] string targetCamKey = "House";
 
     public float interactDistance = 1.5f;
     public string entranceLayerName = "Entrance";
@@ -30,7 +31,7 @@ public class PlaceEntrance : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.E) && InRange())
-            EnterHouse();
+            EnterPlace();
 
         if (Input.GetMouseButtonDown(0) && selfCol)
         {
@@ -40,44 +41,38 @@ public class PlaceEntrance : MonoBehaviour
             Vector2 mouseWorld = cam.ScreenToWorldPoint(Input.mousePosition);
             var hit = Physics2D.OverlapPoint(mouseWorld, entranceLayerMask);
             if (hit == selfCol && InRange())
-                EnterHouse();
+                EnterPlace();
         }
     }
 
-    void EnterHouse()
+    void EnterPlace()
     {
-        if (!cameraManager)
-        {
-            cameraManager = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
-        }
-
+        cameraManager = cameraManager ?? CameraManager.Instance ?? FindObjectOfType<CameraManager>();
         var fade = FadeManager.Instance ?? FindObjectOfType<FadeManager>();
-
         var col = player.GetComponent<Collider2D>();
+        var mover = player.GetComponent<PlayerMovement>();
+        var rb = player.GetComponent<Rigidbody2D>();
 
-        if (!fade)
-        {
-            if (col) col.enabled = false;
-            cameraManager.SwitchToHouse();
-            player.position = playerIndoorPosition;
-            StartCoroutine(ReenableColliderNextFrame(col));
-            return;
-        }
-
+        if (mover) mover.enabled = false;
+        if (rb) { rb.velocity = Vector2.zero; rb.isKinematic = true; }
         if (col) col.enabled = false;
 
-        fade.FadeOutIn(() =>
+        System.Action teleport = () =>
         {
-            cameraManager.SwitchToHouse();
+            cameraManager.SwitchTo(targetCamKey);
             player.position = playerIndoorPosition;
-            StartCoroutine(ReenableColliderNextFrame(col));
-        });
+            StartCoroutine(RestoreNextFrame(rb, col, mover));
+        };
+
+        if (fade) fade.FadeOutIn(teleport); else teleport();
     }
 
-    IEnumerator ReenableColliderNextFrame(Collider2D col)
+    IEnumerator RestoreNextFrame(Rigidbody2D rb, Collider2D col, PlayerMovement mover)
     {
         yield return null;
+        if (rb) rb.isKinematic = false;
         if (col) col.enabled = true;
+        if (mover) mover.enabled = true;
     }
 
     bool InRange()

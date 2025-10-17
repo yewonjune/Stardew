@@ -17,7 +17,6 @@ public class FadeManager : MonoBehaviour
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
     }
 
     public void FadeOutIn(System.Action onFadeMiddle)

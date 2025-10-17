@@ -5857,7 +5857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  playerOutdoorPosition: {x: 0, y: 0, z: 0}
+  playerOutdoorPosition: {x: 4.62, y: -6.64, z: 0}
 --- !u!1 &517416201
 GameObject:
   m_ObjectHideFlags: 0
@@ -7128,6 +7128,7 @@ GameObject:
   - component: {fileID: 868827498}
   - component: {fileID: 868827500}
   - component: {fileID: 868827501}
+  - component: {fileID: 868827502}
   m_Layer: 0
   m_Name: HouseCamera
   m_TagString: Untagged
@@ -7218,6 +7219,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 358f26fc9bc9cd140a6ae77a62c121d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &868827502
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 868827497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f073add576c8a42b29f37429383030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: House
 --- !u!1 &931296144
 GameObject:
   m_ObjectHideFlags: 0
@@ -9682,10 +9696,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f74afd6940ed9f94b8ddd7275cc8697b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 1919207365}
-  houseCam: {fileID: 868827498}
-  villageCam: {fileID: 0}
-  player: {fileID: 0}
+  activePriority: 20
+  idlePriority: 0
+  playerTag: Player
+  playerCameraTargetName: CameraTarget
 --- !u!4 &1134211198
 Transform:
   m_ObjectHideFlags: 0
@@ -26163,6 +26177,7 @@ GameObject:
   - component: {fileID: 1919207365}
   - component: {fileID: 1919207367}
   - component: {fileID: 1919207368}
+  - component: {fileID: 1919207369}
   m_Layer: 0
   m_Name: FarmCamera
   m_TagString: Untagged
@@ -26253,6 +26268,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 358f26fc9bc9cd140a6ae77a62c121d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1919207369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919207364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02f073add576c8a42b29f37429383030, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  key: Farm
 --- !u!1 &1946707036
 GameObject:
   m_ObjectHideFlags: 0
