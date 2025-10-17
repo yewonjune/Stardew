@@ -37,6 +37,6 @@ public class MenuController : MonoBehaviour
 
     void OnstartBtnClicked()
     {
-        SceneManager.LoadScene("FarmScene");
+        SceneManager.LoadScene("ManagerScene");
     }
 }
