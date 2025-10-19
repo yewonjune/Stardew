@@ -5193,7 +5193,7 @@ Transform:
   m_GameObject: {fileID: 882359613}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 46.74, y: -12.4, z: 0}
+  m_LocalPosition: {x: -10.43, y: 0.37, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5262,9 +5262,9 @@ PolygonCollider2D:
   m_Points:
     m_Paths:
     - - {x: -7.4831324, y: 15.964517}
-      - {x: -30.92275, y: 15.956399}
-      - {x: -30.832304, y: -19.990551}
-      - {x: 17.818304, y: -20.114283}
+      - {x: -21.313017, y: 16.01326}
+      - {x: -21.195232, y: -17.085258}
+      - {x: 17.734404, y: -16.93207}
       - {x: 17.9447, y: 16.007177}
   m_UseDelaunayMesh: 0
 --- !u!4 &934076275
@@ -24202,8 +24202,8 @@ Tilemap:
   - first: {x: -9, y: -17, z: 0}
     second:
       serializedVersion: 2
-      m_TileIndex: 14
-      m_TileSpriteIndex: 14
+      m_TileIndex: 16
+      m_TileSpriteIndex: 16
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -27379,11 +27379,11 @@ Tilemap:
     m_Data: {fileID: 11400000, guid: 3b30b5364e568b94c8774377a0f7af96, type: 2}
   - m_RefCount: 12
     m_Data: {fileID: 11400000, guid: e16972da912872d4d81c3b4163cd6905, type: 2}
-  - m_RefCount: 103
+  - m_RefCount: 102
     m_Data: {fileID: 11400000, guid: 2f92ae43193ccf74f995de5921ebfee0, type: 2}
   - m_RefCount: 1
     m_Data: {fileID: 11400000, guid: e5081494f19b48045ac02e8123091c1d, type: 2}
-  - m_RefCount: 18
+  - m_RefCount: 19
     m_Data: {fileID: 11400000, guid: 4dc8ae63beb0c3c45add3d5e2e0ebff0, type: 2}
   - m_RefCount: 3
     m_Data: {fileID: 11400000, guid: d196a3c6dccc229488a5e25412fdd866, type: 2}
@@ -27432,11 +27432,11 @@ Tilemap:
     m_Data: {fileID: 1921130132, guid: b081f4841990ee947bd7149a38aeddc5, type: 3}
   - m_RefCount: 12
     m_Data: {fileID: 21300000, guid: 6e3183ccefe216d4db03b736c4d0e659, type: 3}
-  - m_RefCount: 103
+  - m_RefCount: 102
     m_Data: {fileID: 734769215, guid: 53dc6dd4ab75e394f8531a872ca9cd1c, type: 3}
   - m_RefCount: 1
     m_Data: {fileID: -894467018, guid: 53dc6dd4ab75e394f8531a872ca9cd1c, type: 3}
-  - m_RefCount: 18
+  - m_RefCount: 19
     m_Data: {fileID: -828837410, guid: 53dc6dd4ab75e394f8531a872ca9cd1c, type: 3}
   - m_RefCount: 3
     m_Data: {fileID: 264846605, guid: 53dc6dd4ab75e394f8531a872ca9cd1c, type: 3}
@@ -33385,7 +33385,7 @@ Transform:
   m_GameObject: {fileID: 2045038693}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 57.6, y: -18.59, z: 0}
+  m_LocalPosition: {x: 57.6, y: -18.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33404,7 +33404,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  playerOutdoorPosition: {x: 4.62, y: -6.64, z: 0}
+  playerOutdoorPosition: {x: -10.43, y: 0.37, z: 0}
   targetCamKey: Village
 --- !u!61 &2045038696
 BoxCollider2D:

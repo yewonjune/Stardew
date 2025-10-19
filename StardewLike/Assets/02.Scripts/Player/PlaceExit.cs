@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlaceExit : MonoBehaviour
 {
     public Transform player;
-    private CameraManager cameraManager;
 
     public Vector3 playerOutdoorPosition;
 
@@ -19,8 +18,6 @@ public class PlaceExit : MonoBehaviour
             var go = GameObject.FindGameObjectWithTag("Player");
             if (go) player = go.transform;
         }
-
-        cameraManager = CameraManager.Instance;
     }
 
     void OnTriggerEnter2D(Collider2D collision)
@@ -31,7 +28,7 @@ public class PlaceExit : MonoBehaviour
 
     void ExitPlace()
     {
-        if (cameraManager == null || player == null)
+        if (CameraManager.Instance == null || player == null)
         {
             return;
         }
@@ -46,7 +43,7 @@ public class PlaceExit : MonoBehaviour
 
         FadeManager.Instance.FadeOutIn(() =>
         {
-            cameraManager.SwitchTo(targetCamKey);
+            CameraManager.Instance.SwitchTo(targetCamKey);
             player.position = playerOutdoorPosition;
 
             StartCoroutine(RestoreNextFrame(rb, col, mover));

@@ -11,7 +11,6 @@ public class PlaceEntrance : MonoBehaviour
     public float interactDistance = 1.5f;
     public string entranceLayerName = "Entrance";
 
-    CameraManager cameraManager;
     int entranceLayerMask;
     Collider2D selfCol;
 
@@ -23,7 +22,7 @@ public class PlaceEntrance : MonoBehaviour
             if (go) player = go.transform;
         }
 
-        cameraManager = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        CameraManager.Instance = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
         entranceLayerMask = LayerMask.GetMask(entranceLayerName);
         selfCol = GetComponent<Collider2D>();
     }
@@ -47,7 +46,7 @@ public class PlaceEntrance : MonoBehaviour
 
     void EnterPlace()
     {
-        cameraManager = cameraManager ?? CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        CameraManager.Instance = CameraManager.Instance ?? CameraManager.Instance ?? FindObjectOfType<CameraManager>();
         var fade = FadeManager.Instance ?? FindObjectOfType<FadeManager>();
         var col = player.GetComponent<Collider2D>();
         var mover = player.GetComponent<PlayerMovement>();
@@ -59,7 +58,7 @@ public class PlaceEntrance : MonoBehaviour
 
         System.Action teleport = () =>
         {
-            cameraManager.SwitchTo(targetCamKey);
+            CameraManager.Instance.SwitchTo(targetCamKey);
             player.position = playerIndoorPosition;
             StartCoroutine(RestoreNextFrame(rb, col, mover));
         };
