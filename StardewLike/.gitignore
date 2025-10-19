@@ -9,6 +9,11 @@
 **/[Bb]uilds/
 **/[Ll]ogs/
 **/[Uu]ser[Ss]ettings/
+# === Firebase (exclude only heavy binaries, keep scripts/settings) ===
+Assets/Firebase/Plugins/**/*.bundle
+Assets/Firebase/Plugins/**/*.so
+Assets/Firebase/Plugins/**/*.dll
+Assets/Firebase/Plugins/**/*.aar
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
