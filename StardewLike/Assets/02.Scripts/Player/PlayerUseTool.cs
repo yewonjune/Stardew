@@ -14,7 +14,6 @@ public class PlayerUseTool : MonoBehaviour
     [SerializeField] PlayerMovement playerMovement;
 
     [SerializeField] SoilTilemapController soilTilemapController;
-    [SerializeField] Inventory inventory;
 
     [SerializeField] bool useMouseTarget = false;
 
@@ -177,7 +176,7 @@ public class PlayerUseTool : MonoBehaviour
         if (soilTilemapController.TryWaterAtWorldPos(world))
         {
             StartToolAction(ToolType.WateringCan);
-            // (선택) 물통 용량 줄이려면 여기서 감소
+            // 물통 용량 줄이려면 여기서 감소
         }
         else
         {
@@ -288,8 +287,8 @@ public class PlayerUseTool : MonoBehaviour
 
         if (soilTilemapController.TryPlantAtWorldPos(world, seed))
         {
-            inventory.RemoveItem(seed, 1);
-            StartToolAction(ToolType.Hoe); // 모션 나중에 변경
+            Inventory.instance.RemoveItem(seed, 1);
+            //StartToolAction(ToolType.Hoe); // 모션 나중에 변경
         }
     }
 
@@ -304,9 +303,9 @@ public class PlayerUseTool : MonoBehaviour
         if (soilTilemapController.TryHarvestAtWorldPos(world, out var harvested))
         {
             if (harvested != null)
-                inventory?.AddItem(harvested, 1);
+                Inventory.instance?.AddItem(harvested, 1);
             
-            StartToolAction(ToolType.Scythe);   // 나중에 추가
+            //StartToolAction(ToolType.Scythe);   // 나중에 추가
         }
     }
 }

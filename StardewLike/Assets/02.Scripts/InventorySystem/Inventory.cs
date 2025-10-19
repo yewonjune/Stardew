@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(instance);
+            Destroy(gameObject);
         }
 
         instance = this;
@@ -64,8 +64,6 @@ public class Inventory : MonoBehaviour
         while (items.Count < n) items.Add(new ItemStack(null, 0));
         if (items.Count > n) items.RemoveRange(n, items.Count - n);
     }
-
-
 
     int FindEmptyIndex()
     {

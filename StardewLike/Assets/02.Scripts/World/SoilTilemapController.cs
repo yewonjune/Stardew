@@ -119,7 +119,6 @@ public class SoilTilemapController : MonoBehaviour
     public bool TryHarvestAtCell(Vector3Int cell, out Item harvestedItem)
     {
         harvestedItem = null;
-        //Crop crop;
 
         if (!plantedCrop.TryGetValue(cell, out var crop)) return false;
 
@@ -187,7 +186,6 @@ public class SoilTilemapController : MonoBehaviour
         WorldStateManager StateManager = WorldStateManager.Instance;
         if (StateManager != null)
         {
-            // 간단히: 씬 상태의 watered 집합을 비움
             SceneState st = StateManager.GetOrCreate(SceneName);
             st.watered.Clear();
         }
