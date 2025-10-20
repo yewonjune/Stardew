@@ -18,6 +18,8 @@ public class TimeManager : MonoBehaviour
     public Text dayText;
     public Text timeText;
 
+    public Image ClockHand;
+
     public SoilTilemapController soilTilemapController;
 
     // Update is called once per frame
@@ -43,6 +45,8 @@ public class TimeManager : MonoBehaviour
         }
 
         UpdateUI();
+
+        UpdateClockHand();
     }
 
     public void EndDay()
@@ -112,4 +116,16 @@ public class TimeManager : MonoBehaviour
         soilTilemapController = bestCtrl ?? all[0];
     }
 
+    void UpdateClockHand()
+    {
+        if (!ClockHand) return;
+
+        int totalMinutes = hour * 60 + minute;
+
+        float t = Mathf.InverseLerp(360f, 1440f, totalMinutes);
+
+        float angle = Mathf.Lerp(-90f, 90f, t);
+
+        ClockHand.rectTransform.localRotation = Quaternion.Euler(0, 0, angle);
+    }
 }

@@ -7,9 +7,6 @@ public class PlayerFishingController : MonoBehaviour
     [SerializeField] Animator animator;          // Player Animator
     [SerializeField] Transform feet;             // 발 위치 (없으면 transform 사용)
 
-    [Header("Input")]
-    [SerializeField] KeyCode fishKey = KeyCode.E;
-
     [Header("Water Detect")]
     [SerializeField] LayerMask fishingZoneLayer;       // Water 레이어 체크
     [SerializeField] float detectRadius = 0.9f;  // 감지 반경
