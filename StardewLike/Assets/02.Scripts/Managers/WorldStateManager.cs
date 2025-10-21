@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[SerializeField]
+[System.Serializable]
 public class CropSave
 {
     public string prefabId;          // 어떤 작물인지(프리팹 이름/ID)
@@ -13,7 +13,7 @@ public class CropSave
     public bool harvestedOnce;        // 재성장 여부 판단에 필요 (복원 정확도 향상)
 }
 
-[SerializeField]
+[System.Serializable]
 public class ResourceSave
 {
     public string prefabId;          // rock, stump 등
@@ -21,7 +21,7 @@ public class ResourceSave
     public bool harvestedOrRemoved;  // 캐졌으면 true
 }
 
-[SerializeField]
+[System.Serializable]
 public class SceneState
 {
     public HashSet<Vector3Int> tilled = new();      // 갈아둔 땅
@@ -48,6 +48,22 @@ public class WorldStateManager : MonoBehaviour
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
+    public IEnumerable<KeyValuePair<string, SceneState>> SnapshotAllScenes()
+        => _scenes;
+
+    public void ReplaceSceneState(string sceneName, SceneState newState)
+    {
+        _scenes[sceneName] = newState ?? new SceneState();
+    }
+
+    public void ReplaceAll(Dictionary<string, SceneState> all)
+    {
+        _scenes.Clear();
+        if (all == null) return;
+        foreach (var kv in all)
+            _scenes[kv.Key] = kv.Value;
+    }
+
     public SceneState GetOrCreate(string sceneName)
     {
         if (!_scenes.TryGetValue(sceneName, out var st))

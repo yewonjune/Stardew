@@ -49,7 +49,7 @@ public class TimeManager : MonoBehaviour
         UpdateClockHand();
     }
 
-    public void EndDay()
+    public async void EndDay()
     {
         day++;
         hour = 6;
@@ -58,6 +58,20 @@ public class TimeManager : MonoBehaviour
         Debug.Log($"Day {day} 시작!");
 
         if (soilTilemapController) soilTilemapController.NewDay();
+
+        // === 여기서 저장 ===
+        try
+        {
+            var svc = FindObjectOfType<CloudSaveService>();
+            var player = FindObjectOfType<PlayerMovement>()?.transform ?? this.transform;
+
+            var data = SaveBuilder.Build(this, player);
+            await svc.SaveAsync("slot1", data); // 슬롯명은 상황에 맞게
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError("[CloudSave] Save failed: " + ex);
+        }
     }
 
     void UpdateUI()
