@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "490521179679",
+    "firebase_url": "https://stardewlike-default-rtdb.firebaseio.com",
+    "project_id": "stardewlike",
+    "storage_bucket": "stardewlike.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490521179679:android:e6d050317ec4582348472a",
+        "android_client_info": {
+          "package_name": "com.yw.StardewLike"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490521179679-fkaocas9r7f7bjt3bi8u64hq5gj2ahid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZWhzuC15ykF1R6O3tpZLLo8jEOv-59Tg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490521179679-fkaocas9r7f7bjt3bi8u64hq5gj2ahid.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

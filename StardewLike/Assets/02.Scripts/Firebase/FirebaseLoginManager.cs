@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
+using UnityEngine.SceneManagement;
 
 public class FirebaseLoginManager : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class FirebaseLoginManager : MonoBehaviour
     private bool isBusy = false;
 
     private FirebaseAuth firebaseAuth;
+
+    private bool didStartScene = false;
 
     string ID;
     string PW;
@@ -137,6 +140,8 @@ public class FirebaseLoginManager : MonoBehaviour
                 return;
             }
             MessageOnOff("로그인 성공");
+
+            StartSceneOnce();
         });
     }
     void GuestLoginBtnClick()
@@ -172,6 +177,8 @@ public class FirebaseLoginManager : MonoBehaviour
                 else
                 {
                     MessageOnOff("익명 로그인 성공 (User 정보 없음)");
+
+                    StartSceneOnce();
                 }
             });
     }
@@ -207,5 +214,14 @@ public class FirebaseLoginManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    void StartSceneOnce()
+    {
+        if (didStartScene)
+            return;
+
+        didStartScene = true;
+        SceneManager.LoadScene("StartScene");
     }
 }
