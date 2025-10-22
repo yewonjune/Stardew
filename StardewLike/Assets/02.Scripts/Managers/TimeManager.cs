@@ -20,6 +20,8 @@ public class TimeManager : MonoBehaviour
 
     public Image ClockHand;
 
+    public float DayRatio01 => Mathf.Repeat((hour * 60f + minute) / 1440f, 1f);
+
     public SoilTilemapController soilTilemapController;
 
     // Update is called once per frame
