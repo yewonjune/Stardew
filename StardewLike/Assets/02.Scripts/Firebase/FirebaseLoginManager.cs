@@ -20,6 +20,8 @@ public class FirebaseLoginManager : MonoBehaviour
     private bool isInitialized = false;
     private bool isBusy = false;
 
+   // public Button GoogleLogin_Btn;
+
     private FirebaseAuth firebaseAuth;
 
     private bool didStartScene = false;
@@ -160,23 +162,25 @@ public class FirebaseLoginManager : MonoBehaviour
                 isBusy = false;
                 if (task.IsCanceled)
                 {
-                    MessageOnOff("익명 로그인 취소");
+                    MessageOnOff("게스트 로그인 취소");
                     return;
                 }
                 if (task.IsFaulted)
                 {
                     Debug.LogError(task.Exception);
-                    MessageOnOff("익명 로그인 실패");
+                    MessageOnOff("게스트 로그인 실패");
                     return;
                 }
                 FirebaseUser newUser = task.Result.User;
                 if (newUser != null)
                 {
-                    MessageOnOff("익명 로그인 성공 : " + newUser.UserId);
+                    MessageOnOff("게스트 로그인 성공 : " + newUser.UserId);
+
+                    StartSceneOnce();
                 }
                 else
                 {
-                    MessageOnOff("익명 로그인 성공 (User 정보 없음)");
+                    MessageOnOff("게스트 로그인 성공 (User 정보 없음)");
 
                     StartSceneOnce();
                 }
