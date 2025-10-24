@@ -110,6 +110,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueData: {fileID: 11400000, guid: 66ba338c8dd4ec940bc3e01c4cccd210, type: 2}
+  speed: 0
+  target: {x: 0, y: 0, z: 0}
+  hasTarget: 0
 --- !u!1 &8961172874882226436
 GameObject:
   m_ObjectHideFlags: 0
