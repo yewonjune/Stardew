@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,9 +6,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
 public class TimeManager : MonoBehaviour
 {
+    public event System.Action<int, int> OnMinuteChanged;   // (hour, minute)
+    //public static event Action OnNewDay;
+
     public int day = 1;
     public int hour = 6;
     public int minute = 0;
@@ -27,6 +30,7 @@ public class TimeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         timer += Time.deltaTime * timeScale;
 
         if(timer >= 60f)
@@ -43,6 +47,10 @@ public class TimeManager : MonoBehaviour
             if(hour >= 24)
             {
                 EndDay();
+            }
+            else
+            {
+                OnMinuteChanged?.Invoke(hour, minute);
             }
         }
 
@@ -61,6 +69,9 @@ public class TimeManager : MonoBehaviour
 
         if (soilTilemapController) soilTilemapController.NewDay();
 
+        //OnNewDay?.Invoke();
+        //OnMinuteTicked?.Invoke(hour, minute);
+
         // === 여기서 저장 ===
         try
         {
@@ -68,7 +79,7 @@ public class TimeManager : MonoBehaviour
             var player = FindObjectOfType<PlayerMovement>()?.transform ?? this.transform;
 
             var data = SaveBuilder.Build(this, player);
-            await svc.SaveAsync("slot1", data); // 슬롯명은 상황에 맞게
+            await svc.SaveAsync("slot1", data);
         }
         catch (System.Exception ex)
         {

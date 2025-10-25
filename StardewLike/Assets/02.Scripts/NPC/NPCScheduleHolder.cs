@@ -4,5 +4,13 @@ using UnityEngine;
 
 public class NPCScheduleHolder : MonoBehaviour
 {
-    public NPCSchedule[] schedules;
+    [System.Serializable]
+    public class Schedule
+    {
+        public int hour;
+        public int minute;
+        public Transform target;
+    }
+
+    public Schedule[] schedules;
 }
