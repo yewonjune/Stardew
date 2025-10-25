@@ -517,40 +517,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &213749220
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 213749221}
-  m_Layer: 0
-  m_Name: NPCSchedule
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &213749221
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 213749220}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 906165688}
-  - {fileID: 1954365447}
-  - {fileID: 1520093711}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &241015343
 GameObject:
   m_ObjectHideFlags: 0
@@ -7725,37 +7691,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.0625, y: 3.8045654}
   m_EdgeRadius: 0
---- !u!1 &906165687
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 906165688}
-  m_Layer: 0
-  m_Name: StoreInside
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &906165688
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 906165687}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 41.82, y: 8.11, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 213749221}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &934076273
 GameObject:
   m_ObjectHideFlags: 0
@@ -25904,61 +25839,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnId: VillageEntrancePoint
---- !u!1 &1206465534
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1206465536}
-  - component: {fileID: 1206465535}
-  m_Layer: 0
-  m_Name: AStarGrid2D
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1206465535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206465534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89a5fdf9044c7034fb147877e930a8d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  roadTilemap: {fileID: 1529271352}
-  blockTilemaps:
-  - {fileID: 1123000067}
-  - {fileID: 1653885200}
-  - {fileID: 273557472}
-  - {fileID: 2033304129}
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 256
-  cellSize: {x: 1, y: 1}
-  agentRadius: 0.2
---- !u!4 &1206465536
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206465534}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.19919835, y: -5.976811, z: -5.8881454}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1232871753
 GameObject:
   m_ObjectHideFlags: 3
@@ -26285,37 +26165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1520093710
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1520093711}
-  m_Layer: 0
-  m_Name: CafeDoor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1520093711
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520093710}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.62, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 213749221}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1520126081
 GameObject:
   m_ObjectHideFlags: 0
@@ -33151,6 +33000,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NPC_Soyeon
       objectReference: {fileID: 0}
+    - target: {fileID: 8837334371180322079, guid: daf3e1ccf28d8c1499d2b5d23577899d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 8961172874882226436, guid: daf3e1ccf28d8c1499d2b5d23577899d, type: 3}
@@ -33168,10 +33022,6 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1626657510}
-    - targetCorrespondingSourceObject: {fileID: 8837334371180322079, guid: daf3e1ccf28d8c1499d2b5d23577899d,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1626657511}
   m_SourcePrefab: {fileID: 100100000, guid: daf3e1ccf28d8c1499d2b5d23577899d, type: 3}
 --- !u!1 &1626657507 stripped
 GameObject:
@@ -33267,34 +33117,19 @@ MonoBehaviour:
   schedules:
   - hour: 6
     minute: 0
-    target: {fileID: 906165688}
+    target: {fileID: 0}
   - hour: 12
     minute: 0
-    target: {fileID: 1954365447}
+    target: {fileID: 0}
   - hour: 13
     minute: 0
-    target: {fileID: 906165688}
+    target: {fileID: 0}
   - hour: 17
     minute: 0
-    target: {fileID: 1520093711}
+    target: {fileID: 0}
   - hour: 20
     minute: 0
-    target: {fileID: 906165688}
---- !u!114 &1626657511
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1626657507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec18fdcda871793468d577b056d6759f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grid: {fileID: 1206465535}
-  speed: 0
-  waypointReachDist: 0.06
+    target: {fileID: 0}
 --- !u!1 &1653885197
 GameObject:
   m_ObjectHideFlags: 0
@@ -35963,37 +35798,6 @@ PolygonCollider2D:
       - {x: 18.18004, y: -24.203995}
       - {x: 18.161331, y: -15.225528}
   m_UseDelaunayMesh: 0
---- !u!1 &1954365446
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1954365447}
-  m_Layer: 0
-  m_Name: StoreDoor
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1954365447
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1954365446}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.2, y: -7.08, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 213749221}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1998431375
 GameObject:
   m_ObjectHideFlags: 0
@@ -37347,5 +37151,3 @@ SceneRoots:
   - {fileID: 1452073440}
   - {fileID: 1566837288}
   - {fileID: 1284193305}
-  - {fileID: 1206465536}
-  - {fileID: 213749221}

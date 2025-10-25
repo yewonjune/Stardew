@@ -5,26 +5,41 @@ using UnityEngine;
 public class NPCScheduleManager : MonoBehaviour
 {
     public TimeManager timeManager;
-    public AStarGrid2D grid;
 
     readonly HashSet<(int minuteStamp, GameObject npc)> _fired = new();
 
     void OnEnable()
     {
-        if (timeManager) timeManager.OnMinuteChanged += OnMinuteChanged;
+        if (timeManager)
+        {
+            timeManager.OnMinuteChanged += OnMinuteChanged;
+            //timeManager.OnDayChanged += OnDayChanged; // 있으면 연결
+        }
     }
 
     void OnDisable()
     {
-        if (timeManager) timeManager.OnMinuteChanged -= OnMinuteChanged;
+        if (timeManager)
+        {
+            timeManager.OnMinuteChanged -= OnMinuteChanged;
+            //timeManager.OnDayChanged -= OnDayChanged;
+        }
     }
+
+    void OnDayChanged(int newDay)
+    {
+        _fired.Clear();
+    }
+
 
     void OnMinuteChanged(int hour, int minute)
     {
         int stamp = hour * 60 + minute;
 
-        var npcs = FindObjectsOfType<NPCScheduleHolder>(includeInactive: false);
-        foreach (var holder in npcs)
+        var holders = FindObjectsOfType<NPCScheduleHolder>(includeInactive: false);
+        Debug.Log($"[Sched] {hour:D2}:{minute:D2} holders={holders.Length}");
+
+        foreach (var holder in holders)
         {
             var npcGo = holder.gameObject;
             var key = (stamp, npcGo);
@@ -34,36 +49,13 @@ public class NPCScheduleManager : MonoBehaviour
             {
                 if (s.hour == hour && s.minute == minute && s.target)
                 {
-                    var agent = npcGo.GetComponent<NPCPathAgent2D>();
-                    if (!agent) agent = npcGo.AddComponent<NPCPathAgent2D>();
-                    agent.SetGrid(grid);
-                    bool ok = agent.SetDestination(s.target.position);
+                    Debug.Log($"[Sched] match -> {holder.name} -> {s.target?.name}");
 
-                    _fired.Add(key);
-                    // 필요하면 실패 로깅
-                    if (!ok) Debug.Log($"[NPCSchedule] 경로 실패: {npcGo.name} -> {s.target.name}");
+                    _fired.Add(key); // 같은 분에 같은 NPC는 1회만
+
                 }
             }
         }
     }
-
-        // Update is called once per frame
-        void Update()
-    {
-        NPCMovement[] npcs = FindObjectsOfType<NPCMovement>();
-
-        foreach (NPCMovement npc in npcs)
-        {
-            var holder = npc.GetComponent<NPCScheduleHolder>();
-            if (holder == null) continue;
-
-            foreach (var schedule in holder.schedules)
-            {
-                if (timeManager.hour == schedule.hour && timeManager.minute == schedule.minute)
-                {
-                    npc.SetTarget(schedule.target.position);
-                }
-            }
-        }
-    }
+       
 }

@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class TimeManager : MonoBehaviour
 {
     public event System.Action<int, int> OnMinuteChanged;   // (hour, minute)
+    int _prevMinute = -1;
     //public static event Action OnNewDay;
 
     public int day = 1;
@@ -44,15 +45,20 @@ public class TimeManager : MonoBehaviour
                 minute = 0;
             }
 
-            if(hour >= 24)
+            if (hour >= 24)
             {
                 EndDay();
             }
             else
             {
-                OnMinuteChanged?.Invoke(hour, minute);
+                if (minute != _prevMinute)
+                {
+                    _prevMinute = minute;
+                    OnMinuteChanged?.Invoke(hour, minute);
+                }
             }
         }
+
 
         UpdateUI();
 

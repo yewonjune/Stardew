@@ -19,27 +19,18 @@ public class NPCMovement : MonoBehaviour
     Vector3 target;
     bool moving;
 
-    // 경로 이동 에이전트
-    NPCPathAgent2D agent;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-        agent = GetComponent<NPCPathAgent2D>();
+
     }
 
-    void OnValidate()
-    {
-        // 에디터에서 speed 동기화(편의)
-        if (!agent) agent = GetComponent<NPCPathAgent2D>();
-        if (agent) agent.speed = speed;
-    }
 
     void FixedUpdate()
     {
-        // ★ A* 에이전트가 활성로 이동 중이면, 여기서는 아무 것도 하지 않는다.
-        if (agent && agent.IsMoving) return;
+
 
         // ★ 그리드가 없거나 A* 미사용일 때만 직선 이동 fallback
         if (!moving) return;
@@ -78,14 +69,6 @@ public class NPCMovement : MonoBehaviour
     /// </summary>
     public void SetTarget(Vector3 pos)
     {
-        // 1) A* 경로 사용 시: PathAgent에 위임
-        if (agent && agent.grid)
-        {
-            moving = false; // 직선이동 비활성
-            agent.SetDestination(pos);
-            return;
-        }
-
         // 2) 그리드가 없으면 직선 fallback
         target = pos;
         moving = true;
@@ -95,7 +78,6 @@ public class NPCMovement : MonoBehaviour
     public void Stop()
     {
         moving = false;
-        if (agent) agent.Stop();
         SetAnimIdle();
     }
 
@@ -103,7 +85,6 @@ public class NPCMovement : MonoBehaviour
     public void Warp(Vector3 worldPos)
     {
         moving = false;
-        if (agent) agent.Stop();
         rb.position = worldPos;
         transform.position = worldPos;
         SetAnimIdle();

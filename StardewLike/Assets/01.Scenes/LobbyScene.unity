@@ -2934,12 +2934,14 @@ MonoBehaviour:
   EmailLogin_Btn: {fileID: 633320509}
   OpenCreateID_Btn: {fileID: 1787323289}
   MessageText: {fileID: 1107362624}
+  LoginMessageText: {fileID: 1107362624}
   CreateIDPanel: {fileID: 1335283244}
   New_IDInputField: {fileID: 2039402967}
   New_PWInputField: {fileID: 1837555210}
   New_NickInputField: {fileID: 1192742000}
   CreateAccountBtn: {fileID: 2028939046}
   CancelBtn: {fileID: 1957449821}
+  CreateIDMessageText: {fileID: 2083300123}
   GuestLogin_Btn: {fileID: 62964739}
 --- !u!4 &1374518789
 Transform:
@@ -4534,7 +4536,7 @@ GameObject:
   - component: {fileID: 2083300124}
   - component: {fileID: 2083300123}
   m_Layer: 5
-  m_Name: MessageText
+  m_Name: CreateIDMessageText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

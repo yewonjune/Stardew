@@ -6,8 +6,10 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine.SceneManagement;
-using DG.Tweening.Plugins.Options;
+//using DG.Tweening.Plugins.Options;
 using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 public class FirebaseLoginManager : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class FirebaseLoginManager : MonoBehaviour
     public Button EmailLogin_Btn;
     public Button OpenCreateID_Btn;
     public Text MessageText;
+    public Text LoginMessageText;
 
     [Header("--- Create ID ---")]
     public GameObject CreateIDPanel;
@@ -24,7 +27,7 @@ public class FirebaseLoginManager : MonoBehaviour
     public InputField New_NickInputField;
     public Button CreateAccountBtn;
     public Button CancelBtn;
-   // public Button m_CancelBtn;
+    public Text CreateIDMessageText;
 
     [Header("--- Guest Login ---")]
     public Button GuestLogin_Btn;
@@ -73,6 +76,10 @@ public class FirebaseLoginManager : MonoBehaviour
                     GuestLogin_Btn.onClick.AddListener(GuestLoginBtnClick);
                 }
 
+                if (CreateAccountBtn != null)
+                {
+                    CreateAccountBtn.onClick.AddListener(CreateAccountBtnClick);
+                }
                 isInitialized = true;
 
                 MessageOnOff("Firebase 준비 완료");
@@ -99,43 +106,18 @@ public class FirebaseLoginManager : MonoBehaviour
 
     void OpenCreateIDBtnClick()
     {
+        MessageOnOff("", false);
+
         if (CreateIDPanel != null)
         {
             CreateIDPanel.SetActive(true);
         }
-
-        //if (!TryReadInputs(out ID, out PW))
-        //    return;
-        //if (firebaseAuth == null)
-        //{
-        //    MessageOnOff("초기화 중입니다. 잠시 후 다시 시도하세요.");
-        //    return;
-        //}
-
-        //if (isBusy)
-        //    return;
-
-        //isBusy = true;
-
-        //firebaseAuth.CreateUserWithEmailAndPasswordAsync(ID, PW)
-        //.ContinueWithOnMainThread(task =>
-        //{
-        //    if (task.IsCanceled)
-        //    {
-        //        MessageOnOff("가입 취소");
-        //        return;
-        //    }
-        //    if (task.IsFaulted)
-        //    {
-        //        MessageOnOff("가입 실패");
-        //        return;
-        //    }
-        //    MessageOnOff("가입 성공");
-        //});
     }
 
     void CancelBtnClick()
     {
+        MessageOnOff("", false);
+
         if (CreateIDPanel != null)
             CreateIDPanel.SetActive(false);
 
@@ -143,143 +125,7 @@ public class FirebaseLoginManager : MonoBehaviour
         New_PWInputField.text = "";
         New_NickInputField.text = "";
     }
-    //async void CreateIDBtnClick()
-    //{
-    //    if (NetworkMgr.g_fAuth == null)
-    //    {
-    //        MessageOnOff("초기화 중입니다. 잠시 후 다시 시도하세요.");
-    //        return;
-    //    }
-
-    //    string a_IdStr = New_IDInputField.text;
-    //    string a_PwStr = New_PWInputField.text;
-    //    string a_NickStr = New_NickInputField.text;
-
-    //    a_IdStr = a_IdStr.Trim();
-    //    a_PwStr = a_PwStr.Trim();
-    //    a_NickStr = a_NickStr.Trim();
-
-    //    if (string.IsNullOrEmpty(a_IdStr) == true ||
-    //        string.IsNullOrEmpty(a_PwStr) == true ||
-    //        string.IsNullOrEmpty(a_NickStr) == true)
-    //    {
-    //        MessageOnOff("Id, Pw, 별명은 빈칸 없이 입력해 주세요.");
-    //        return;
-    //    }
-
-    //    if (!(6 <= a_IdStr.Length && a_IdStr.Length <= 20))  // 6 ~ 20
-    //    {
-    //        MessageOnOff("Id는 6글자부터 20글자까지 작성해 주세요.");
-    //        return;
-    //    }
-
-    //    if (!(6 <= a_PwStr.Length && a_PwStr.Length <= 20))
-    //    {
-    //        MessageOnOff("비밀번호는 6글자부터 20글자까지 작성해 주세요.");
-    //        return;
-    //    }
-
-    //    if (!(3 <= a_NickStr.Length && a_NickStr.Length <= 20))
-    //    {
-    //        MessageOnOff("별명은 3글자부터 20글자까지 작성해 주세요.");
-    //        return;
-    //    }
-
-    //    if (!CheckEmailAddress(a_IdStr))
-    //    {
-    //        MessageOnOff("Email 형식이 맞지 않습니다.");
-    //        return;
-    //    }
-
-    //    m_SvNewIdStr = a_IdStr;
-    //    m_SvNewPwStr = a_PwStr;
-
-    //    try
-    //    {
-    //        //1) 닉네임 중복 확인
-    //        QuerySnapshot checkSnapshot = await NetworkMgr.g_fsRef
-    //                                                .Collection("users")
-    //                                                .WhereEqualTo("NickName", a_NickStr)
-    //                                                .GetSnapshotAsync();
-
-    //        if (checkSnapshot != null && checkSnapshot.Count > 0)
-    //        {
-    //            MessageOnOff("이미 존재하는 별명입니다.");
-    //            return;
-    //        }
-
-    //        MessageOnOff("회원 가입 중... 잠시만 기다려 주세요.");
-    //        ShowMsTimer = 300.0f;
-
-    //        //2) 계정 생성
-    //        var signUpResult =
-    //            await NetworkMgr.g_fAuth.CreateUserWithEmailAndPasswordAsync(a_IdStr, a_PwStr);
-
-    //        var newUser = signUpResult.User;
-    //        string uid = newUser.UserId;
-
-    //        //----- 3) 닉네임 저장
-    //        Dictionary<string, object> userData = new Dictionary<string, object>()
-    //        {
-    //            { "NickName", a_NickStr },
-    //            { "Email", a_IdStr },
-    //        };
-
-    //        await NetworkMgr.g_fsRef
-    //                    .Collection("users")
-    //        .Document(uid)
-    //                    .SetAsync(userData, SetOptions.MergeAll);
-    //        //----- 닉네임 저장
-
-    //        //----- 체험 스킬 1개씩 주기
-    //        Dictionary<string, object> rsData = new Dictionary<string, object>();
-    //        rsData.Add("Gold", 0);
-    //        for (int i = 0; i < (int)SkillType.SkCount; i++)
-    //        {
-    //            string key = ((SkillType)i).ToString(); //$"Skill_{i}";
-    //            rsData.Add(key, 1);
-    //        }//for (int i = 0; i < (int)SkillType.SkCount; i++)
-
-    //        await NetworkMgr.g_RtdbRoot
-    //                        .Child("users")
-    //                        .Child(uid)
-    //                        .UpdateChildrenAsync(rsData);  // 값 업데이트
-    //        //----- 체험 스킬 1개씩 주기
-
-    //        IdInputField.text = m_SvNewIdStr;
-    //        PassInputField.text = m_SvNewPwStr;
-
-    //        MessageOnOff("가입 성공");
-
-    //    }
-    //    catch (FirebaseException fe)
-    //    {
-    //        // Firebase 에러 코드 분기
-    //        switch ((AuthError)fe.ErrorCode)
-    //        {
-    //            case AuthError.EmailAlreadyInUse:
-    //                MessageOnOff("이미 존재하는 이메일(ID)입니다.");
-    //                break;
-    //            case AuthError.InvalidEmail:
-    //                MessageOnOff("이메일 형식이 잘못되었습니다.");
-    //                break;
-    //            case AuthError.WeakPassword:
-    //                MessageOnOff("비밀번호가 너무 약합니다. 더 강력한 비밀번호를 입력하세요.");
-    //                break;
-    //            default:
-    //                MessageOnOff("가입 실패: " + fe.Message);
-    //                break;
-    //        }
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        // 일반적인 예외 (네트워크 오류 등)
-    //        //Debug.Log("회원가입 처리 중 오류: " + ex.Message);
-    //        MessageOnOff("가입 실패: " + ex.Message);
-    //    }
-
-    //}
-
+   
     void EmailLoginBtnClick()
     {
         if (!TryReadInputs(out ID, out PW))
@@ -298,6 +144,8 @@ public class FirebaseLoginManager : MonoBehaviour
 
         firebaseAuth.SignInWithEmailAndPasswordAsync(ID, PW).ContinueWithOnMainThread(task =>
         {
+            isBusy = false;
+
             if (task.IsCanceled)
             {
                 MessageOnOff("로그인 취소");
@@ -353,19 +201,162 @@ public class FirebaseLoginManager : MonoBehaviour
                 }
             });
     }
+    bool TryReadNewInputs(out string email, out string pw, out string nick)
+    {
+        email = (New_IDInputField != null) ? New_IDInputField.text.Trim() : "";
+        pw = (New_PWInputField != null) ? New_PWInputField.text.Trim() : "";
+        nick = (New_NickInputField != null) ? New_NickInputField.text.Trim() : "";
 
+        if (string.IsNullOrEmpty(email))
+        {
+            MessageOnOff("이메일을 입력하세요.");
+            return false;
+        }
+        if (!Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+        {
+            MessageOnOff("이메일 형식이 올바르지 않습니다.");
+            return false;
+        }
+        if (string.IsNullOrEmpty(pw) || pw.Length < 6)
+        {
+            MessageOnOff("비밀번호는 6자 이상 입력하세요.");
+            return false;
+        }
+        if (string.IsNullOrEmpty(nick) || nick.Length < 2)
+        {
+            MessageOnOff("닉네임을 2자 이상 입력하세요.");
+            return false;
+        }
+        return true;
+    }
+
+    void CreateAccountBtnClick()
+    {
+        if (!isInitialized || firebaseAuth == null)
+        {
+            MessageOnOff("초기화 중입니다. 잠시 후 다시 시도하세요.");
+            return;
+        }
+        if (isBusy) return;
+
+        if (!TryReadNewInputs(out string newEmail, out string newPw, out string newNick))
+            return;
+
+        isBusy = true;
+        MessageOnOff("계정 생성 중...");
+
+        firebaseAuth.CreateUserWithEmailAndPasswordAsync(newEmail, newPw)
+            .ContinueWithOnMainThread(task =>
+            {
+                isBusy = false;
+
+                if (task.IsCanceled)
+                {
+                    MessageOnOff("가입 취소");
+                    return;
+                }
+                if (task.IsFaulted)
+                {
+                    var fe = task.Exception?.Flatten()?.InnerExceptions
+                                .OfType<FirebaseException>().FirstOrDefault();
+                    if (fe != null)
+                    {
+                        switch ((AuthError)fe.ErrorCode)
+                        {
+                            case AuthError.EmailAlreadyInUse:
+                                MessageOnOff("이미 존재하는 이메일(ID)입니다.");
+                                return;
+                            case AuthError.InvalidEmail:
+                                MessageOnOff("이메일 형식이 잘못되었습니다.");
+                                return;
+                            case AuthError.WeakPassword:
+                                MessageOnOff("비밀번호가 너무 약합니다.");
+                                return;
+                        }
+                        MessageOnOff("가입 실패: " + fe.Message);
+                        return;
+                    }
+                    MessageOnOff("가입 실패: 알 수 없는 오류");
+                    return;
+                }
+
+                var user = task.Result.User;
+
+                // 닉네임(표시 이름) 반영 - 선택 사항
+                if (user != null && !string.IsNullOrEmpty(newNick))
+                {
+                    var profile = new UserProfile { DisplayName = newNick };
+                    user.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(_ => { });
+                }
+
+                // 로그인창에 자동 채움 & 패널 닫기
+                if (IDInputField) IDInputField.text = newEmail;
+                if (PWInputField) PWInputField.text = newPw;
+
+                if (CreateIDPanel) CreateIDPanel.SetActive(false);
+                if (New_IDInputField) New_IDInputField.text = "";
+                if (New_PWInputField) New_PWInputField.text = "";
+                if (New_NickInputField) New_NickInputField.text = "";
+
+                MessageOnOff("가입 성공! 로그인 버튼을 눌러주세요.");
+            });
+    }
+    Text ResolveTargetMessageText()
+    {
+        // CreateIDPanel이 켜져있으면 Create 패널쪽 우선
+        if (CreateIDPanel != null && CreateIDPanel.activeSelf)
+        {
+            if (CreateIDMessageText != null) return CreateIDMessageText;
+            // 패널 전용 Text가 없으면 공용으로 폴백
+            if (MessageText != null) return MessageText;
+        }
+        else
+        {
+            // 로그인 패널 쪽
+            if (LoginMessageText != null) return LoginMessageText;
+            if (MessageText != null) return MessageText;
+        }
+
+        return null; // 모두 없으면 null
+    }
+
+    Text _currentMsgTarget;  // 현재 표시 중인 대상(타이머로 끌 때 사용)
+
+    // 기존 함수 대체
     void MessageOnOff(string Mess = "", bool isOn = true)
     {
-        if (isOn == true)
+        if (isOn)
         {
-            MessageText.text = Mess;
-            MessageText.gameObject.SetActive(true);
+            _currentMsgTarget = ResolveTargetMessageText();
+
+            if (_currentMsgTarget != null)
+            {
+                _currentMsgTarget.text = Mess;
+                _currentMsgTarget.gameObject.SetActive(true);
+            }
+            // 공용(기존) MessageText만 쓰는 경우도 대비
+            if (_currentMsgTarget == null && MessageText != null)
+            {
+                MessageText.text = Mess;
+                MessageText.gameObject.SetActive(true);
+                _currentMsgTarget = MessageText;
+            }
+
             ShowMsTimer = MessageDuration;
         }
         else
         {
-            MessageText.text = "";
-            MessageText.gameObject.SetActive(false);
+            // 마지막으로 켠 대상만 끔
+            if (_currentMsgTarget != null)
+            {
+                _currentMsgTarget.text = "";
+                _currentMsgTarget.gameObject.SetActive(false);
+            }
+            else if (MessageText != null)
+            {
+                MessageText.text = "";
+                MessageText.gameObject.SetActive(false);
+            }
             ShowMsTimer = 0.0f;
         }
     }
@@ -395,4 +386,5 @@ public class FirebaseLoginManager : MonoBehaviour
         didStartScene = true;
         SceneManager.LoadScene("StartScene");
     }
+
 }
