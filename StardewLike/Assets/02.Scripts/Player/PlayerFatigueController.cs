@@ -25,6 +25,7 @@ public class PlayerFatigueController : MonoBehaviour
         new ToolFatigue{ toolType = ToolType.Sword,       amount = 2.5f },
         new ToolFatigue{ toolType = ToolType.Fishingrod,  amount = 2f },
     };
+    public bool IsFull => current >= maxFatigue;
 
     Dictionary<ToolType, float> dict;
 
@@ -37,12 +38,21 @@ public class PlayerFatigueController : MonoBehaviour
         ClampAndRaise();
     }
 
-    float GetAmount(ToolType t) =>
-        dict != null && dict.TryGetValue(t, out var a) ? a : defaultToolFatigue;
+    float GetAmount(ToolType type)
+    {
+        foreach (var tf in toolFatigues)
+        {
+            if (tf.toolType == type) return tf.amount;
+        }
+        return defaultToolFatigue;
+    }
 
     public void AddByTool(ToolType t)
     {
         current += GetAmount(t);
+
+        if (current > maxFatigue) current = maxFatigue;
+
         ClampAndRaise();
     }
 

@@ -2163,7 +2163,7 @@ GameObject:
   - component: {fileID: 485458065}
   - component: {fileID: 485458064}
   m_Layer: 5
-  m_Name: Energy
+  m_Name: Fatigue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4144,6 +4144,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 964853095}
+    - targetCorrespondingSourceObject: {fileID: 7458104359877964771, guid: c1037e29090479b4c9fe2983a2250f08,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 964853102}
   m_SourcePrefab: {fileID: 100100000, guid: c1037e29090479b4c9fe2983a2250f08, type: 3}
 --- !u!1 &964853092 stripped
 GameObject:
@@ -4240,7 +4244,7 @@ MonoBehaviour:
   useToolPoint: {fileID: 1111303907}
   animator: {fileID: 964853101}
   playerMovement: {fileID: 964853100}
-  playerFatigueController: {fileID: 0}
+  playerFatigueController: {fileID: 964853102}
   soilTilemapController: {fileID: 0}
   useMouseTarget: 0
   hitRadius: 0.6
@@ -4286,6 +4290,21 @@ Animator:
     type: 3}
   m_PrefabInstance: {fileID: 950573353}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &964853102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964853092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a737f0e12a64074ea29f10fd9d8b3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxFatigue: 100
+  current: 0
+  defaultToolFatigue: 2
 --- !u!1001 &977324348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7338,8 +7357,9 @@ GameObject:
   - component: {fileID: 1481890829}
   - component: {fileID: 1481890831}
   - component: {fileID: 1481890830}
+  - component: {fileID: 1481890832}
   m_Layer: 5
-  m_Name: EnergyBG
+  m_Name: FatigueBG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7403,6 +7423,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1481890828}
   m_CullTransparentMesh: 1
+--- !u!114 &1481890832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1481890828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0084f1d44b854eb4b83e17760ff43233, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerFatigueControllercontroller: {fileID: 964853102}
+  fill: {fileID: 485458064}
 --- !u!1 &1500363293
 GameObject:
   m_ObjectHideFlags: 0

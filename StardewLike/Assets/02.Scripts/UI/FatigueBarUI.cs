@@ -5,25 +5,27 @@ using UnityEngine.UI;
 
 public class FatigueBarUI : MonoBehaviour
 {
-    [SerializeField] PlayerFatigueController playerFatigueControllercontroller;
+    [SerializeField] PlayerFatigueController playerFatigueController;
     [SerializeField] Image fill;
     void OnEnable()
     {
-        if (playerFatigueControllercontroller) 
-            playerFatigueControllercontroller.OnFatigueChanged += Refresh;
-        if (playerFatigueControllercontroller)
-            Refresh(playerFatigueControllercontroller.current, playerFatigueControllercontroller.maxFatigue);
+        if (playerFatigueController)
+            playerFatigueController.OnFatigueChanged += Refresh;
+        if (playerFatigueController)
+            Refresh(playerFatigueController.current, playerFatigueController.maxFatigue);
     }
 
     void OnDisable()
     {
-        if (playerFatigueControllercontroller) 
-            playerFatigueControllercontroller.OnFatigueChanged -= Refresh;
+        if (playerFatigueController)
+            playerFatigueController.OnFatigueChanged -= Refresh;
     }
 
     void Refresh(float cur, float max)
     {
         if (!fill) return;
-        fill.fillAmount = max > 0 ? cur / max : 0f;
+        if (max <= 0) { fill.fillAmount = 0f; return; }
+
+        fill.fillAmount = 1f - (cur / max);
     }
 }

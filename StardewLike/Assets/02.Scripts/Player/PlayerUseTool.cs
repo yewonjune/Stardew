@@ -13,7 +13,6 @@ public class PlayerUseTool : MonoBehaviour
 
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] PlayerFatigueController playerFatigueController;
-
     [SerializeField] SoilTilemapController soilTilemapController;
 
     [SerializeField] bool useMouseTarget = false;
@@ -23,7 +22,7 @@ public class PlayerUseTool : MonoBehaviour
 
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
-    const string StateToolAction = "PlayerAction";
+    //const string StateToolAction = "PlayerAction";
 
     void OnEnable()
     {
@@ -101,6 +100,12 @@ public class PlayerUseTool : MonoBehaviour
 
     void UseTool(Tools tool)
     {
+        if (playerFatigueController && playerFatigueController.IsFull)
+        {
+            Debug.Log("오늘 하루 체력을 다 사용했습니다");
+            return;
+        }
+
         Debug.Log($"사용 중: {tool.itemName} ({tool.toolType})");
 
         switch (tool.toolType)
