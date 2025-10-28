@@ -12,6 +12,7 @@ public class PlayerUseTool : MonoBehaviour
     public Animator animator;
 
     [SerializeField] PlayerMovement playerMovement;
+    [SerializeField] PlayerFatigueController playerFatigueController;
 
     [SerializeField] SoilTilemapController soilTilemapController;
 
@@ -167,7 +168,11 @@ public class PlayerUseTool : MonoBehaviour
         Vector3 center = soilTilemapController.groundTilemap.GetCellCenterWorld(clickedCell);
         bool ok = soilTilemapController.TryTillAtWorldPos(center);
 
-        if (ok) StartToolAction(ToolType.Hoe);
+        if (ok)
+        {
+            StartToolAction(ToolType.Hoe);
+            playerFatigueController?.AddByTool(ToolType.Hoe);
+        }
     }
 
     void WaterCropWithWateringCan()
@@ -176,6 +181,7 @@ public class PlayerUseTool : MonoBehaviour
         if (soilTilemapController.TryWaterAtWorldPos(world))
         {
             StartToolAction(ToolType.WateringCan);
+            playerFatigueController?.AddByTool(ToolType.WateringCan);
             // 물통 용량 줄이려면 여기서 감소
         }
         else
@@ -204,9 +210,13 @@ public class PlayerUseTool : MonoBehaviour
         }
 
         if (fishingController.isFishing)
+        {
             fishingController.TryStopFishing();
+        }
         else
+        {
             fishingController.TryStartFishing();
+        }
     }
 
     void BreakResourceWithTool(Tools tool)
@@ -219,6 +229,7 @@ public class PlayerUseTool : MonoBehaviour
             {
                 resourceNode.Hit(tool);
                 StartToolAction(tool.toolType);
+                playerFatigueController?.AddByTool(tool.toolType);
                 return;
             }
         }

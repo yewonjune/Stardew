@@ -71,12 +71,16 @@ public class TimeManager : MonoBehaviour
         hour = 6;
         minute = 0;
 
+        PlayerFatigueController playerFatigueController = FindObjectOfType<PlayerFatigueController>(true);
+        if (playerFatigueController != null)
+        {
+            // 완전회복이면 true, 아니면 적당히 큰 수치 회복
+            playerFatigueController.RecoverOnSleep(recoverAmount: 60f, fullRecover: false);
+        }
+
         Debug.Log($"Day {day} 시작!");
 
         if (soilTilemapController) soilTilemapController.NewDay();
-
-        //OnNewDay?.Invoke();
-        //OnMinuteTicked?.Invoke(hour, minute);
 
         // === 여기서 저장 ===
         try

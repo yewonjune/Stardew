@@ -1,0 +1,74 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerFatigueController : MonoBehaviour
+{
+    public float maxFatigue = 100f;
+    public float current = 0f;
+
+    public float defaultToolFatigue = 2f;
+
+    public struct ToolFatigue
+    {
+        public ToolType toolType;
+        public float amount;
+    }
+    public List<ToolFatigue> toolFatigues = new()
+    {
+        new ToolFatigue{ toolType = ToolType.Hoe,         amount = 2f },
+        new ToolFatigue{ toolType = ToolType.Pickaxe,     amount = 4f },
+        new ToolFatigue{ toolType = ToolType.Axe,         amount = 4f },
+        new ToolFatigue{ toolType = ToolType.Scythe,      amount = 1.5f },
+        new ToolFatigue{ toolType = ToolType.WateringCan, amount = 1.2f },
+        new ToolFatigue{ toolType = ToolType.Sword,       amount = 2.5f },
+        new ToolFatigue{ toolType = ToolType.Fishingrod,  amount = 2f },
+    };
+
+    Dictionary<ToolType, float> dict;
+
+    public event Action<float, float> OnFatigueChanged;
+
+    void Awake()
+    {
+        dict = new Dictionary<ToolType, float>();
+        foreach (var tf in toolFatigues) dict[tf.toolType] = tf.amount;
+        ClampAndRaise();
+    }
+
+    float GetAmount(ToolType t) =>
+        dict != null && dict.TryGetValue(t, out var a) ? a : defaultToolFatigue;
+
+    public void AddByTool(ToolType t)
+    {
+        current += GetAmount(t);
+        ClampAndRaise();
+    }
+
+    public void AddFatigue(float amount)
+    {
+        current += amount;
+        ClampAndRaise();
+    }
+
+    public void ReduceFatigue(float amount)
+    {
+        current -= amount;
+        ClampAndRaise();
+    }
+
+    public void RecoverOnSleep(float recoverAmount = 60f, bool fullRecover = false)
+    {
+        if (fullRecover) current = 0f;
+        else current = Mathf.Max(0f, current - recoverAmount);
+        ClampAndRaise();
+    }
+    void ClampAndRaise()
+    {
+        current = Mathf.Clamp(current, 0f, maxFatigue);
+        OnFatigueChanged?.Invoke(current, maxFatigue);
+    }
+
+    public float Ratio => maxFatigue > 0 ? current / maxFatigue : 0f;
+}

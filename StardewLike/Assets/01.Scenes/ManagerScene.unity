@@ -4240,6 +4240,7 @@ MonoBehaviour:
   useToolPoint: {fileID: 1111303907}
   animator: {fileID: 964853101}
   playerMovement: {fileID: 964853100}
+  playerFatigueController: {fileID: 0}
   soilTilemapController: {fileID: 0}
   useMouseTarget: 0
   hitRadius: 0.6
@@ -7326,7 +7327,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeManager: {fileID: 0}
-  grid: {fileID: 0}
 --- !u!1 &1481890828
 GameObject:
   m_ObjectHideFlags: 0
