@@ -15,6 +15,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
     public System.Action<int, PointerEventData.InputButton, bool> onClick;
 
+
     public void SetIndex(int index) => slotIndex = index;
 
     public void SetItem(Item newItem, int newCount = 1)

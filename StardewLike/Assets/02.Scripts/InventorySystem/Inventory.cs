@@ -129,4 +129,45 @@ public class Inventory : MonoBehaviour
     {
         onInventoryChanged?.Invoke();
     }
+    public bool TryAddToSlot(int index, Item item, int amount)
+    {
+        if (index < 0 || index >= items.Count) return false;
+        var stack = items[index];
+
+        // 비어있으면 새로 넣기
+        if (stack == null || stack.item == null || stack.count <= 0)
+        {
+            items[index] = new ItemStack(item, amount);
+            ForceRefresh();
+            return true;
+        }
+
+        // 같은 아이템 & 스택 가능
+        if (stack.item == item && item.isStackable)
+        {
+            stack.count += amount;
+            ForceRefresh();
+            return true;
+        }
+
+        // 그 외에는 거절
+        return false;
+    }
+
+    public ItemStack GetStack(int index)
+    {
+        if (index < 0 || index >= items.Count) return null;
+        return items[index];
+    }
+
+    public void RemoveFromSlot(int index, int amount)
+    {
+        if (index < 0 || index >= items.Count) return;
+        var stack = items[index];
+        if (stack == null || stack.item == null) return;
+
+        stack.count -= amount;
+        if (stack.count <= 0) items[index] = new ItemStack(null, 0);
+        ForceRefresh();
+    }
 }

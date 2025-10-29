@@ -80,6 +80,8 @@ public class TimeManager : MonoBehaviour
 
         Debug.Log($"Day {day} 시작!");
 
+        SoundManager.instance.PlaySFX("Chicken");
+
         if (soilTilemapController) soilTilemapController.NewDay();
 
         // === 여기서 저장 ===

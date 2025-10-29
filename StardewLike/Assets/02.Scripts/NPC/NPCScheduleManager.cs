@@ -37,7 +37,6 @@ public class NPCScheduleManager : MonoBehaviour
         int stamp = hour * 60 + minute;
 
         var holders = FindObjectsOfType<NPCScheduleHolder>(includeInactive: false);
-        Debug.Log($"[Sched] {hour:D2}:{minute:D2} holders={holders.Length}");
 
         foreach (var holder in holders)
         {
@@ -51,7 +50,7 @@ public class NPCScheduleManager : MonoBehaviour
                 {
                     Debug.Log($"[Sched] match -> {holder.name} -> {s.target?.name}");
 
-                    _fired.Add(key); // 같은 분에 같은 NPC는 1회만
+                    _fired.Add(key);
 
                 }
             }

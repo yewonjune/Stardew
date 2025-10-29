@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,11 @@ public class InventoryUI : MonoBehaviour
     Item cursorItem;
     int cursorCount;
     public CursorItemUI cursorUI;
+    
+    public bool externalHandleEnabled = false;
+
+    public Action<int> onSlotClicked;
+    public Action<int> onSlotRightClicked;
 
     void Start()
     {
@@ -28,7 +34,10 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i].SetIndex(i);
-            slots[i].onClick = OnSlotClick;
+            //slots[i].onClick = OnSlotClick;
+
+            slots[i].onClick = (si, btn, shift) => HandleSlotClick(si, btn, shift);
+
         }
 
         InventoryPanel.SetActive(activeInventory);
@@ -36,6 +45,23 @@ public class InventoryUI : MonoBehaviour
         Refresh();
         UpdateCursorUI();
     }
+
+    void HandleSlotClick(int slotIndex, UnityEngine.EventSystems.PointerEventData.InputButton btn, bool shift)
+    {
+        // ★ 외부(상점)에서 처리하도록 넘기고 내부 로직은 중단
+        if (externalHandleEnabled)
+        {
+            if (btn == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
+                onSlotClicked?.Invoke(slotIndex);
+            else if (btn == UnityEngine.EventSystems.PointerEventData.InputButton.Right)
+                onSlotRightClicked?.Invoke(slotIndex);
+            return; // 내부 집기/스왑 로직 실행하지 않음
+        }
+
+        // ★ 기존 내부 로직 (네 OnSlotClick 내용을 그대로 이동)
+        OnSlotClick(slotIndex, btn, shift);
+    }
+
 
     void SlotChange(int val)
     {
@@ -205,5 +231,9 @@ public class InventoryUI : MonoBehaviour
         if (!cursorUI) return;
         cursorUI.Set(cursorItem, cursorCount);
     }
-
+    public void Show(bool on)
+    {
+        activeInventory = on;
+        if (InventoryPanel) InventoryPanel.SetActive(on);
+    }
 }
