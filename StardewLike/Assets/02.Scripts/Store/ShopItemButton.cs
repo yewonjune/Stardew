@@ -10,7 +10,6 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
     public Text nameText;
     public Text priceText;
     public Text stockText;
-    //public Button buyButton;
 
     ShopItemEntry bound;
     ShopController controller;
@@ -21,16 +20,14 @@ public class ShopItemButton : MonoBehaviour, IPointerClickHandler
         bound = e; controller = c;
         if (icon) icon.sprite = e.item.icon;
         if (nameText) nameText.text = e.item.itemName;
-        if (priceText) priceText.text = $"{e.buyPrice}g";
+        if (priceText) priceText.text = $"{e.buyPrice}골드";
         if (stockText)
         {
             stockText.gameObject.SetActive(e.stock >= 0);
             if (e.stock >= 0) stockText.text = $"x{e.stock}";
         }
-        // buyButton 관련 코드 전부 제거
     }
 
-    // 셀 아무 곳이나 좌클릭하면 구매 시작
     public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button != PointerEventData.InputButton.Left) return;

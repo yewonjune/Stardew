@@ -33,3 +33,7 @@ MonoBehaviour:
     buyPrice: 20
     sellPrice: 5
     stock: -1
+  - item: {fileID: 11400000, guid: c8e25fdc2297ceb4886e5f1e78a77fe4, type: 2}
+    buyPrice: 1500
+    sellPrice: 5
+    stock: 2

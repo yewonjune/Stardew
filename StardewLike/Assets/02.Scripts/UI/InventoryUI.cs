@@ -9,6 +9,7 @@ public class InventoryUI : MonoBehaviour
     Inventory inventory;
 
     public GameObject InventoryPanel;
+    public CursorItemUI cursorUI;
     bool activeInventory = false;
 
     public Slot[] slots;
@@ -16,7 +17,6 @@ public class InventoryUI : MonoBehaviour
 
     Item cursorItem;
     int cursorCount;
-    public CursorItemUI cursorUI;
     
     public bool externalHandleEnabled = false;
 
@@ -48,7 +48,6 @@ public class InventoryUI : MonoBehaviour
 
     void HandleSlotClick(int slotIndex, UnityEngine.EventSystems.PointerEventData.InputButton btn, bool shift)
     {
-        // ★ 외부(상점)에서 처리하도록 넘기고 내부 로직은 중단
         if (externalHandleEnabled)
         {
             if (btn == UnityEngine.EventSystems.PointerEventData.InputButton.Left)
@@ -58,7 +57,6 @@ public class InventoryUI : MonoBehaviour
             return; // 내부 집기/스왑 로직 실행하지 않음
         }
 
-        // ★ 기존 내부 로직 (네 OnSlotClick 내용을 그대로 이동)
         OnSlotClick(slotIndex, btn, shift);
     }
 
@@ -71,16 +69,13 @@ public class InventoryUI : MonoBehaviour
             var btn = slots[i].GetComponent<Button>();
             if (btn) btn.interactable = enabled;
 
-            // 슬롯 수보다 큰 인덱스는 비워놓기(보여도 클릭만 막힘. 필요하면 SetActive도 가능)
             if (!enabled)
                 slots[i].ClearSlot();
         }
     }
 
-    // 인벤토리 내용물 → 슬롯 UI 반영
     void Refresh()
     {
-        // 모든 슬롯 초기화
         for (int i = 0; i < slots.Length; i++)
             slots[i].ClearSlot();
 
@@ -100,10 +95,9 @@ public class InventoryUI : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.I))
         {
-            activeInventory = !activeInventory;
-            InventoryPanel.SetActive(activeInventory);
+            if (activeInventory) Close();
+            else Open();
         }
-        
     }
 
     public void AddSlot()
@@ -119,10 +113,8 @@ public class InventoryUI : MonoBehaviour
         var slotItem = slotStack.item;
         var slotCount = slotStack.count;
 
-        // ---- 우클릭: 1개씩 이동 ----
         if (btn == UnityEngine.EventSystems.PointerEventData.InputButton.Right)
         {
-            // 손이 비었고 슬롯에 있으면 1개만 집기
             if (cursorItem == null && slotItem != null && slotCount > 0)
             {
                 cursorItem = slotItem;
@@ -134,7 +126,6 @@ public class InventoryUI : MonoBehaviour
                 return;
             }
 
-            // 손에 있고, 대상 슬롯이 비었으면 1개 내려놓기
             if (cursorItem != null && (slotItem == null || slotCount <= 0))
             {
                 inventory.items[slotIndex] = new ItemStack(cursorItem, 1);
@@ -156,14 +147,12 @@ public class InventoryUI : MonoBehaviour
                 return;
             }
 
-            // 그 외: 아무 것도 안함(우클릭은 미세 조정용)
             return;
         }
 
         // ---- 좌클릭: 전량/절반 ----
         bool splitHalf = shift; // Shift+좌클릭 → 절반 나누기
 
-        // 1) 손이 비었고 슬롯에 있으면 집기
         if (cursorItem == null)
         {
             if (slotItem == null || slotCount <= 0) return;
@@ -188,7 +177,6 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 2) 손에 들고 있고, 대상 슬롯이 비었으면 내려놓기
         if (slotItem == null || slotCount <= 0)
         {
             int putCount = splitHalf ? Mathf.Max(1, cursorCount / 2) : cursorCount;
@@ -200,7 +188,6 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 3) 손/슬롯 같은 아이템 & 스택 가능 → 합치기
         if (slotItem == cursorItem && cursorItem.isStackable)
         {
             int add = splitHalf ? Mathf.Max(1, cursorCount / 2) : cursorCount;
@@ -212,7 +199,6 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // 4) 서로 다른 아이템 → 스왑(Shift 상관없이 전량 스왑)
         {
             var tempItem = slotItem;
             var tempCount = slotCount;
@@ -233,7 +219,54 @@ public class InventoryUI : MonoBehaviour
     }
     public void Show(bool on)
     {
-        activeInventory = on;
-        if (InventoryPanel) InventoryPanel.SetActive(on);
+        if (on) Open();
+        else Close();
+    }
+    public void Open()
+    {
+        activeInventory = true;
+        if (InventoryPanel) InventoryPanel.SetActive(true);
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        if (cursorUI)
+        {
+            cursorUI.gameObject.SetActive(true);
+            cursorUI.transform.SetAsLastSibling();
+        }
+
+        Refresh();
+        UpdateCursorUI();
+    }
+
+    public void Close()
+    {
+        activeInventory = false;
+        if (InventoryPanel) InventoryPanel.SetActive(false);
+
+        if (cursorUI) cursorUI.gameObject.SetActive(false);
+    }
+    public void ShowCursorPreview(Item item, int count)
+    {
+        cursorItem = item;
+        cursorCount = count;
+
+        if (cursorUI)
+        {
+            cursorUI.gameObject.SetActive(true);
+            cursorUI.transform.SetAsLastSibling();
+            cursorUI.Set(item, count);
+        }
+    }
+
+    public void HideCursorPreview()
+    {
+        cursorItem = null; cursorCount = 0;
+        if (cursorUI)
+        {
+            cursorUI.Set(null, 0);
+            cursorUI.gameObject.SetActive(false);
+        }
     }
 }

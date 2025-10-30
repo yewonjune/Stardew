@@ -4,13 +4,13 @@ using UnityEngine.UI;
 
 public class ShopController : MonoBehaviour
 {
-    public GameObject shopPanel;            // ShopCanvas 안 Panel
-    public Transform shopContent;           // 버튼들이 들어갈 Content
+    public GameObject shopPanel;
+    public Transform shopContent;
     public GameObject shopItemButtonPrefab;
 
-    public PlayerWallet wallet;             // PlayerWallet.I 로도 가능
+    public PlayerWallet wallet;
     public Text goldText;
-    public Text hintText;                   // "슬롯을 클릭해서 넣어주세요" 안내
+    public Text hintText;
     public InventoryUILayout inventoryLayout;
     public InventoryUI inventoryUI;
     public Button cancelButton;
@@ -19,8 +19,8 @@ public class ShopController : MonoBehaviour
     public ShopCatalog catalog;
 
     // 내부 상태
-    ShopItemEntry pendingBuy;                   // 구매 대기 중인 상품(아이템 1개)
-    ShopItemButton pendingButton;          // 재고 갱신용
+    ShopItemEntry pendingBuy;
+    ShopItemButton pendingButton;
     int pendingCount = 0;
 
     List<ShopItemButton> spawned = new List<ShopItemButton>();
@@ -46,19 +46,22 @@ public class ShopController : MonoBehaviour
         BuildList();
 
         if (shopPanel) shopPanel.SetActive(true);
-        if (inventoryUI) inventoryUI.Show(true);
+
+        if (inventoryUI) inventoryUI.Open();
 
         hintText.text = "상점에서 아이템을 고르거나, 인벤토리 아이템을 클릭해 판매하세요.";
         pendingBuy = null; pendingButton = null;
-        // 인벤토리 슬롯 클릭 이벤트 연결
+
         inventoryUI.onSlotClicked -= OnInventorySlotClicked;
         inventoryUI.onSlotRightClicked -= OnInventorySlotRightClicked;
         inventoryUI.onSlotClicked += OnInventorySlotClicked;
         inventoryUI.onSlotRightClicked += OnInventorySlotRightClicked;
 
         inventoryUI.externalHandleEnabled = true;
-
         inventoryLayout?.ApplyShop();
+
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
     }
 
     public void CloseShop()
@@ -74,11 +77,12 @@ public class ShopController : MonoBehaviour
         inventoryUI.externalHandleEnabled = false;
 
         inventoryLayout?.ApplyOriginal();
+
+        inventoryUI.HideCursorPreview();
     }
 
     void BuildList()
     {
-        // 기존 버튼 정리
         foreach (var b in spawned) Destroy(b.gameObject);
         spawned.Clear();
 
@@ -95,10 +99,9 @@ public class ShopController : MonoBehaviour
     void RefreshGold()
     {
         if (!wallet) wallet = PlayerWallet.Instance;
-        if (goldText) goldText.text = $"{wallet.gold}g";
+        if (goldText) goldText.text = $"{wallet.gold}골드";
     }
 
-    // ----- 구매 흐름 -----
     public void BeginBuy(ShopItemEntry entry, ShopItemButton btn)
     {
         if (entry.stock == 0)
@@ -134,21 +137,21 @@ public class ShopController : MonoBehaviour
             return;
         }
 
+        if (inventoryUI) inventoryUI.ShowCursorPreview(entry.item, pendingCount);
+
         hintText.text = $"[{entry.item.itemName}] {pendingCount}개 구매 준비됨 " +
-                             $"(예상 비용: {pendingCount * entry.buyPrice}g)\n" +
+                             $"(예상 비용: {pendingCount * entry.buyPrice}골드)\n" +
                                             "→ 넣을 인벤토리 슬롯을 클릭하세요.";
     }
 
     void OnInventorySlotClicked(int slotIndex)
     {
-        // 판매 모드가 아니라면: 구매 배치
         if (pendingBuy != null)
         {
             TryPlacePurchasedItem(slotIndex);
             return;
         }
 
-        // 구매 대기가 없으면: 판매 1개
         TrySellFromSlot(slotIndex, sellAll: false);
     }
 
@@ -171,6 +174,21 @@ public class ShopController : MonoBehaviour
         {
             hintText.text = "구매 대기 중인 아이템이 없어요.";
             return;
+        }
+
+        if (entry.item is BagItem bag)
+        {
+            bool handled = BagUpgradeService.TryApplyBagPurchase(
+                entry, bag, wallet, inventoryUI, ref pendingCount,
+                refreshGold: RefreshGold,
+                onClearPending: () => { pendingBuy = null; pendingButton = null; pendingCount = 0; },
+                setHint: (msg) => { hintText.text = msg; });
+
+            if (handled)
+            {
+                pendingButton?.RefreshStock();
+                return;
+            }
         }
 
         int want = pendingCount;
@@ -207,7 +225,7 @@ public class ShopController : MonoBehaviour
         if (entry.stock > 0) entry.stock -= canBuy;
         pendingButton?.RefreshStock();
 
-        hintText.text = $"[{entry.item.itemName}] {canBuy}개 구매 완료! (-{totalCost}g)";
+        hintText.text = $"[{entry.item.itemName}] {canBuy}개 구매 완료! (-{totalCost}골드)";
         RefreshGold();
 
         pendingCount -= canBuy;
@@ -221,6 +239,9 @@ public class ShopController : MonoBehaviour
         {
             hintText.text += $"\n(잔여 대기: {pendingCount}개 → 다른 슬롯을 클릭해 넣을 수 있어요)";
         }
+
+        if (pendingCount > 0) inventoryUI.ShowCursorPreview(pendingBuy.item, pendingCount);
+        else inventoryUI.HideCursorPreview();
     }
 
     void TrySellFromSlot(int slotIndex, bool sellAll)
@@ -253,6 +274,6 @@ public class ShopController : MonoBehaviour
 
         wallet.Earn(price * amount);
         RefreshGold();
-        hintText.text = $"[{stack.item.itemName}] {amount}개 판매! (+{price * amount}g)";
+        hintText.text = $"[{stack.item.itemName}] {amount}개 판매! (+{price * amount}골드)";
     }
 }

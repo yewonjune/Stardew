@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67da8369e8e5bed4885e6dda7c29d39e, type: 3}
+  m_Name: New Bag
+  m_EditorClassIdentifier: 
+  itemName: "\uAC00\uBC29"
+  icon: {fileID: -987158244320924088, guid: 0c2ac66bc32bfcd438336c5a6ac1c924, type: 3}
+  isStackable: 1
+  maxStack: 2
+  worldPrefab: {fileID: 0}
+  slotIncrease: 10
