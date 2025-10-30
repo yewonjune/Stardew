@@ -13,6 +13,7 @@ public class ShopController : MonoBehaviour
     public Text hintText;                   // "슬롯을 클릭해서 넣어주세요" 안내
     public InventoryUILayout inventoryLayout;
     public InventoryUI inventoryUI;
+    public Button cancelButton;
 
     [Header("Data")]
     public ShopCatalog catalog;
@@ -30,6 +31,11 @@ public class ShopController : MonoBehaviour
             inventoryLayout = FindObjectOfType<InventoryUILayout>(true); 
         if (!inventoryUI)
             inventoryUI = FindObjectOfType<InventoryUI>(true);
+    }
+
+    void Start()
+    {
+        cancelButton.onClick.AddListener(() => CloseShop());
     }
 
     void OnEnable() { RefreshGold(); }

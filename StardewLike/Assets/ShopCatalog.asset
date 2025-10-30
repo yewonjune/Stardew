@@ -21,3 +21,15 @@ MonoBehaviour:
     buyPrice: 40
     sellPrice: 10
     stock: -1
+  - item: {fileID: 11400000, guid: 02749f89da0b4424890491bdb2909ed0, type: 2}
+    buyPrice: 10
+    sellPrice: 1
+    stock: -1
+  - item: {fileID: 11400000, guid: 13722fdaf9828c94bac3c9ec9ddfc1b2, type: 2}
+    buyPrice: 20
+    sellPrice: 5
+    stock: -1
+  - item: {fileID: 11400000, guid: 83fbcd61982df7b449a384043a95226c, type: 2}
+    buyPrice: 20
+    sellPrice: 5
+    stock: -1

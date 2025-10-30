@@ -46,12 +46,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seedData: {fileID: 11400000, guid: 7330b2b7c9345bf4cba4fa0ebb668087, type: 2}
-  cell: {x: 0, y: 0, z: 0}
   growthSprites:
   - {fileID: -111453550, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   - {fileID: -1711437738, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   - {fileID: -390016845, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   - {fileID: 1305789424, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  cell: {x: 0, y: 0, z: 0}
 --- !u!212 &6070308605632669742
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -92,7 +92,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 1807283792, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1352728932622244378
+--- !u!1 &7518937925669243300
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,23 +8,23 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6096216758602475867}
-  - component: {fileID: 9110519698029986808}
-  - component: {fileID: 6070308605632669742}
+  - component: {fileID: 1071309179189100553}
+  - component: {fileID: 1390166403758968926}
+  - component: {fileID: 7848870535122919798}
   m_Layer: 0
-  m_Name: RiceCropPrefab
+  m_Name: CucumberCropPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6096216758602475867
+--- !u!4 &1071309179189100553
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352728932622244378}
+  m_GameObject: {fileID: 7518937925669243300}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -33,32 +33,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9110519698029986808
+--- !u!114 &1390166403758968926
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352728932622244378}
+  m_GameObject: {fileID: 7518937925669243300}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c3c947f35b1945e4a99aee2a26cc312e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seedData: {fileID: 11400000, guid: d7ef36438c6b43a4dbf5edebad9b123b, type: 2}
+  seedData: {fileID: 11400000, guid: 02749f89da0b4424890491bdb2909ed0, type: 2}
   growthSprites:
-  - {fileID: 1212273481, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
-  - {fileID: 785330792, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
-  - {fileID: -1304546830, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
-  - {fileID: -1609977462, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  - {fileID: 360325846, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  - {fileID: 96002049, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  - {fileID: 238081888, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  - {fileID: 67024681, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   cell: {x: 0, y: 0, z: 0}
---- !u!212 &6070308605632669742
+--- !u!212 &7848870535122919798
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1352728932622244378}
+  m_GameObject: {fileID: 7518937925669243300}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -93,7 +93,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 838974119, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
+  m_Sprite: {fileID: -48246460, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
