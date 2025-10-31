@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb03bed993df9e549bdff56e4717165b, type: 3}
-  m_Name: LionFIsh
+  m_Name: Crayfish
   m_EditorClassIdentifier: 
-  itemName: "\uC3E8\uBC30\uAC10\uD3AD"
-  icon: {fileID: -6730320637373223454, guid: 4d35a8b0ba5f1ca43a037ca2e749faa0, type: 3}
+  itemName: "\uAC00\uC7AC"
+  icon: {fileID: -1495532221452470286, guid: 3dc9426ac8619614fb9b3697d4014d94, type: 3}
   isStackable: 1
   maxStack: 99
+  canSell: 1
+  sellPrice: 60
   worldPrefab: {fileID: 0}

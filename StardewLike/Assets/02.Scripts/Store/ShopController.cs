@@ -254,8 +254,7 @@ public class ShopController : MonoBehaviour
             return;
         }
 
-        var entry = catalog.shopItemEntries.Find(e => e.item == stack.item);
-        int price = (entry != null) ? entry.sellPrice : 0;
+        int price = (stack.item != null && stack.item.canSell) ? stack.item.sellPrice : 0;
 
         if (price <= 0)
         {

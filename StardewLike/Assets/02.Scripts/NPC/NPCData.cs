@@ -21,6 +21,10 @@ public class NPCData : ScriptableObject
     public Sprite angryPortrait;
     public Sprite surprisedPortrait;
 
+    [Header("Affection Settings")]
+    public int maxAffection = 100;
+    public int currentAffection = 0;
+
     public Sprite GetPortrait(EmotionType type)
     {
         switch(type)

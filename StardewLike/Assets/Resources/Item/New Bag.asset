@@ -16,5 +16,7 @@ MonoBehaviour:
   icon: {fileID: -987158244320924088, guid: 0c2ac66bc32bfcd438336c5a6ac1c924, type: 3}
   isStackable: 1
   maxStack: 2
+  canSell: 0
+  sellPrice: 10
   worldPrefab: {fileID: 0}
   slotIncrease: 10

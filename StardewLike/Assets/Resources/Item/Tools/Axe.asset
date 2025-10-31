@@ -15,5 +15,9 @@ MonoBehaviour:
   itemName: Axe
   icon: {fileID: 381413843, guid: 7a45b40d73b994d43a78d06cb8eca45f, type: 3}
   isStackable: 0
+  maxStack: 99
+  canSell: 0
+  sellPrice: 10
+  worldPrefab: {fileID: 0}
   toolType: 2
   power: 1

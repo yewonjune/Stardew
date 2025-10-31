@@ -6,8 +6,6 @@ using UnityEngine;
 public class Resource : Item
 {
     public ResourceType resourceType;
-
-    public int sellPrice;
 }
 
 public enum ResourceType

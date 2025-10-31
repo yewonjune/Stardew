@@ -8,7 +8,7 @@ public class ShopItemEntry
 {
     public Item item;
     public int buyPrice = 50;
-    public int sellPrice = 20;
+    //public int sellPrice = 20;
     public int stock = -1;
 }
 
