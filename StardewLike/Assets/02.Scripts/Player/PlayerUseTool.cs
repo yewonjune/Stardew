@@ -81,6 +81,9 @@ public class PlayerUseTool : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            var fc = GetComponent<PlayerFishingController>();
+            if (fc != null && fc.isFishing) return;
+
             Item selectedItem = hotbarManager.GetSelectedItem();
 
             if (selectedItem is Tools tool)
