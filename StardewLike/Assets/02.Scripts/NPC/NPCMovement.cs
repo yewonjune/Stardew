@@ -78,6 +78,10 @@ public class NPCMovement : MonoBehaviour
                 // ÁÂ¿ì ÀÌµ¿
                 animX = moveDir.x > 0 ? 1f : -1f;
                 animY = 0f;
+
+                Vector3 localScale = transform.localScale;
+                localScale.x = moveDir.x > 0 ? Mathf.Abs(localScale.x) : -Mathf.Abs(localScale.x);
+                transform.localScale = localScale;
             }
             else
             {
