@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Sprites;
 using UnityEngine;
 
 public class NPCGiftReceiver : MonoBehaviour
@@ -21,7 +20,7 @@ public class NPCGiftReceiver : MonoBehaviour
 
     public void ReceiveGift(string itemId)
     {
-        int add = baseAffectionOnGift;
+        int add = 0;
 
         var result = NPCGiftPreference.GiftResult.Neutral;
         if (giftPreference)
@@ -37,6 +36,8 @@ public class NPCGiftReceiver : MonoBehaviour
             add += likedBonus;
         else if (result == NPCGiftPreference.GiftResult.Disliked)
             add += dislikedPenalty;
+        else
+            add += baseAffectionOnGift;
 
         if (affection != null)
             affection.AddAffection(add);
