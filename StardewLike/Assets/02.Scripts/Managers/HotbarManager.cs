@@ -6,7 +6,6 @@ using UnityEngine;
 public class HotbarManager : MonoBehaviour
 {
     public HotbarSlotUI[] slots;
-    //public Item[] startItems;
 
     private int selectedIndex = 0;
 
@@ -111,5 +110,10 @@ public class HotbarManager : MonoBehaviour
     public Item GetSelectedItem()
     {
         return slots[selectedIndex].GetItem();
+    }
+
+    public int GetSelectedIndex()
+    {
+        return selectedIndex;
     }
 }

@@ -5,56 +5,48 @@ using UnityEngine;
 public class NPCScheduleManager : MonoBehaviour
 {
     public TimeManager timeManager;
+    public NPCScheduleHolder[] npcs;
 
-    readonly HashSet<(int minuteStamp, GameObject npc)> _fired = new();
 
     void OnEnable()
     {
-        if (timeManager)
+        if (timeManager == null)
+        {
+            timeManager = FindObjectOfType<TimeManager>();
+        }
+
+        if (timeManager != null)
         {
             timeManager.OnMinuteChanged += OnMinuteChanged;
-            //timeManager.OnDayChanged += OnDayChanged; // 있으면 연결
         }
     }
 
     void OnDisable()
     {
-        if (timeManager)
+        if (timeManager != null)
         {
             timeManager.OnMinuteChanged -= OnMinuteChanged;
-            //timeManager.OnDayChanged -= OnDayChanged;
         }
     }
 
-    void OnDayChanged(int newDay)
-    {
-        _fired.Clear();
-    }
-
-
     void OnMinuteChanged(int hour, int minute)
     {
-        int stamp = hour * 60 + minute;
-
-        var holders = FindObjectsOfType<NPCScheduleHolder>(includeInactive: false);
-
-        foreach (var holder in holders)
+        // 모든 NPC 검사
+        foreach (var holder in npcs)
         {
-            var npcGo = holder.gameObject;
-            var key = (stamp, npcGo);
-            if (_fired.Contains(key)) continue;
+            if (holder == null || holder.schedules == null) continue;
 
-            foreach (var s in holder.schedules)
+            foreach (var entry in holder.schedules)
             {
-                if (s.hour == hour && s.minute == minute && s.target)
+                // 시간이 정확히 맞으면 실행
+                if (entry.hour == hour && entry.minute == minute)
                 {
-                    Debug.Log($"[Sched] match -> {holder.name} -> {s.target?.name}");
-
-                    _fired.Add(key);
-
+                    if (holder.movement != null)
+                    {
+                        holder.movement.SetPath(entry.path, false); // false면 도착 후 멈춤
+                    }
                 }
             }
         }
     }
-       
 }

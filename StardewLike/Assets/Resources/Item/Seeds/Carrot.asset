@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb03bed993df9e549bdff56e4717165b, type: 3}
   m_Name: Carrot
   m_EditorClassIdentifier: 
+  itemId: Carrot
   itemName: Carrot
   icon: {fileID: 1720569650, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
   isStackable: 1

@@ -33,3 +33,19 @@ MonoBehaviour:
     - text: "\uBC16\uC740 \uB0A0\uC528\uB3C4 \uB365\uACE0 \uD798\uB4E4 \uD150\uB370
         \uC640\uC918\uC11C \uACE0\uB9C8\uC6CC."
       emotion: 1
+  loveGiftSequence:
+    lines:
+    - text: "\uC0AC\uB791\uD558\uB294 \uC120\uBB3C"
+      emotion: 1
+  likeGiftSequence:
+    lines:
+    - text: "\uC88B\uC544\uD558\uB294 \uC120\uBB3C"
+      emotion: 0
+  dislikeGiftSequence:
+    lines:
+    - text: "\uAC1C\uC2EB\uC74C"
+      emotion: 0
+  neutralGiftSequence:
+    lines:
+    - text: "\uBCC4\uC0DD\uAC01\uC5C6\uC74C"
+      emotion: 0

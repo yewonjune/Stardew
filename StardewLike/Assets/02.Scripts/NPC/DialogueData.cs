@@ -23,4 +23,9 @@ public class DialogueData : ScriptableObject
     public NPCData npcData;
     public DialogueSequence[] sequences;
 
+    public DialogueSequence loveGiftSequence;
+    public DialogueSequence likeGiftSequence;
+    public DialogueSequence dislikeGiftSequence;
+    public DialogueSequence neutralGiftSequence;
+
 }

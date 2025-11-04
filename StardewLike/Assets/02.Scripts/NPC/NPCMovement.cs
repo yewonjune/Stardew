@@ -22,6 +22,11 @@ public class NPCMovement : MonoBehaviour
     float lastX = 0f;
     float lastY = -1f;
 
+    DoorWaypoint _lastDoorA;
+    DoorWaypoint _lastDoorB;
+
+    public bool startWithDefaultPath = false;
+
 
     void Awake()
     {
@@ -31,7 +36,7 @@ public class NPCMovement : MonoBehaviour
     }
     void Start()
     {
-        if (wayPoints != null && wayPoints.Length > 0)
+        if (startWithDefaultPath && wayPoints != null && wayPoints.Length > 0)
         {
             SetTarget(wayPoints[0].position);
         }
@@ -45,7 +50,6 @@ public class NPCMovement : MonoBehaviour
         Vector3 dir = target - pos;
         float dist = dir.magnitude;
 
-        // 도착했으면 멈춤
         if (dist <= arriveDist)
         {
             hasTarget = false;
@@ -53,14 +57,41 @@ public class NPCMovement : MonoBehaviour
 
             var currentWp = wayPoints[wayPointIndex];
             var door = currentWp != null ? currentWp.GetComponent<DoorWaypoint>() : null;
+
             if (door != null && door.warpTarget != null)
             {
-                Warp(door.warpTarget.position);
+                if (door != _lastDoorA && door != _lastDoorB)
+                {
+                    Warp(door.warpTarget.position);
+
+                    var targetDoor = door.warpTarget.GetComponent<DoorWaypoint>();
+
+                    _lastDoorA = door;
+                    _lastDoorB = targetDoor;
+
+                    int idx = FindWayPointIndex(door.warpTarget);
+                    if (idx >= 0)
+                    {
+                        wayPointIndex = idx;
+                    }
+
+                    TryGoNextWayPoint();
+                    return;
+                }
+                else
+                {
+                    _lastDoorA = null;
+                    _lastDoorB = null;
+                }
+            }
+            else
+            {
+                _lastDoorA = null;
+                _lastDoorB = null;
             }
 
             TryGoNextWayPoint();
             return;
-
         }
 
         Vector3 moveDir = dir.normalized;
@@ -69,13 +100,11 @@ public class NPCMovement : MonoBehaviour
 
         if (animator)
         {
-            // 방향 정리: 어느 축이 더 큰지에 따라 상하/좌우 고정
             float animX = 0f;
             float animY = 0f;
 
             if (Mathf.Abs(moveDir.x) > Mathf.Abs(moveDir.y))
             {
-                // 좌우 이동
                 animX = moveDir.x > 0 ? 1f : -1f;
                 animY = 0f;
 
@@ -85,7 +114,6 @@ public class NPCMovement : MonoBehaviour
             }
             else
             {
-                // 상하 이동
                 animY = moveDir.y > 0 ? 1f : -1f;
                 animX = 0f;
             }
@@ -94,11 +122,11 @@ public class NPCMovement : MonoBehaviour
             animator.SetFloat("MoveY", animY);
             animator.SetBool("isMoving", true);
 
-            // 나중에 멈춰도 이 방향 유지
             lastX = animX;
             lastY = animY;
         }
     }
+
 
     public void Interact()
     {
@@ -129,8 +157,8 @@ public class NPCMovement : MonoBehaviour
     {
         if (!animator) return;
 
-        animator.SetFloat("MoveX", lastX);
-        animator.SetFloat("MoveY", lastY);
+        animator.SetFloat("MoveX", 0f);
+        animator.SetFloat("MoveY", -1f);
         animator.SetBool("isMoving", false);
     }
 
@@ -144,24 +172,48 @@ public class NPCMovement : MonoBehaviour
         {
             if (autoLoopWayPoints)
             {
-                wayPointIndex = 0; // 다시 처음부터
+                wayPointIndex = 0;
             }
             else
             {
-                return; // 더 이상 안 감
+                return;
             }
         }
 
         SetTarget(wayPoints[wayPointIndex].position);
     }
 
+    public void SetPath(Transform[] newPoints, bool autoLoop = false)
+    {
+        wayPoints = newPoints;
+        autoLoopWayPoints = autoLoop;
+        wayPointIndex = 0;
+
+        if (wayPoints != null && wayPoints.Length > 0)
+        {
+            SetTarget(wayPoints[0].position);
+        }
+        else
+        {
+            Stop();
+        }
+    }
+
+    int FindWayPointIndex(Transform t)
+    {
+        if (wayPoints == null) return -1;
+        for (int i = 0; i < wayPoints.Length; i++)
+        {
+            if (wayPoints[i] == t)
+                return i;
+        }
+        return -1;
+    }
+
     void OnDrawGizmos()
     {
         if (wayPoints == null || wayPoints.Length == 0) return;
 
-        Gizmos.color = Color.green;
-
-        // 순서대로 선 연결
         Gizmos.color = Color.yellow;
         for (int i = 0; i < wayPoints.Length - 1; i++)
         {

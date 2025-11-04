@@ -4474,6 +4474,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 964853102}
+    - targetCorrespondingSourceObject: {fileID: 7458104359877964771, guid: c1037e29090479b4c9fe2983a2250f08,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 964853104}
   m_SourcePrefab: {fileID: 100100000, guid: c1037e29090479b4c9fe2983a2250f08, type: 3}
 --- !u!1 &964853092 stripped
 GameObject:
@@ -4654,6 +4658,24 @@ MonoBehaviour:
   fishing: {fileID: 964853099}
   openInventoryOnCatch: 0
   previewCursorOnCatch: 1
+--- !u!114 &964853104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 964853092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1c54c8e84dcb0042b36fd9a68126e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactRange: 1.2
+  npcLayer:
+    serializedVersion: 2
+    m_Bits: 4096
+  inventory: {fileID: 964853097}
+  hotbar: {fileID: 439797436}
 --- !u!1001 &977324348
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7709,6 +7731,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeManager: {fileID: 816535880}
+  npcs: []
 --- !u!1 &1481890828
 GameObject:
   m_ObjectHideFlags: 0

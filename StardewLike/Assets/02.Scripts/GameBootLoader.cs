@@ -31,8 +31,4 @@ public class GameBootLoader : MonoBehaviour
         }
     }
 
-    public void Initialize()
-    {
-
-    }
 }

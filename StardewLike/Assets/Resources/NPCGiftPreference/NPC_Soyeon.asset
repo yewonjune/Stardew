@@ -9,14 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb03bed993df9e549bdff56e4717165b, type: 3}
-  m_Name: Corn
+  m_Script: {fileID: 11500000, guid: 269c718383111094b9664c5fcd2a3b4e, type: 3}
+  m_Name: NPC_Soyeon
   m_EditorClassIdentifier: 
-  itemId: Corn
-  itemName: Corn
-  icon: {fileID: -2046620659, guid: 19de471ec8e70ba418cdc18ac63ae945, type: 3}
-  isStackable: 1
-  maxStack: 99
-  canSell: 1
-  sellPrice: 90
-  worldPrefab: {fileID: 0}
+  npcId: Soyeon
+  lovedItemIds:
+  - Carrot
+  likedItemIds:
+  - Corn
+  dislikedItemIds:
+  - Tomato

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
 using System;
 
 public class DialogueManager : MonoBehaviour
@@ -76,6 +75,41 @@ public class DialogueManager : MonoBehaviour
                 ? data.npcData.displayName
                 : "???";
 
+        if (portraitImage != null)
+        {
+            Sprite s = (data.npcData != null) ? data.npcData.defaultPortrait : null;
+            portraitImage.sprite = s;
+            portraitImage.enabled = (s != null);
+        }
+
+        ShowLine();
+
+        lastAdvanceTime = Time.unscaledTime - advanceCooldown;
+
+        FreezePlayer(true);
+        GamePause.Pause();
+    }
+
+    public void StartDialogue(DialogueData data, DialogueSequence seq)
+    {
+        if (data == null || seq == null) return;
+
+        isDialogueActive = true;
+        currentData = data;
+        lines = seq.lines;
+        index = 0;
+
+        dialoguePanel.SetActive(true);
+
+        // 이름
+        if (nameText)
+        {
+            nameText.text = (data.npcData != null && !string.IsNullOrEmpty(data.npcData.displayName))
+                ? data.npcData.displayName
+                : "???";
+        }
+
+        // 기본 초상화
         if (portraitImage != null)
         {
             Sprite s = (data.npcData != null) ? data.npcData.defaultPortrait : null;
