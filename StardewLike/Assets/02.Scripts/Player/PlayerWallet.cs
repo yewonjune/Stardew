@@ -44,7 +44,7 @@ public class PlayerWallet : MonoBehaviour
         RefreshUI();
     }
 
-    void RefreshUI()
+    public void RefreshUI()
     {
         if (goldText != null)
             goldText.text = $"{gold}";

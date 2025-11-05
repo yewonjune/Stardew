@@ -9,16 +9,16 @@ public class SaveData
     public PlayerDTO player;
     public InventoryDTO inventory;
     public WorldDTO world;
+    public StoreDTO store;
 }
 
-// 메타/플레이어
 [System.Serializable]
 public class MetaDTO
 {
     public int day, hour, minute;
     public string lastScene;
-    public float posX, posY; // Player 위치(씬 재진입 스폰에 활용)
-    // public int money;
+    public float posX, posY;
+    public int gold;
 }
 
 [System.Serializable]
@@ -32,12 +32,12 @@ public class PlayerDTO
 public class InventoryDTO
 {
     public int slotCnt;
-    public ItemStackDTO[] slots; // inventory.items와 동일한 길이, 인덱스=슬롯
+    public ItemStackDTO[] slots;
 }
 [System.Serializable]
 public class ItemStackDTO
 {
-    public string itemId; // Item(SO) 이름 또는 고유ID
+    public string itemId;
     public int count;
 }
 
@@ -47,12 +47,14 @@ public class WorldDTO
 {
     public SceneEntryDTO[] scenes;
 }
+
 [System.Serializable]
 public class SceneEntryDTO
 {
     public string scene;
     public SceneStateDTO state;
 }
+
 [System.Serializable]
 public class SceneStateDTO
 {
@@ -62,6 +64,7 @@ public class SceneStateDTO
     public ResourceDTO[] resources;
     public bool initialSpawnDone;
 }
+
 [System.Serializable] public class CellDTO { public int x, y; }
 
 [System.Serializable]
@@ -80,4 +83,18 @@ public class ResourceDTO
     public string prefabId;
     public float x, y;
     public bool harvestedOrRemoved;
+}
+
+[System.Serializable]
+public class StoreDTO
+{
+    public StoreItemDTO[] items;
+}
+
+[System.Serializable]
+public class StoreItemDTO
+{
+    public string itemId;
+    public int price;
+    public int stock;
 }

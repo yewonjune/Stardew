@@ -27,12 +27,8 @@ public class DataBaseManager : MonoBehaviour
         public string Name;
         public string FramName;
         public int Gold;
-        //public List<string> Items;
 
-        public Data()
-        {
-
-        }
+        public Data() { }
 
         public Data(string name, string framName, int gold)
         {
@@ -48,11 +44,5 @@ public class DataBaseManager : MonoBehaviour
         auth = FirebaseAuth.DefaultInstance;
 
         DBReference = FirebaseDatabase.DefaultInstance.RootReference;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class PlayerUseTool : MonoBehaviour
@@ -22,7 +22,6 @@ public class PlayerUseTool : MonoBehaviour
 
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
-    //const string StateToolAction = "PlayerAction";
 
     void OnEnable()
     {
@@ -81,6 +80,12 @@ public class PlayerUseTool : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
+            if (IsClickOnBlockingUI())
+            { 
+                Debug.Log("막아야 하는 UI 위 클릭됨 -> 도구 사용 안 함");
+                return;    // UI 클릭이니까 도구 사용 안 함
+            }
+
             var fc = GetComponent<PlayerFishingController>();
             if (fc != null && fc.isFishing) return;
 
@@ -108,8 +113,6 @@ public class PlayerUseTool : MonoBehaviour
             Debug.Log("오늘 하루 체력을 다 사용했습니다");
             return;
         }
-
-        Debug.Log($"사용 중: {tool.itemName} ({tool.toolType})");
 
         switch (tool.toolType)
         {
@@ -326,5 +329,26 @@ public class PlayerUseTool : MonoBehaviour
             
             //StartToolAction(ToolType.Scythe);   // 나중에 추가
         }
+    }
+
+    bool IsClickOnBlockingUI()
+    {
+        if (EventSystem.current == null) return false;
+
+        PointerEventData data = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(data, results);
+
+        for (int i = 0; i < results.Count; i++)
+        {
+            if (results[i].gameObject.CompareTag("BlockTool"))
+                return true;
+        }
+
+        return false;
     }
 }

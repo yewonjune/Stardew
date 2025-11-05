@@ -8,6 +8,7 @@ public static class SaveBuilder
     public static SaveData Build(TimeManager tm, Transform player)
     {
         var data = new SaveData();
+        var wallet = PlayerWallet.Instance;
 
         // Meta
         data.meta = new MetaDTO
@@ -18,7 +19,7 @@ public static class SaveBuilder
             lastScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
             posX = player.position.x,
             posY = player.position.y,
-            //money = 0 // 있으면 채우기
+            gold = wallet != null ? wallet.gold : 0
         };
 
         // Player (확장 여지)
@@ -110,12 +111,10 @@ public static class SaveBuilder
         return list.ToArray();
     }
 
-    // === Apply (DTO -> 런타임) =========================================
     public static void Apply(SaveData data, TimeManager tm)
     {
         if (data == null) return;
 
-        // 0) Null 가드
         if (data.meta == null) data.meta = new MetaDTO();
         if (data.inventory == null) data.inventory = new InventoryDTO { slotCnt = 0, slots = System.Array.Empty<ItemStackDTO>() };
         if (data.world == null) data.world = new WorldDTO { scenes = System.Array.Empty<SceneEntryDTO>() };
@@ -126,6 +125,12 @@ public static class SaveBuilder
             tm.day = data.meta.day;
             tm.hour = data.meta.hour;
             tm.minute = data.meta.minute;
+        }
+
+        if (PlayerWallet.Instance != null)
+        {
+            PlayerWallet.Instance.gold = data.meta.gold;
+            PlayerWallet.Instance.RefreshUI();
         }
 
         // 인벤토리
@@ -140,7 +145,7 @@ public static class SaveBuilder
                 var s = slots[i];
                 if (s != null && !string.IsNullOrEmpty(s.itemId) && s.count > 0)
                 {
-                    // ★ 폴더 경로 확장: Seeds / Items.Resource / Items.Tools
+                    // 폴더 경로:Seeds / Items.Resource / Items.Tools
                     var item =
                         Resources.Load<Item>($"Item/{s.itemId}") ??
                         Resources.Load<Item>($"Item/Seeds/{s.itemId}") ??
