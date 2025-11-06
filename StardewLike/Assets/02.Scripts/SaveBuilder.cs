@@ -10,6 +10,14 @@ public static class SaveBuilder
         var data = new SaveData();
         var wallet = PlayerWallet.Instance;
 
+        string nickname = null;
+        string farmName = null;
+
+        if (PlayerRankManager.Instance != null)
+        {
+            if (PlayerRankManager.Instance.farmNameText != null)
+                farmName = PlayerRankManager.Instance.farmNameText.text;
+        }
         // Meta
         data.meta = new MetaDTO
         {
@@ -19,10 +27,11 @@ public static class SaveBuilder
             lastScene = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name,
             posX = player.position.x,
             posY = player.position.y,
-            gold = wallet != null ? wallet.gold : 0
+            gold = wallet != null ? wallet.gold : 0,
+            nickname = nickname,
+            farmName = farmName
         };
 
-        // Player (확장 여지)
         data.player = new PlayerDTO
         {
             //stamina = 0 // PlayerStaminaController 있으면 채우기

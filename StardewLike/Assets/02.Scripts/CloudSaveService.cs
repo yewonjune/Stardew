@@ -42,11 +42,7 @@ public class CloudSaveService : MonoBehaviour
 
             var app = FirebaseApp.DefaultInstance;
 
-            // ★ DefaultInstance 쓰지 말고 URL로 인스턴스 받기
             firebaseDatabase = FirebaseDatabase.GetInstance(app, databaseUrl);
-
-            // (선택) 오프라인 캐시: 반드시 '위 한 줄'보다 먼저, 그리고 한 번만
-            // db.SetPersistenceEnabled(true);
 
             root = firebaseDatabase.RootReference;
             IsReady = true;

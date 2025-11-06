@@ -19,6 +19,9 @@ public class MetaDTO
     public string lastScene;
     public float posX, posY;
     public int gold;
+
+    public string nickname;
+    public string farmName;
 }
 
 [System.Serializable]

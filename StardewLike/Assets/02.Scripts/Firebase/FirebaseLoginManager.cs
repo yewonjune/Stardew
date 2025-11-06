@@ -6,7 +6,6 @@ using Firebase;
 using Firebase.Auth;
 using Firebase.Extensions;
 using UnityEngine.SceneManagement;
-//using DG.Tweening.Plugins.Options;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -287,6 +286,11 @@ public class FirebaseLoginManager : MonoBehaviour
                 {
                     var profile = new UserProfile { DisplayName = newNick };
                     user.UpdateUserProfileAsync(profile).ContinueWithOnMainThread(_ => { });
+
+                    if (PlayerRankManager.Instance != null)
+                    {
+                        PlayerRankManager.Instance.SaveNickname(newNick);
+                    }
                 }
 
                 // 로그인창에 자동 채움 & 패널 닫기

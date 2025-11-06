@@ -15,13 +15,38 @@ public class MenuController : MonoBehaviour
     public RectTransform newGamePanel;
     public RectTransform coopGamePanel;
 
+    [Header("New Game Slide")]
+    public float mainMenuHideX = 2000f;
+    public float newGameTargetX = 0f;
+
+    [Header("Coop Slide")]
+    public float coopTargetY = 0f;
+    public float mainMenuHideY = 1080f;
+
     public float transitionDuration = 1f;
-    public float slideOffsetX = 2080f;
-    public float slideOffsetY = 540f;
+
+    Vector2 mainMenuStartPos;
+    Vector2 newGameStartPos;
+    Vector2 coopStartPos;
 
     // Start is called before the first frame update
     void Start()
     {
+        if (mainMenuPanel != null)
+            mainMenuStartPos = mainMenuPanel.anchoredPosition;
+
+        if (newGamePanel != null)
+        {
+            newGameStartPos = newGamePanel.anchoredPosition;
+            newGamePanel.gameObject.SetActive(false);
+        }
+
+        if (coopGamePanel != null)
+        {
+            coopStartPos = coopGamePanel.anchoredPosition;
+            coopGamePanel.gameObject.SetActive(false);
+        }
+
         if (newBtn != null)
             newBtn.onClick.AddListener(OnNewGameClicked);
 
@@ -35,10 +60,8 @@ public class MenuController : MonoBehaviour
     {
         newGamePanel.gameObject.SetActive(true);
 
-        mainMenuPanel.DOAnchorPosX(mainMenuPanel.anchoredPosition.x + slideOffsetX,
-                                    transitionDuration);
-        newGamePanel.DOAnchorPosX(newGamePanel.anchoredPosition.x + slideOffsetX,
-                                    transitionDuration);
+        mainMenuPanel.DOAnchorPosX(mainMenuHideX, transitionDuration);
+        newGamePanel.DOAnchorPosX(newGameTargetX, transitionDuration);
     }
 
     void OnStartBtnClicked()
@@ -50,12 +73,25 @@ public class MenuController : MonoBehaviour
     {
         coopGamePanel.gameObject.SetActive(true);
 
-        mainMenuPanel.DOAnchorPosY(mainMenuPanel.anchoredPosition.y + slideOffsetY,
-                            transitionDuration);
+        mainMenuPanel.DOAnchorPosY(mainMenuHideY, transitionDuration);
+        coopGamePanel.DOAnchorPosY(coopTargetY, transitionDuration);
+    }
 
-        coopGamePanel.DOAnchorPosY(coopGamePanel.anchoredPosition.y + slideOffsetY,
-                            transitionDuration);
+    public void ResetToDefault()
+    {
+        if (mainMenuPanel != null)
+            mainMenuPanel.anchoredPosition = mainMenuStartPos;
 
-        //SceneManager.LoadScene("CoopScene");
+        if (newGamePanel != null)
+        {
+            newGamePanel.anchoredPosition = newGameStartPos;
+            newGamePanel.gameObject.SetActive(false);
+        }
+
+        if (coopGamePanel != null)
+        {
+            coopGamePanel.anchoredPosition = coopStartPos;
+            coopGamePanel.gameObject.SetActive(false);
+        }
     }
 }
