@@ -15,6 +15,8 @@ public class MenuController : MonoBehaviour
     public RectTransform newGamePanel;
     public RectTransform coopGamePanel;
 
+    public Button coopPanelCancelBtn;
+
     [Header("New Game Slide")]
     public float mainMenuHideX = 2000f;
     public float newGameTargetX = 0f;
@@ -55,6 +57,9 @@ public class MenuController : MonoBehaviour
 
         if (coopBtn != null)
             coopBtn.onClick.AddListener(OnCoopBtnClicked);
+
+        if (coopPanelCancelBtn != null)
+            coopPanelCancelBtn.onClick.AddListener(OnCoopPanelCancelBtnClicked);
     }
     void OnNewGameClicked()
     {
@@ -93,5 +98,10 @@ public class MenuController : MonoBehaviour
             coopGamePanel.anchoredPosition = coopStartPos;
             coopGamePanel.gameObject.SetActive(false);
         }
+    }
+
+    void OnCoopPanelCancelBtnClicked()
+    {
+        ResetToDefault();
     }
 }
