@@ -2071,7 +2071,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 416643221}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1001970914}
+        m_TargetAssemblyTypeName: PlayerRankManager, Assembly-CSharp
+        m_MethodName: OpenRankPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &416643221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6034,7 +6046,9 @@ MonoBehaviour:
   farmNameText: {fileID: 851622786}
   goldText: {fileID: 448893586}
   seasonText: {fileID: 1768311750}
-  rankBlockPrefab: {fileID: 1742568644432998102, guid: 7a5f6b981a27dee49bfbf186546b604a,
+  goldRankBlockPrefab: {fileID: 1742568644432998102, guid: 7a5f6b981a27dee49bfbf186546b604a,
+    type: 3}
+  npcRankBlockPrefab: {fileID: 1741211436669056245, guid: cda7ab6818f70b744b95bbea40c0c27b,
     type: 3}
 --- !u!1 &1045310220
 GameObject:

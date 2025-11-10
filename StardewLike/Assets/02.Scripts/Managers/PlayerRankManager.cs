@@ -22,12 +22,12 @@ public class PlayerRankManager : MonoBehaviour
     public GameObject coopPanel;
 
     [Header("UI - Gold Rank (위)")]
-    public Text goldRankTitleText;          // "현재 GOLD 순위"
-    public Transform goldRankContent;       // 위 Content
+    public Text goldRankTitleText;
+    public Transform goldRankContent;
 
     [Header("UI - NPC/Affection Rank (아래)")]
-    public Text npcRankTitleText;           // "현재 호감도 순위"
-    public Transform npcRankContent;        // 아래 Content
+    public Text npcRankTitleText;
+    public Transform npcRankContent;
 
     [Header("UI - Left Info (선택)")]
     public Text emailText;
@@ -37,7 +37,8 @@ public class PlayerRankManager : MonoBehaviour
     public Text seasonText;
 
     [Header("Prefab")]
-    public GameObject rankBlockPrefab;      // RankBlock (안에 RankText, NameText, GoldText 있는 프리팹)
+    public GameObject goldRankBlockPrefab;
+    public GameObject npcRankBlockPrefab;
 
     void Awake()
     {
@@ -57,7 +58,6 @@ public class PlayerRankManager : MonoBehaviour
             var status = await FirebaseApp.CheckAndFixDependenciesAsync();
             if (status != DependencyStatus.Available)
             {
-                Debug.LogError("[Rank] Firebase deps not available : " + status);
                 return;
             }
 
@@ -65,7 +65,6 @@ public class PlayerRankManager : MonoBehaviour
 
             if (auth.CurrentUser == null)
             {
-                Debug.LogWarning("[Rank] 로그인된 유저가 없어서 RankManager 초기화 스킵");
                 return;
             }
 
@@ -78,7 +77,6 @@ public class PlayerRankManager : MonoBehaviour
             initialized = true;
 
             await LoadMyUserInfo();
-            Debug.Log("[Rank] Firebase init OK");
         }
         catch (Exception ex)
         {
@@ -90,17 +88,13 @@ public class PlayerRankManager : MonoBehaviour
     {
         if (!initialized)
         {
-            // 초기화 기다리기
-            Debug.Log("[Rank] 아직 초기화 중이라 기다립니다.");
-            return; // 또는 여기서 코루틴으로 조금 있다 다시 호출
+            return;
         }
 
         if (coopPanel) coopPanel.SetActive(true);
 
         await LoadMyUserInfo();
-        // 내 데이터 올리고
         await UploadMyRankData();
-        // 둘 다 갱신
         await RefreshBothRanks();
     }
 
@@ -124,7 +118,6 @@ public class PlayerRankManager : MonoBehaviour
         if (string.IsNullOrEmpty(displayName))
             displayName = "Guest";
 
-        // 기본값
         var updates = new Dictionary<string, object>();
         if (!snap.Exists)
         {
@@ -132,7 +125,6 @@ public class PlayerRankManager : MonoBehaviour
             updates["farmName"] = "My Farm";
             updates["nickname"] = displayName;
             updates["season"] = "Spring";
-            updates["gold"] = (PlayerWallet.Instance != null ? PlayerWallet.Instance.gold : 0);
             updates["createdAt"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             await userRef.UpdateChildrenAsync(updates);
             Debug.Log("[Rank] 새 유저 문서 생성 완료");
@@ -141,17 +133,14 @@ public class PlayerRankManager : MonoBehaviour
         {
             if (!snap.HasChild("farmName")) updates["farmName"] = "My Farm";
             if (!snap.HasChild("season")) updates["season"] = "Spring";
-            if (!snap.HasChild("gold")) updates["gold"] = (PlayerWallet.Instance != null ? PlayerWallet.Instance.gold : 0);
             if (!snap.HasChild("nickname")) updates["nickname"] = displayName;
             if (updates.Count > 0)
             {
                 await userRef.UpdateChildrenAsync(updates);
-                Debug.Log("[Rank] 기존 유저 필드 보충 완료");
             }
         }
     }
 
-    // DB에 저장할 기본 구조
     [Serializable]
     public class UserDTO
     {
@@ -159,7 +148,6 @@ public class PlayerRankManager : MonoBehaviour
         public string nickname;
         public string farmName;
         public string season;
-        public int gold;
         public long createdAt;
     }
     private async Task LoadMyUserInfo()
@@ -170,7 +158,6 @@ public class PlayerRankManager : MonoBehaviour
         var snap = await root.Child("users").Child(uid).GetValueAsync();
         if (!snap.Exists)
         {
-            Debug.Log("[Rank] no user info in DB");
             return;
         }
 
@@ -178,7 +165,17 @@ public class PlayerRankManager : MonoBehaviour
         string nickname = snap.Child("nickname").Value?.ToString() ?? "";
         string farmName = snap.Child("farmName").Value?.ToString() ?? "Farm";
         string season = snap.Child("season").Value?.ToString() ?? "";
-        string goldStr = snap.Child("gold").Value?.ToString() ?? "0";
+        
+        string goldStr = "0";
+        var saveMetaGold = snap.Child("saves").Child("slot1").Child("meta").Child("gold");
+        if (saveMetaGold.Exists && saveMetaGold.Value != null)
+        {
+            goldStr = saveMetaGold.Value.ToString();
+        }
+        else
+        {
+            goldStr = snap.Child("gold").Value?.ToString() ?? "0";
+        }
 
         if (emailText) emailText.text = email;
         if (nicknameText) nicknameText.text = nickname;
@@ -216,8 +213,24 @@ public class PlayerRankManager : MonoBehaviour
         string nickname = (nicknameText != null) ? nicknameText.text : "";
 
         int gold = 0;
-        if (PlayerWallet.Instance != null)
-            gold = PlayerWallet.Instance.gold;
+        var goldSnap = await root
+            .Child("users")
+            .Child(uid)
+            .Child("saves")
+            .Child("slot1")
+            .Child("meta")
+            .Child("gold")
+            .GetValueAsync();
+
+        if (goldSnap.Exists && goldSnap.Value != null)
+        {
+            int.TryParse(goldSnap.Value.ToString(), out gold);
+        }
+        else
+        {
+            if (PlayerWallet.Instance != null)
+                gold = PlayerWallet.Instance.gold;
+        }
 
         int affectionTotal = CalcTotalNPCAffection();
 
@@ -239,7 +252,6 @@ public class PlayerRankManager : MonoBehaviour
         string json = JsonUtility.ToJson(dto);
         await root.Child("ranks").Child(uid).SetRawJsonValueAsync(json);
 
-        // 왼쪽 정보 UI도 채우기
         if (emailText != null) emailText.text = email;
         if (goldText != null) goldText.text = gold + " 골드";
     }
@@ -249,56 +261,76 @@ public class PlayerRankManager : MonoBehaviour
         if (!initialized || root == null)
             return;
 
-        // 제목 세팅
         if (goldRankTitleText != null)
             goldRankTitleText.text = "현재 GOLD 순위";
         if (npcRankTitleText != null)
             npcRankTitleText.text = "현재 호감도 순위";
 
-        var snap = await root.Child("ranks").GetValueAsync();
-        if (!snap.Exists)
-        {
-            ClearContent(goldRankContent);
-            ClearContent(npcRankContent);
-            return;
-        }
-
-        // 전체 데이터 한 번에 파싱
+        var ranksSnap = await root.Child("ranks").GetValueAsync();
         List<PlayerRankDTO> all = new List<PlayerRankDTO>();
-        foreach (var child in snap.Children)
+
+        if (ranksSnap.Exists)
         {
-            try
+            foreach (var child in ranksSnap.Children)
             {
-                var json = child.GetRawJsonValue();
-                var dto = JsonUtility.FromJson<PlayerRankDTO>(json);
-                if (dto != null)
-                    all.Add(dto);
+                try
+                {
+                    var json = child.GetRawJsonValue();
+                    var dto = JsonUtility.FromJson<PlayerRankDTO>(json);
+                    if (dto != null)
+                        all.Add(dto);
+                }
+                catch { }
             }
-            catch { }
         }
 
-        // 위쪽: 골드 기준 내림차순
+        var usersSnap = await root.Child("users").GetValueAsync();
+        if (usersSnap.Exists)
+        {
+            foreach (var user in usersSnap.Children)
+            {
+                string uid = user.Key;
+                var target = all.FirstOrDefault(x => x.uid == uid);
+                if (target == null)
+                    continue;
+
+                var nk = user.Child("nickname");
+                if (nk.Exists && nk.Value != null)
+                    target.nickname = nk.Value.ToString();
+
+                int latestGold = target.gold;
+                var saveGold = user.Child("saves").Child("slot1").Child("meta").Child("gold");
+                if (saveGold.Exists && saveGold.Value != null)
+                {
+                    int.TryParse(saveGold.Value.ToString(), out latestGold);
+                }
+                else
+                {
+                    var rootGold = user.Child("gold");
+                    if (rootGold.Exists && rootGold.Value != null)
+                        int.TryParse(rootGold.Value.ToString(), out latestGold);
+                }
+                target.gold = latestGold;
+            }
+        }
+
         var goldList = all.OrderByDescending(x => x.gold).ToList();
-        // 아래쪽: 호감도 기준 내림차순
         var npcList = all.OrderByDescending(x => x.affection).ToList();
 
-        // UI 비우고
         ClearContent(goldRankContent);
         ClearContent(npcRankContent);
 
-        // 위쪽 뿌리기
         int rank = 1;
         foreach (var dto in goldList)
         {
-            CreateRankBlockLine(goldRankContent, rank, dto, isGold: true);
+            CreateRankBlockLine(goldRankContent, rank, dto, isGold: true, prefab: goldRankBlockPrefab);
             rank++;
         }
 
-        // 아래쪽 뿌리기
         int npcRank = 1;
         foreach (var dto in npcList)
         {
-            CreateRankBlockLine(npcRankContent, npcRank, dto, isGold: false);
+            CreateRankBlockLine(npcRankContent, npcRank, dto, isGold: false, prefab: npcRankBlockPrefab);
             npcRank++;
         }
     }
@@ -310,13 +342,17 @@ public class PlayerRankManager : MonoBehaviour
             GameObject.Destroy(content.GetChild(i).gameObject);
     }
 
-    void CreateRankBlockLine(Transform parent, int rank, PlayerRankDTO dto, bool isGold)
+    void CreateRankBlockLine(Transform parent, int rank, PlayerRankDTO dto, bool isGold, GameObject prefab)
     {
-        if (rankBlockPrefab == null || parent == null) return;
+        if (parent == null) return;
+        if (prefab == null)
+        {
+            Debug.LogWarning("[Rank] prefab is null for " + (isGold ? "gold" : "npc"));
+            return;
+        }
 
-        GameObject go = Instantiate(rankBlockPrefab, parent);
+        GameObject go = Instantiate(prefab, parent);
 
-        // 프리팹 안 Text들 이름으로 찾아오기
         Text[] texts = go.GetComponentsInChildren<Text>(true);
 
         Text rankText = null;
@@ -328,6 +364,7 @@ public class PlayerRankManager : MonoBehaviour
             if (tx.name == "RankText") rankText = tx;
             else if (tx.name == "NameText") nameText = tx;
             else if (tx.name == "GoldText") valueText = tx;
+            else if (tx.name == "AffectionText") valueText = tx;
         }
 
         if (rankText != null)
