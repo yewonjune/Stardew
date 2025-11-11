@@ -44,6 +44,7 @@ GameObject:
   - component: {fileID: 464837414380355624}
   - component: {fileID: 5868044839262264906}
   - component: {fileID: 8637259868309506629}
+  - component: {fileID: 8888527914593397779}
   m_Layer: 0
   m_Name: Resources_Icons_NO_Outline_0
   m_TagString: Untagged
@@ -166,3 +167,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 9ba856f9a8230514690c282b7a141a0a, type: 2}
+--- !u!114 &8888527914593397779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5507186920901112583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b45e6d4dab810e44a932438e4620fb58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useJumpTween: 1
+  jumpPower: 1.2
+  jumpDuration: 0.35
+  randomSpawnOffset: {x: 0.5, y: 0}
+  rotateOnSpawn: 1
+  rotateDuration: 0.35
+  enableAutoCollect: 1
+  collectDelay: 0.6
+  collectRadius: 2.5
+  collectSpeed: 6
+  idleFloat: 1
+  floatHeight: 0.08
+  floatDuration: 0.6
