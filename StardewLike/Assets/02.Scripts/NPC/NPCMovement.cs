@@ -1,21 +1,34 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class NPCMovement : MonoBehaviour
 {
+    [Header("Identity")]
+    public string npcId;
+
+    [Header("Dialogue")]
     public DialogueData dialogueData;
 
+    [Header("Move")]
     public float speed = 2.5f;
     public float arriveDist = 0.05f;
+
+    [Header("Path")]
+    public Transform[] wayPoints;
+    public bool autoLoopWayPoints = true;
+    public bool startWithDefaultPath = false;   // 기본 경로로 자동 시작을 원할 때만 true
+
+    [Header("Persistence Options")]
+    public bool loadProgressOnStart = true;
+    public bool autoSaveOnArrive = true;
+    public bool autoSavePosition = true;
+    public float positionSaveInterval = 2f;
 
     Animator animator;
     Rigidbody2D rb;
 
-    public Transform[] wayPoints;
-    public bool autoLoopWayPoints = true;
     int wayPointIndex = 0;
-
     Vector3 target;
     bool hasTarget;
 
@@ -25,20 +38,78 @@ public class NPCMovement : MonoBehaviour
     DoorWaypoint _lastDoorA;
     DoorWaypoint _lastDoorB;
 
-    public bool startWithDefaultPath = false;
+    Coroutine posSaver;
 
+    // ★ 외부(스케줄/타 시스템)에서 경로를 강제로 지정했음을 나타내는 플래그
+    bool _pathForcedExternally = false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
     }
+
     void Start()
     {
-        if (startWithDefaultPath && wayPoints != null && wayPoints.Length > 0)
+        // 1) 진행도/위치 복원
+        if (loadProgressOnStart && NPCStateManager.Instance != null && !string.IsNullOrEmpty(npcId))
         {
-            SetTarget(wayPoints[0].position);
+            wayPointIndex = Mathf.Clamp(
+                NPCStateManager.Instance.LoadWaypointIndex(npcId, wayPointIndex),
+                0, Mathf.Max(0, (wayPoints?.Length ?? 1) - 1)
+            );
+
+            var savedScene = NPCStateManager.Instance.LoadScene(npcId, null);
+            if (!string.IsNullOrEmpty(savedScene) && savedScene == SceneManager.GetActiveScene().name)
+            {
+                if (NPCStateManager.Instance.TryLoadPosition(npcId, out var savedPos))
+                {
+                    Warp(savedPos);
+                }
+            }
+        }
+
+        // 2) 시작 타겟 지정 (조건부)
+        //    - 외부에서 이미 SetPath로 경로 강제: 건너뜀
+        //    - 진행도 저장 있음: 저장된 인덱스 기준으로 시작
+        //    - 진행도 없음 & startWithDefaultPath가 true일 때만 기본 경로 시작
+        if (!_pathForcedExternally && wayPoints != null && wayPoints.Length > 0)
+        {
+            bool hasProgress = NPCStateManager.Instance != null
+                               && !string.IsNullOrEmpty(npcId)
+                               && NPCStateManager.Instance.HasWaypointProgress(npcId);
+
+            if (hasProgress)
+            {
+                wayPointIndex = Mathf.Clamp(wayPointIndex, 0, wayPoints.Length - 1);
+                SetTarget(wayPoints[wayPointIndex].position);
+            }
+            else if (startWithDefaultPath)
+            {
+                wayPointIndex = 0;
+                SetTarget(wayPoints[0].position);
+            }
+            // else: 스케줄을 기다림(아무 것도 하지 않음)
+        }
+
+        // 3) 위치 자동 저장 루프
+        if (autoSavePosition && positionSaveInterval > 0f)
+            posSaver = StartCoroutine(CoAutoSavePosition());
+    }
+
+    void OnDisable()
+    {
+        SafePersistState();
+        if (posSaver != null) StopCoroutine(posSaver);
+    }
+
+    IEnumerator CoAutoSavePosition()
+    {
+        var wait = new WaitForSeconds(positionSaveInterval);
+        while (true)
+        {
+            SafePersistPositionOnly();
+            yield return wait;
         }
     }
 
@@ -55,8 +126,11 @@ public class NPCMovement : MonoBehaviour
             hasTarget = false;
             SetAnimIdle();
 
-            var currentWp = wayPoints[wayPointIndex];
-            var door = currentWp != null ? currentWp.GetComponent<DoorWaypoint>() : null;
+            var currentWp = wayPoints != null && wayPointIndex >= 0 && wayPointIndex < wayPoints.Length
+                            ? wayPoints[wayPointIndex]
+                            : null;
+
+            var door = currentWp ? currentWp.GetComponent<DoorWaypoint>() : null;
 
             if (door != null && door.warpTarget != null)
             {
@@ -65,7 +139,6 @@ public class NPCMovement : MonoBehaviour
                     Warp(door.warpTarget.position);
 
                     var targetDoor = door.warpTarget.GetComponent<DoorWaypoint>();
-
                     _lastDoorA = door;
                     _lastDoorB = targetDoor;
 
@@ -73,6 +146,7 @@ public class NPCMovement : MonoBehaviour
                     if (idx >= 0)
                     {
                         wayPointIndex = idx;
+                        SaveWaypointIndex();
                     }
 
                     TryGoNextWayPoint();
@@ -90,6 +164,7 @@ public class NPCMovement : MonoBehaviour
                 _lastDoorB = null;
             }
 
+            if (autoSaveOnArrive) SaveWaypointIndex();
             TryGoNextWayPoint();
             return;
         }
@@ -127,10 +202,10 @@ public class NPCMovement : MonoBehaviour
         }
     }
 
-
     public void Interact()
     {
-        DialogueManager.Instance.StartDialogue(dialogueData);
+        if (dialogueData)
+            DialogueManager.Instance.StartDialogue(dialogueData);
     }
 
     public void SetTarget(Vector3 pos)
@@ -151,12 +226,12 @@ public class NPCMovement : MonoBehaviour
         rb.position = worldPos;
         transform.position = worldPos;
         SetAnimIdle();
+        SafePersistPositionOnly();
     }
 
     void SetAnimIdle()
     {
         if (!animator) return;
-
         animator.SetFloat("MoveX", 0f);
         animator.SetFloat("MoveY", -1f);
         animator.SetBool("isMoving", false);
@@ -170,16 +245,11 @@ public class NPCMovement : MonoBehaviour
 
         if (wayPointIndex >= wayPoints.Length)
         {
-            if (autoLoopWayPoints)
-            {
-                wayPointIndex = 0;
-            }
-            else
-            {
-                return;
-            }
+            if (autoLoopWayPoints) wayPointIndex = 0;
+            else { SaveWaypointIndex(); return; }
         }
 
+        SaveWaypointIndex();
         SetTarget(wayPoints[wayPointIndex].position);
     }
 
@@ -189,8 +259,12 @@ public class NPCMovement : MonoBehaviour
         autoLoopWayPoints = autoLoop;
         wayPointIndex = 0;
 
+        _pathForcedExternally = true;         // ★ 외부 강제 경로 지정됨
+        _lastDoorA = null; _lastDoorB = null; // ★ 문 워프 루프가드 초기화
+
         if (wayPoints != null && wayPoints.Length > 0)
         {
+            SaveWaypointIndex();
             SetTarget(wayPoints[0].position);
         }
         else
@@ -203,10 +277,7 @@ public class NPCMovement : MonoBehaviour
     {
         if (wayPoints == null) return -1;
         for (int i = 0; i < wayPoints.Length; i++)
-        {
-            if (wayPoints[i] == t)
-                return i;
-        }
+            if (wayPoints[i] == t) return i;
         return -1;
     }
 
@@ -220,6 +291,28 @@ public class NPCMovement : MonoBehaviour
             if (wayPoints[i] != null && wayPoints[i + 1] != null)
                 Gizmos.DrawLine(wayPoints[i].position, wayPoints[i + 1].position);
         }
+    }
 
+    // ===== 저장 유틸 =====
+    void SaveWaypointIndex()
+    {
+        if (NPCStateManager.Instance == null || string.IsNullOrEmpty(npcId)) return;
+        NPCStateManager.Instance.SaveWaypointIndex(
+            npcId,
+            Mathf.Clamp(wayPointIndex, 0, Mathf.Max(0, (wayPoints?.Length ?? 1) - 1))
+        );
+    }
+
+    void SafePersistPositionOnly()
+    {
+        if (NPCStateManager.Instance == null || string.IsNullOrEmpty(npcId)) return;
+        NPCStateManager.Instance.SavePosition(npcId, transform.position);
+        NPCStateManager.Instance.SaveScene(npcId, SceneManager.GetActiveScene().name);
+    }
+
+    void SafePersistState()
+    {
+        SaveWaypointIndex();
+        SafePersistPositionOnly();
     }
 }

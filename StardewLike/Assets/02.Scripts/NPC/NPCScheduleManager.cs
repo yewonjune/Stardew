@@ -7,7 +7,6 @@ public class NPCScheduleManager : MonoBehaviour
     public TimeManager timeManager;
     public NPCScheduleHolder[] npcs;
 
-
     void OnEnable()
     {
         if (timeManager == null)
@@ -38,14 +37,11 @@ public class NPCScheduleManager : MonoBehaviour
 
             foreach (var entry in holder.schedules)
             {
-                // 시간이 정확히 맞으면 실행
-                if (entry.hour == hour && entry.minute == minute)
-                {
-                    if (holder.movement != null)
+                    if (entry.hour == hour && entry.minute == minute && holder.movement != null && entry.path != null && entry.path.Length > 0)
                     {
-                        holder.movement.SetPath(entry.path, false); // false면 도착 후 멈춤
+                        holder.movement.SetPath(entry.path, false);
+                        break;
                     }
-                }
             }
         }
     }

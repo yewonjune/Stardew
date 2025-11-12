@@ -25,9 +25,6 @@ public class PlayerRankManager : MonoBehaviour
     public Text goldRankTitleText;
     public Transform goldRankContent;
 
-    [Header("UI - NPC/Affection Rank (아래)")]
-    public Text npcRankTitleText;
-    public Transform npcRankContent;
 
     [Header("UI - Left Info (선택)")]
     public Text emailText;
@@ -38,7 +35,6 @@ public class PlayerRankManager : MonoBehaviour
 
     [Header("Prefab")]
     public GameObject goldRankBlockPrefab;
-    public GameObject npcRankBlockPrefab;
 
     void Awake()
     {
@@ -232,7 +228,6 @@ public class PlayerRankManager : MonoBehaviour
                 gold = PlayerWallet.Instance.gold;
         }
 
-        int affectionTotal = CalcTotalNPCAffection();
 
         string farmName = (farmNameText != null) ? farmNameText.text : "Farm";
         string season = (seasonText != null) ? seasonText.text : "";
@@ -243,7 +238,6 @@ public class PlayerRankManager : MonoBehaviour
             email = email,
             nickname = nickname,
             gold = gold,
-            affection = affectionTotal,
             farmName = farmName,
             season = season,
             updatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
@@ -263,8 +257,6 @@ public class PlayerRankManager : MonoBehaviour
 
         if (goldRankTitleText != null)
             goldRankTitleText.text = "현재 GOLD 순위";
-        if (npcRankTitleText != null)
-            npcRankTitleText.text = "현재 호감도 순위";
 
         var ranksSnap = await root.Child("ranks").GetValueAsync();
         List<PlayerRankDTO> all = new List<PlayerRankDTO>();
@@ -315,23 +307,14 @@ public class PlayerRankManager : MonoBehaviour
         }
 
         var goldList = all.OrderByDescending(x => x.gold).ToList();
-        var npcList = all.OrderByDescending(x => x.affection).ToList();
 
         ClearContent(goldRankContent);
-        ClearContent(npcRankContent);
 
         int rank = 1;
         foreach (var dto in goldList)
         {
             CreateRankBlockLine(goldRankContent, rank, dto, isGold: true, prefab: goldRankBlockPrefab);
             rank++;
-        }
-
-        int npcRank = 1;
-        foreach (var dto in npcList)
-        {
-            CreateRankBlockLine(npcRankContent, npcRank, dto, isGold: false, prefab: npcRankBlockPrefab);
-            npcRank++;
         }
     }
 
@@ -364,7 +347,6 @@ public class PlayerRankManager : MonoBehaviour
             if (tx.name == "RankText") rankText = tx;
             else if (tx.name == "NameText") nameText = tx;
             else if (tx.name == "GoldText") valueText = tx;
-            else if (tx.name == "AffectionText") valueText = tx;
         }
 
         if (rankText != null)
@@ -384,18 +366,7 @@ public class PlayerRankManager : MonoBehaviour
         {
             if (isGold)
                 valueText.text = "Gold: " + dto.gold;
-            else
-                valueText.text = "Affection: " + dto.affection;
         }
-    }
-
-    int CalcTotalNPCAffection()
-    {
-        int sum = 0;
-        var all = FindObjectsOfType<NPCAffection>();
-        foreach (var a in all)
-            sum += a.currentAffection;
-        return sum;
     }
 
     [Serializable]
@@ -407,7 +378,6 @@ public class PlayerRankManager : MonoBehaviour
         public string farmName;
         public string season;
         public int gold;
-        public int affection;
         public long updatedAt;
     }
 }
