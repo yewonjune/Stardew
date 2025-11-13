@@ -25,12 +25,13 @@ public class PlayerRankManager : MonoBehaviour
     public Text goldRankTitleText;
     public Transform goldRankContent;
 
-
     [Header("UI - Left Info (선택)")]
     public Text emailText;
     public Text nicknameText;
     public Text farmNameText;
     public Text goldText;
+
+    // NOTE: 기존 seasonText 슬롯을 그대로 사용해 "N일차" 표기
     public Text seasonText;
 
     [Header("Prefab")]
@@ -58,7 +59,6 @@ public class PlayerRankManager : MonoBehaviour
             }
 
             auth = FirebaseAuth.DefaultInstance;
-
             if (auth.CurrentUser == null)
             {
                 return;
@@ -82,10 +82,7 @@ public class PlayerRankManager : MonoBehaviour
 
     public async void OpenRankPanel()
     {
-        if (!initialized)
-        {
-            return;
-        }
+        if (!initialized) return;
 
         if (coopPanel) coopPanel.SetActive(true);
 
@@ -111,25 +108,29 @@ public class PlayerRankManager : MonoBehaviour
         if (string.IsNullOrEmpty(email)) email = "Guest";
 
         string displayName = auth.CurrentUser.DisplayName;
-        if (string.IsNullOrEmpty(displayName))
-            displayName = "Guest";
+        if (string.IsNullOrEmpty(displayName)) displayName = "Guest";
 
         var updates = new Dictionary<string, object>();
+
         if (!snap.Exists)
         {
             updates["email"] = email;
             updates["farmName"] = "My Farm";
             updates["nickname"] = displayName;
-            updates["season"] = "Spring";
+
+            updates["day"] = 1; // 1일차부터 시작
+
             updates["createdAt"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
             await userRef.UpdateChildrenAsync(updates);
             Debug.Log("[Rank] 새 유저 문서 생성 완료");
         }
         else
         {
+
             if (!snap.HasChild("farmName")) updates["farmName"] = "My Farm";
-            if (!snap.HasChild("season")) updates["season"] = "Spring";
             if (!snap.HasChild("nickname")) updates["nickname"] = displayName;
+            if (!snap.HasChild("day")) updates["day"] = 1;
+
             if (updates.Count > 0)
             {
                 await userRef.UpdateChildrenAsync(updates);
@@ -143,25 +144,29 @@ public class PlayerRankManager : MonoBehaviour
         public string email;
         public string nickname;
         public string farmName;
-        public string season;
+        public int day;
         public long createdAt;
     }
+
     private async Task LoadMyUserInfo()
     {
         if (auth == null || root == null) return;
 
         string uid = auth.CurrentUser.UserId;
         var snap = await root.Child("users").Child(uid).GetValueAsync();
-        if (!snap.Exists)
-        {
-            return;
-        }
+        if (!snap.Exists) return;
 
         string email = snap.Child("email").Value?.ToString() ?? "Guest";
         string nickname = snap.Child("nickname").Value?.ToString() ?? "";
         string farmName = snap.Child("farmName").Value?.ToString() ?? "Farm";
-        string season = snap.Child("season").Value?.ToString() ?? "";
-        
+
+        int day = 0;
+        var dayNode = snap.Child("day");
+        if (dayNode.Exists && dayNode.Value != null)
+        {
+            int.TryParse(dayNode.Value.ToString(), out day);
+        }
+
         string goldStr = "0";
         var saveMetaGold = snap.Child("saves").Child("slot1").Child("meta").Child("gold");
         if (saveMetaGold.Exists && saveMetaGold.Value != null)
@@ -176,7 +181,9 @@ public class PlayerRankManager : MonoBehaviour
         if (emailText) emailText.text = email;
         if (nicknameText) nicknameText.text = nickname;
         if (farmNameText) farmNameText.text = farmName;
-        if (seasonText) seasonText.text = season;
+
+        if (seasonText) seasonText.text = $"{day}일차";
+
         if (goldText) goldText.text = goldStr + " 골드";
 
         if (int.TryParse(goldStr, out int goldVal))
@@ -188,6 +195,19 @@ public class PlayerRankManager : MonoBehaviour
             }
         }
     }
+
+    public async Task SaveDay(int day)
+    {
+        if (!initialized || auth == null || root == null) return;
+        if (day < 1) day = 1;
+
+        string uid = auth.CurrentUser.UserId;
+        await root.Child("users").Child(uid).Child("day").SetValueAsync(day);
+
+        if (seasonText) seasonText.text = $"{day}일차";
+        Debug.Log($"[Rank] Day 저장 완료 : {day}");
+    }
+
     public async Task SaveNickname(string nickname)
     {
         if (!initialized || auth == null || root == null) return;
@@ -200,8 +220,7 @@ public class PlayerRankManager : MonoBehaviour
 
     public async Task UploadMyRankData()
     {
-        if (!initialized || auth == null || root == null)
-            return;
+        if (!initialized || auth == null || root == null) return;
 
         string uid = auth.CurrentUser.UserId;
         string email = auth.CurrentUser.Email;
@@ -210,12 +229,8 @@ public class PlayerRankManager : MonoBehaviour
 
         int gold = 0;
         var goldSnap = await root
-            .Child("users")
-            .Child(uid)
-            .Child("saves")
-            .Child("slot1")
-            .Child("meta")
-            .Child("gold")
+            .Child("users").Child(uid)
+            .Child("saves").Child("slot1").Child("meta").Child("gold")
             .GetValueAsync();
 
         if (goldSnap.Exists && goldSnap.Value != null)
@@ -228,9 +243,14 @@ public class PlayerRankManager : MonoBehaviour
                 gold = PlayerWallet.Instance.gold;
         }
 
+        int day = 0;
+        var daySnap = await root.Child("users").Child(uid).Child("day").GetValueAsync();
+        if (daySnap.Exists && daySnap.Value != null)
+        {
+            int.TryParse(daySnap.Value.ToString(), out day);
+        }
 
         string farmName = (farmNameText != null) ? farmNameText.text : "Farm";
-        string season = (seasonText != null) ? seasonText.text : "";
 
         PlayerRankDTO dto = new PlayerRankDTO
         {
@@ -239,7 +259,7 @@ public class PlayerRankManager : MonoBehaviour
             nickname = nickname,
             gold = gold,
             farmName = farmName,
-            season = season,
+            day = day,
             updatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         };
 
@@ -248,12 +268,12 @@ public class PlayerRankManager : MonoBehaviour
 
         if (emailText != null) emailText.text = email;
         if (goldText != null) goldText.text = gold + " 골드";
+        if (seasonText != null) seasonText.text = $"{day}일차";
     }
 
     public async Task RefreshBothRanks()
     {
-        if (!initialized || root == null)
-            return;
+        if (!initialized || root == null) return;
 
         if (goldRankTitleText != null)
             goldRankTitleText.text = "현재 GOLD 순위";
@@ -283,8 +303,7 @@ public class PlayerRankManager : MonoBehaviour
             {
                 string uid = user.Key;
                 var target = all.FirstOrDefault(x => x.uid == uid);
-                if (target == null)
-                    continue;
+                if (target == null) continue;
 
                 var nk = user.Child("nickname");
                 if (nk.Exists && nk.Value != null)
@@ -303,6 +322,14 @@ public class PlayerRankManager : MonoBehaviour
                         int.TryParse(rootGold.Value.ToString(), out latestGold);
                 }
                 target.gold = latestGold;
+
+                int latestDay = target.day;
+                var dayNode = user.Child("day");
+                if (dayNode.Exists && dayNode.Value != null)
+                {
+                    int.TryParse(dayNode.Value.ToString(), out latestDay);
+                }
+                target.day = latestDay;
             }
         }
 
@@ -376,7 +403,7 @@ public class PlayerRankManager : MonoBehaviour
         public string email;
         public string nickname;
         public string farmName;
-        public string season;
+        public int day;
         public int gold;
         public long updatedAt;
     }

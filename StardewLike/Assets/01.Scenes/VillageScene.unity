@@ -160,7 +160,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -308,7 +308,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -495,7 +495,7 @@ Transform:
   m_GameObject: {fileID: 153931263}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.79, y: -3.98, z: -0.014938575}
+  m_LocalPosition: {x: -15.94, y: -3.98, z: -0.014938575}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -521,7 +521,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3350,7 +3350,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8152,7 +8152,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8237,7 +8237,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10747,7 +10747,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -27240,7 +27240,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36263,7 +36263,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36580,7 +36580,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -36664,7 +36664,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -38452,12 +38452,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1090f2acde1568429fc7f7c9ff1c312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcId: 
   dialogueData: {fileID: 11400000, guid: a5eec7293572bd34c9ae4ebd20814d21, type: 2}
   speed: 2.5
   arriveDist: 0.05
   wayPoints: []
   autoLoopWayPoints: 1
   startWithDefaultPath: 0
+  loadProgressOnStart: 1
+  autoSaveOnArrive: 1
+  autoSavePosition: 1
+  positionSaveInterval: 2
 --- !u!70 &3973142393926826888
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -38521,6 +38526,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1090f2acde1568429fc7f7c9ff1c312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcId: 
   dialogueData: {fileID: 11400000, guid: 66ba338c8dd4ec940bc3e01c4cccd210, type: 2}
   speed: 2
   arriveDist: 0.05
@@ -38534,6 +38540,10 @@ MonoBehaviour:
   - {fileID: 1806789694}
   autoLoopWayPoints: 0
   startWithDefaultPath: 0
+  loadProgressOnStart: 1
+  autoSaveOnArrive: 1
+  autoSavePosition: 1
+  positionSaveInterval: 2
 --- !u!4 &6017961141396569644
 Transform:
   m_ObjectHideFlags: 0
@@ -38715,6 +38725,8 @@ MonoBehaviour:
   npcId: Soyeon
   maxAffection: 100
   currentAffection: 0
+  loadOnStart: 1
+  autoSaveOnChange: 1
 --- !u!114 &8876706554222312837
 MonoBehaviour:
   m_ObjectHideFlags: 0
