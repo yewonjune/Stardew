@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class AreaPortal : MonoBehaviour
 {
-    // 인스펙터에서 설정
     public string targetScene;
     public string spawnPointId;
 
@@ -79,22 +78,11 @@ public class AreaPortal : MonoBehaviour
         yield return null;
         if (gateCol) gateCol.enabled = true;
 
-        var vcams = FindObjectsOfType<CinemachineVirtualCamera>(includeInactive: true);
-        foreach (var v in vcams)
-        {
-            if (v && v.Follow == null) v.Follow = player;
-        }
-        yield return null;
-        foreach (var v in vcams) v.GetComponent<CinemachineConfiner2D>()?.InvalidateCache();
-
         yield return new WaitForSecondsRealtime(0.1f);
 
         if (rb) { rb.simulated = true; rb.WakeUp(); }
         if (col) col.enabled = true;
         if (mover) mover.SetControl(true);
-
-        yield return null;
-        if (gateCol) gateCol.enabled = true;
 
         FadeManager.Instance.FadeInCoroutine(fadeDuration);
 
@@ -104,8 +92,6 @@ public class AreaPortal : MonoBehaviour
             if (unload != null) yield return unload;
         }
         yield return Resources.UnloadUnusedAssets();
-
-
 
         isTransitioning = false;
     }

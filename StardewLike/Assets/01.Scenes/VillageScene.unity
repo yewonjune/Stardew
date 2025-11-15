@@ -26430,7 +26430,6 @@ GameObject:
   - component: {fileID: 1125884395}
   - component: {fileID: 1125884394}
   - component: {fileID: 1125884393}
-  - component: {fileID: 1125884392}
   - component: {fileID: 1125884396}
   m_Layer: 0
   m_Name: VillageCamera
@@ -26439,18 +26438,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1125884392
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1125884391}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 358f26fc9bc9cd140a6ae77a62c121d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1125884393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -27010,7 +26997,6 @@ GameObject:
   - component: {fileID: 1452073440}
   - component: {fileID: 1452073439}
   - component: {fileID: 1452073438}
-  - component: {fileID: 1452073437}
   - component: {fileID: 1452073436}
   m_Layer: 0
   m_Name: StoreCamera
@@ -27032,18 +27018,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: Store
---- !u!114 &1452073437
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1452073435}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 358f26fc9bc9cd140a6ae77a62c121d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1452073438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31366,7 +31340,6 @@ GameObject:
   - component: {fileID: 1566837288}
   - component: {fileID: 1566837287}
   - component: {fileID: 1566837286}
-  - component: {fileID: 1566837285}
   - component: {fileID: 1566837284}
   m_Layer: 0
   m_Name: CafeCamera
@@ -31388,18 +31361,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   key: Cafe
---- !u!114 &1566837285
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1566837283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 358f26fc9bc9cd140a6ae77a62c121d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1566837286
 MonoBehaviour:
   m_ObjectHideFlags: 0

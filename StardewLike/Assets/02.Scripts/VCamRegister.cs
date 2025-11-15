@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class VCamRegister : MonoBehaviour
 {
-    [Tooltip("¿¹: Farm, House, Village, Store, Cafe")]
     public string key;
 
     CinemachineVirtualCamera vcam;

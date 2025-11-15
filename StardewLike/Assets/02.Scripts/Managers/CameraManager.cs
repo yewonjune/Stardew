@@ -39,8 +39,8 @@ public class CameraManager : MonoBehaviour
     void OnSceneLoaded(Scene s, LoadSceneMode m)
     {
         RebindFollowTarget();
-        RescanAndRegisterAll();      // ← 새로 켜진 씬의 VCamRegister 즉시 흡수
-        if (!string.IsNullOrEmpty(currentKey)) SwitchTo(currentKey); // (선택) 우선순위 복구
+        RescanAndRegisterAll();
+        if (!string.IsNullOrEmpty(currentKey)) SwitchTo(currentKey);
     }
 
     void OnActiveSceneChanged(Scene prev, Scene next)
@@ -59,7 +59,6 @@ public class CameraManager : MonoBehaviour
         ApplyFollowLookAt(vcam);
         SetPriority(vcam, idlePriority);
 
-        // 현재 활성 키와 같다면 즉시 activePriority 부여
         if (!string.IsNullOrEmpty(currentKey) && k == currentKey)
             SetPriority(vcam, activePriority);
     }
@@ -78,14 +77,11 @@ public class CameraManager : MonoBehaviour
         var k = key?.Trim();
         if (string.IsNullOrEmpty(k)) return false;
 
-        // 1차 조회
         if (!vcams.TryGetValue(k, out var target) || !target)
         {
-            // 못 찾으면 전역 재스캔으로 늦은 등록 케이스 보정
             RescanAndRegisterAll();
         }
 
-        // 2차 조회
         if (!vcams.TryGetValue(k, out target) || !target)
         {
             Debug.LogWarning($"[CameraManager] No VCam registered for '{k}'.");
@@ -100,28 +96,6 @@ public class CameraManager : MonoBehaviour
         target.Priority = activePriority;
         currentKey = k;
         return true;
-    }
-
-    public void SwitchToFarm()
-    {
-        SwitchTo("Farm");
-    }
-
-    public void SwitchToHouse()
-    {
-        SwitchTo("House");
-    }
-    public void SwitchToVillage()
-    {
-        SwitchTo("Village");
-    }   
-    public void SwitchToStore()
-    {
-        SwitchTo("Store");
-    }
-    public void SwitchToCafe()
-    {
-        SwitchTo("Cafe");
     }
 
     void RebindFollowTarget()
@@ -164,13 +138,11 @@ public class CameraManager : MonoBehaviour
             var v = reg.GetComponent<CinemachineVirtualCamera>();
             if (!v) continue;
 
-            vcams[k] = v;                // 등록(덮어쓰기 허용)
+            vcams[k] = v;
             ApplyFollowLookAt(v);
-            // currentKey는 SwitchTo에서 처리
         }
     }
 
-    // 현재 등록된 키를 보기 쉽게 출력
     public void DebugPrintRegisteredKeys()
     {
         var keys = string.Join(", ", vcams.Keys);

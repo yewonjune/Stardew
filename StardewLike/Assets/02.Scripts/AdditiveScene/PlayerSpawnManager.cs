@@ -19,13 +19,11 @@ public class PlayerSpawnManager : MonoBehaviour
             return;
         }
 
-        // 공백/대소문자 실수 방지
         var wanted = NextSpawnPointId.Trim();
         NextSpawnPointId = null;
 
         var active = SceneManager.GetActiveScene();
 
-        // 활성 씬에 '속한' SpawnPoint만 모두 수집(비활성 포함)
         var allPoints = GameObject.FindObjectsOfType<SpawnPoint>(true)
                                   .Where(p => p && p.gameObject.scene == active)
                                   .ToList();
@@ -36,11 +34,9 @@ public class PlayerSpawnManager : MonoBehaviour
             return;
         }
 
-        // 씬 내 존재 목록을 로그로 출력(즉시 원인 파악)
         Debug.Log($"[PlayerSpawnManager] SpawnPoints in '{active.name}': " +
                   string.Join(", ", allPoints.Select(p => p.spawnId)));
 
-        // 정확 일치(앞뒤 공백 제거, 대소문자 구분 없음 원하면 OrdinalIgnoreCase로)
         var target = allPoints.FirstOrDefault(p =>
             string.Equals(p.spawnId?.Trim(), wanted, System.StringComparison.Ordinal));
 
