@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: NPC1_Data
   m_EditorClassIdentifier: 
   npcId: Soyeon
-  displayName: Soyeon
-  defaultPortrait: {fileID: 1298313460, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
-  happyPortrait: {fileID: -1560046056, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
-  angryPortrait: {fileID: -81851698, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
-  surprisedPortrait: {fileID: 266124187, guid: 7af16f7166ddf9a4b8df704c82abd0d6, type: 3}
+  displayName: "\uC18C\uC5F0"
+  defaultPortrait: {fileID: -727164244, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
+  happyPortrait: {fileID: -1358220341, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
+  angryPortrait: {fileID: -865682468, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
+  surprisedPortrait: {fileID: 1947812678, guid: aa65d5030ca534c4baba1f9fec77142b,
+    type: 3}
+  maxAffection: 100
+  currentAffection: 0

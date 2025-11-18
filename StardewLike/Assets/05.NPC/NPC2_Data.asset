@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: NPC2_Data
   m_EditorClassIdentifier: 
   npcId: Miso
-  displayName: Miso
-  defaultPortrait: {fileID: -1416626849, guid: 63ac96ac63bcb6b4cb56e6b3b4cf5f6a, type: 3}
-  happyPortrait: {fileID: -947251781, guid: 63ac96ac63bcb6b4cb56e6b3b4cf5f6a, type: 3}
-  angryPortrait: {fileID: 1747308203, guid: 63ac96ac63bcb6b4cb56e6b3b4cf5f6a, type: 3}
-  surprisedPortrait: {fileID: -1645932871, guid: 63ac96ac63bcb6b4cb56e6b3b4cf5f6a,
+  displayName: "\uBBF8\uC18C"
+  defaultPortrait: {fileID: 356813160, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  happyPortrait: {fileID: 416084649, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  angryPortrait: {fileID: 701538050, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  surprisedPortrait: {fileID: 1317701476, guid: d0c48f4aaab6fa04cbdb1b0438b0971f,
     type: 3}
+  maxAffection: 100
+  currentAffection: 0

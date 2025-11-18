@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7af16f7166ddf9a4b8df704c82abd0d6
+guid: d0c48f4aaab6fa04cbdb1b0438b0971f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -106,37 +106,11 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: iPhone
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Soyeon_Portrait_0
+      name: NPC2_Miso_Portrait_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a931cb44172a9a041931d9fdaa988f58
-      internalID: 1298313460
+      spriteID: 7712d011a48913e4c9748082572a9110
+      internalID: 356813160
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Soyeon_Portrait_1
+      name: NPC2_Miso_Portrait_1
       rect:
         serializedVersion: 2
         x: 1000
@@ -171,14 +145,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9496235ab1fe9864cad90cadaa64df60
-      internalID: -1560046056
+      spriteID: 1e46b7b02e9e13140b3209c8e799556f
+      internalID: 416084649
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Soyeon_Portrait_2
+      name: NPC2_Miso_Portrait_2
       rect:
         serializedVersion: 2
         x: 0
@@ -192,14 +166,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 321e5fdf0a0fc644b81084a7b67486a8
-      internalID: 266124187
+      spriteID: 9bbc50d3f6e26b749a7d735fd2479a1d
+      internalID: 701538050
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Soyeon_Portrait_3
+      name: NPC2_Miso_Portrait_3
       rect:
         serializedVersion: 2
         x: 1000
@@ -213,8 +187,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f8f27e9192fe88d4f839501f7c5e0452
-      internalID: -81851698
+      spriteID: c7f280d4e9eedfd489d95dfaee3e6dbf
+      internalID: 1317701476
       vertices: []
       indices: 
       edges: []
@@ -230,10 +204,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Soyeon_Portrait_0: 1298313460
-      Soyeon_Portrait_1: -1560046056
-      Soyeon_Portrait_2: 266124187
-      Soyeon_Portrait_3: -81851698
+      NPC2_Miso_Portrait_0: 356813160
+      NPC2_Miso_Portrait_1: 416084649
+      NPC2_Miso_Portrait_2: 701538050
+      NPC2_Miso_Portrait_3: 1317701476
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
