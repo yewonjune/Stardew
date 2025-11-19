@@ -44,7 +44,7 @@ public class ResourceSpawner : MonoBehaviour
 
             Vector3 worldPos = groundTilemap.GetCellCenterWorld(pos);
             GameObject go = Instantiate(resoucePrefab, worldPos, Quaternion.identity, transform);
-            string id = resoucePrefab.name; // 간단히 프리팹 이름으로 식별
+            string id = resoucePrefab.name;
 
             WorldStateManager.Instance.AddResource(
                 gameObject.scene.name,
@@ -59,13 +59,11 @@ public class ResourceSpawner : MonoBehaviour
 
     void RestoreFromState(SceneState state)
     {
-        // 이미 기록된 자원들을 다시 생성(아직 씬에 없고, 제거되지 않은 것만)
         foreach (ResourceSave r in state.resources)
         {
             if (r.harvestedOrRemoved)
                 continue;
 
-            // 씬에 동일 위치에 이미 있는지 체크
             Collider2D hit = Physics2D.OverlapPoint(r.position, resourceLayer);
             if (hit != null)
                 continue;
