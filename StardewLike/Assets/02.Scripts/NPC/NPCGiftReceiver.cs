@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,9 +7,22 @@ public class NPCGiftReceiver : MonoBehaviour
 {
     public NPCGiftPreference giftPreference;
     public DialogueData dialogueData;
-    public int baseAffectionOnGift = 5;  // 기본 선물 호감도
+
+    [Title("NPC 호감도")]
+    [FoldoutGroup("NPC 호감도")]
+    [LabelText("기본 호감도")]
+    public int baseAffectionOnGift = 5;
+
+    [FoldoutGroup("NPC 호감도")]
+    [LabelText("사랑하는 선물 호감도")]
     public int lovedBonus = 15;
+
+    [FoldoutGroup("NPC 호감도")]
+    [LabelText("좋아하는 선물 호감도")]
     public int likedBonus = 8;
+
+    [FoldoutGroup("NPC 호감도")]
+    [LabelText("싫어하는 선물 호감도")]
     public int dislikedPenalty = -5;
 
     NPCAffection affection;
@@ -26,10 +40,8 @@ public class NPCGiftReceiver : MonoBehaviour
         if (giftPreference)
             result = giftPreference.Evaluate(itemId);
 
-        // 선물 반응 대사 보여주기
         PlayGiftDialogue(result);
 
-        // 호감도 반영
         if (result == NPCGiftPreference.GiftResult.Loved)
             add += lovedBonus;
         else if (result == NPCGiftPreference.GiftResult.Liked)
@@ -68,7 +80,6 @@ public class NPCGiftReceiver : MonoBehaviour
 
         if (target == null)
         {
-            // 일반 대사 배열이 있고 1개 이상이면 그중 첫 번째 사용
             if (dialogueData.sequences != null && dialogueData.sequences.Length > 0)
             {
                 target = dialogueData.sequences[0];

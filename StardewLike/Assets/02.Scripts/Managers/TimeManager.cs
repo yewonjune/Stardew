@@ -5,64 +5,88 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Sirenix.OdinInspector;
 
 public class TimeManager : MonoBehaviour
 {
-    public event System.Action<int, int> OnMinuteChanged;   // (hour, minute)
+    [FoldoutGroup("Events")]
+    [LabelText("분 변경 이벤트 (hour, minute)")]
+    public event System.Action<int, int> OnMinuteChanged;
+
+    [FoldoutGroup("Internal State"), ReadOnly]
     int _prevMinute = -1;
-    //public static event Action OnNewDay;
 
-    public int day = 1;
-    public int hour = 6;
-    public int minute = 0;
-
-    public float timeScale = 60f; // 1초 = 게임 속 1분
+    [FoldoutGroup("Internal State"), ReadOnly]
     private float timer;
 
+    // ================= TIME =================
+    [Title("게임 시간 설정")]
+    [FoldoutGroup("Time"), LabelText("Day")]
+    public int day = 1;
+
+    [FoldoutGroup("Time"), LabelText("Hour (0~23)"), Range(0, 23)]
+    public int hour = 6;
+
+    [FoldoutGroup("Time"), LabelText("Minute (0~59)"), Range(0, 59)]
+    public int minute = 0;
+
+    [FoldoutGroup("Time"), LabelText("Time Scale (1초 당 게임 분)")]
+    [MinValue(1f)]
+    public float timeScale = 60f;
+
+    // ================= UI =================
+    [Title("UI 레퍼런스")]
+    [FoldoutGroup("UI"), LabelText("Day Text")]
     public Text dayText;
+
+    [FoldoutGroup("UI"), LabelText("Time Text")]
     public Text timeText;
 
+    [FoldoutGroup("UI"), LabelText("Clock Hand")]
     public Image ClockHand;
 
-    public float DayRatio01 => Mathf.Repeat((hour * 60f + minute) / 1440f, 1f);
-
+    // ================= REFERENCES =================
+    [Title("기타 레퍼런스")]
+    [FoldoutGroup("References"), LabelText("Soil Tilemap Controller")]
     public SoilTilemapController soilTilemapController;
 
-    // Update is called once per frame
     void Update()
     {
-
         timer += Time.deltaTime * timeScale;
 
         if(timer >= 60f)
         {
-            minute++;
-            timer = 0;
-
-            if(minute >= 60)
-            {
-                hour++;
-                minute = 0;
-            }
-
-            if (hour >= 24)
-            {
-                EndDay();
-            }
-            else
-            {
-                if (minute != _prevMinute)
-                {
-                    _prevMinute = minute;
-                    OnMinuteChanged?.Invoke(hour, minute);
-                }
-            }
+            AdvanceMinute();
         }
 
 
         UpdateUI();
 
         UpdateClockHand();
+    }
+
+    private void AdvanceMinute()
+    {
+        timer = 0;
+        minute++;
+
+        if (minute >= 60)
+        {
+            minute = 0;
+            hour++;
+        }
+
+        if (hour >= 24)
+        {
+            EndDay();
+            return;
+        }
+
+        if (minute != _prevMinute)
+        {
+            _prevMinute = minute;
+            OnMinuteChanged?.Invoke(hour, minute);
+        }
     }
 
     public async void EndDay()
@@ -74,7 +98,6 @@ public class TimeManager : MonoBehaviour
         PlayerFatigueController playerFatigueController = FindObjectOfType<PlayerFatigueController>(true);
         if (playerFatigueController != null)
         {
-            // 완전회복이면 true, 아니면 적당히 큰 수치 회복
             playerFatigueController.RecoverOnSleep(recoverAmount: 60f, fullRecover: false);
         }
 
@@ -109,14 +132,14 @@ public class TimeManager : MonoBehaviour
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
-        SceneManager.activeSceneChanged += OnActiveSceneChanged; // 추가
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         RebindSoilController();
     }
 
     void OnDisable()
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        SceneManager.activeSceneChanged -= OnActiveSceneChanged; // 추가
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
     void OnActiveSceneChanged(Scene prev, Scene next)
@@ -137,7 +160,6 @@ public class TimeManager : MonoBehaviour
         var all = FindObjectsOfType<SoilTilemapController>(includeInactive: false);
         if (all == null || all.Length == 0)
         {
-            Debug.Log("[PlayerUseTool] 씬 어디에도 SoilTilemapController가 없음");
             return;
         }
 
