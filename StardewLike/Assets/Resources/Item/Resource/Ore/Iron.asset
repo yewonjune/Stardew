@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c23c0392b651f448eba1725f66b5e5, type: 3}
   m_Name: Iron
   m_EditorClassIdentifier: 
+  itemId: 
   itemName: 
-  icon: {fileID: -546202583, guid: 0c66aa529a220014d8cf4a84a708face, type: 3}
+  icon: {fileID: 1267103209, guid: 572bb35294ab715449c4c06f31b1fa55, type: 3}
   isStackable: 1
-  resourceType: 4
+  maxStack: 99
+  canSell: 1
   sellPrice: 50
+  worldPrefab: {fileID: 0}
+  resourceType: 4

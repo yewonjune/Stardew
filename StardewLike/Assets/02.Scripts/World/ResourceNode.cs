@@ -19,6 +19,8 @@ public class ResourceNode : MonoBehaviour
 
     public string prefabId;
 
+    bool isBroken = false;
+
     private void Awake()
     {
         hp = maxHp;
@@ -38,7 +40,7 @@ public class ResourceNode : MonoBehaviour
         }
 
         var st = worldStateManager.GetOrCreate(gameObject.scene.name);
-        // 이미 동일 위치/ID가 등록된 경우는 무시
+
         if (!st.resources.Exists(r => r.prefabId == prefabId && (r.position - transform.position).sqrMagnitude < 0.0001f))
         {
             worldStateManager.AddResource(gameObject.scene.name, new ResourceSave
@@ -52,7 +54,9 @@ public class ResourceNode : MonoBehaviour
 
     public void Hit(Tools tool)
     {
-        if(tool.toolType != requiredTool)
+        if (isBroken) return;
+
+        if (tool.toolType != requiredTool)
         {
             Debug.Log($"[Resource] {resourceType} 는 {tool.toolType} 으로 채굴 불가");
             return;
@@ -69,6 +73,7 @@ public class ResourceNode : MonoBehaviour
 
         if (hp <= 0)
         {
+            isBroken = true;
             Break();
         }
     }
@@ -94,24 +99,6 @@ public class ResourceNode : MonoBehaviour
 
         Destroy(gameObject);
     }
-
-    //public void Harvest()
-    //{
-    //    SpawnDrops();
-
-    //    WorldStateManager worldStateManager = WorldStateManager.Instance;
-    //    if (worldStateManager != null)
-    //    {
-    //        string sceneName = gameObject.scene.name;
-    //        worldStateManager.MarkResourceRemoved(sceneName, transform.position);
-    //    }
-    //    else
-    //    {
-    //        Debug.LogWarning("[Resource] WorldStateManager.Instance 가 null 입니다. 수확 상태가 저장되지 않습니다.");
-    //    }
-
-    //    Destroy(gameObject);
-    //}
 
     void SpawnDrops()
     {

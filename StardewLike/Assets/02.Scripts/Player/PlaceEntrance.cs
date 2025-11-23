@@ -14,6 +14,10 @@ public class PlaceEntrance : MonoBehaviour
     int entranceLayerMask;
     Collider2D selfCol;
 
+    [Header("Optional: Random Spawn (ex. Cave 1~4)")]
+    public bool useRandomSpawnPositions = false;
+    public Transform[] randomSpawnPositions;
+
     void Start()
     {
         if (!player)
@@ -58,8 +62,28 @@ public class PlaceEntrance : MonoBehaviour
 
         System.Action teleport = () =>
         {
+            Vector3 targetPos = playerIndoorPosition;
+
+            if (useRandomSpawnPositions && randomSpawnPositions != null && randomSpawnPositions.Length > 0)
+            {
+                int idx = Random.Range(0, randomSpawnPositions.Length);
+                targetPos = randomSpawnPositions[idx].position;
+
+                CaveStateManager.CurrentCaveIndex = idx;
+
+                Debug.Log($"Cave random index = {idx}");
+
+                var spawner = FindObjectOfType<ResourceSpawner_Cave>();
+                if (spawner != null)
+                {
+                    spawner.SpawnForCurrentCave();
+                }
+            }
+
             CameraManager.Instance.SwitchTo(targetCamKey);
-            player.position = playerIndoorPosition;
+
+            player.position = targetPos;
+
             StartCoroutine(RestoreNextFrame(rb, col, mover));
         };
 

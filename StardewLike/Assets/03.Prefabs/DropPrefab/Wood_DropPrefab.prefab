@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8189194984332263748}
   m_Layer: 0
-  m_Name: WoodPrefab
+  m_Name: Wood_DropPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -108,7 +108,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 6
-  m_Sprite: {fileID: -1287321996, guid: 0c66aa529a220014d8cf4a84a708face, type: 3}
+  m_Sprite: {fileID: 905117649, guid: 357b5a702fa0c1041af8504a4bf52131, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemData: {fileID: 11400000, guid: 9ba856f9a8230514690c282b7a141a0a, type: 2}
+  pickupDelay: 0.5
 --- !u!114 &8888527914593397779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,12 +184,8 @@ MonoBehaviour:
   jumpPower: 1.2
   jumpDuration: 0.35
   randomSpawnOffset: {x: 0.5, y: 0}
-  rotateOnSpawn: 1
-  rotateDuration: 0.35
   enableAutoCollect: 1
-  collectDelay: 0.6
-  collectRadius: 2.5
-  collectSpeed: 6
-  idleFloat: 1
-  floatHeight: 0.08
-  floatDuration: 0.6
+  collectEnableDelay: 0.5
+  detectRadius: 3
+  followRadius: 1.3
+  followSpeed: 7
