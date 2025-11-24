@@ -95,6 +95,8 @@ public class TimeManager : MonoBehaviour
         hour = 6;
         minute = 0;
 
+        SeasonManager.Instance?.OnNewDay(day);
+
         PlayerFatigueController playerFatigueController = FindObjectOfType<PlayerFatigueController>(true);
         if (playerFatigueController != null)
         {
