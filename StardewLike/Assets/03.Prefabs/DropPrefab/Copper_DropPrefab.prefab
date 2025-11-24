@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca0103c028a70d440a5a9e8f36034734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 11400000, guid: 8f199dc065acac1479436eebc3f88c35, type: 2}
+  itemData: {fileID: 11400000, guid: 16128912e6e9c824f8e64e6dac5fd794, type: 2}
   pickupDelay: 0.5
 --- !u!114 &7542675161449855741
 MonoBehaviour:

@@ -9,7 +9,7 @@ public class ResourceSpawner_Cave : MonoBehaviour
     // ================== Cave 설정 ==================
     [Title("Cave Resource Spawner")]
     [InfoBox("CaveGround 타일맵들을 0~3 순서(Cave1~4)로 넣어주세요!\n" +
-             "Player가 입장한 CaveIndex만 골라서 그 안에만 자원을 스폰스폰")]
+             "Player가 입장한 CaveIndex만 골라서 그 인덱스의 타일맵만 활성화 + 자원 랜덤 스폰")]
     [LabelText("Cave Ground Tilemaps")]
     [Required]
     public Tilemap[] caveGroundTilemaps;
@@ -31,17 +31,13 @@ public class ResourceSpawner_Cave : MonoBehaviour
     public float spawnProbability = 0.05f;
 
     [BoxGroup("Spawn Settings/General")]
-    [LabelText("Resource Layer")]
-    public LayerMask resourceLayer;
+    [LabelText("Ore Ratio (0~1)"), Range(0f, 1f)]
+    public float oreRatio = 0.1f;
 
     // ================== 디버그 / 상태 확인 ==================
     [TitleGroup("Runtime Info")]
     [ShowInInspector, ReadOnly, LabelText("Current Cave Index")]
     private int currentCaveIndex = -1;
-
-    [ShowInInspector, ReadOnly, LabelText("WorldState Key")]
-    private string caveKey = "(not initialized)";
-    private bool initialized = false;
 
     // --------------------------------------------------------
 
@@ -53,12 +49,22 @@ public class ResourceSpawner_Cave : MonoBehaviour
         }
     }
 
+    void ClearSpawnedResources()
+    {
+        for (int i = transform.childCount - 1; i >= 0; i--)
+        {
+            var child = transform.GetChild(i);
+            Destroy(child.gameObject);
+        }
+    }
+
     [Button("Spawn For Current Cave")]
     public void SpawnForCurrentCave()
     {
-        if (initialized) return; // 두 번 스폰 방지
-        initialized = true;
+        // 이번 방문에서 이전에 스폰된 자원(돌/광석/사다리 등) 싹 지우기
+        ClearSpawnedResources();
 
+        // CaveIndex 업데이트
         currentCaveIndex = CaveStateManager.CurrentCaveIndex;
 
         if (caveGroundTilemaps == null || caveGroundTilemaps.Length == 0)
@@ -73,23 +79,23 @@ public class ResourceSpawner_Cave : MonoBehaviour
             return;
         }
 
-        Tilemap selectedMap = caveGroundTilemaps[currentCaveIndex];
-
-        caveKey = $"{gameObject.scene.name}_Cave{currentCaveIndex}";
-
-        var state = WorldStateManager.Instance.GetOrCreate(caveKey);
-
-        if (!state.initialSpawnDone)
+        // 타일맵 활성/비활성 (현재 CaveIndex 것만 켜기)
+        for (int i = 0; i < caveGroundTilemaps.Length; i++)
         {
-            GenerateAndRegister(state, selectedMap, caveKey);
-            WorldStateManager.Instance.MarkInitialSpawnDone(caveKey);
+            if (caveGroundTilemaps[i] != null)
+                caveGroundTilemaps[i].gameObject.SetActive(i == currentCaveIndex);
         }
 
-        RestoreFromState(state);
+        Tilemap selectedMap = caveGroundTilemaps[currentCaveIndex];
+
+        // 이 Cave에서 자원 랜덤 스폰
+        GenerateRandom(selectedMap);
     }
 
-    void GenerateAndRegister(SceneState state, Tilemap map, string key)
+    void GenerateRandom(Tilemap map)
     {
+        if (map == null) return;
+
         BoundsInt bounds = map.cellBounds;
 
         foreach (Vector3Int pos in bounds.allPositionsWithin)
@@ -97,52 +103,16 @@ public class ResourceSpawner_Cave : MonoBehaviour
             if (!map.HasTile(pos))
                 continue;
 
+            // 이 칸에 자원을 둘지 말지
             if (Random.value >= spawnProbability)
                 continue;
 
-            GameObject prefab = (Random.value < 0.5f) ? rockPrefab : orePrefab;
+            // 돌 vs 광석 결정
+            GameObject prefab = (Random.value < oreRatio) ? orePrefab : rockPrefab;
             if (!prefab) continue;
 
             Vector3 worldPos = map.GetCellCenterWorld(pos);
             Instantiate(prefab, worldPos, Quaternion.identity, transform);
-
-            WorldStateManager.Instance.AddResource(
-                key,
-                new ResourceSave
-                {
-                    prefabId = prefab.name,
-                    position = worldPos,
-                    harvestedOrRemoved = false
-                });
         }
-    }
-
-    void RestoreFromState(SceneState state)
-    {
-        foreach (ResourceSave r in state.resources)
-        {
-            if (r.harvestedOrRemoved)
-                continue;
-
-            // 이미 뭔가가 그 자리에 있으면 스킵
-            Collider2D hit = Physics2D.OverlapPoint(r.position, resourceLayer);
-            if (hit != null)
-                continue;
-
-            GameObject prefab = ChoosePrefab(r.prefabId);
-            if (prefab != null)
-                Instantiate(prefab, r.position, Quaternion.identity, transform);
-        }
-    }
-
-    GameObject ChoosePrefab(string id)
-    {
-        if (rockPrefab && rockPrefab.name == id)
-            return rockPrefab;
-
-        if (orePrefab && orePrefab.name == id)
-            return orePrefab;
-
-        return null;
     }
 }

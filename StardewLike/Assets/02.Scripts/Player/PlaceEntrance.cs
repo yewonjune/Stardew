@@ -26,7 +26,11 @@ public class PlaceEntrance : MonoBehaviour
             if (go) player = go.transform;
         }
 
-        CameraManager.Instance = CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        if (CameraManager.Instance == null)
+        {
+            CameraManager.Instance = FindObjectOfType<CameraManager>();
+        }
+
         entranceLayerMask = LayerMask.GetMask(entranceLayerName);
         selfCol = GetComponent<Collider2D>();
     }
@@ -50,7 +54,11 @@ public class PlaceEntrance : MonoBehaviour
 
     void EnterPlace()
     {
-        CameraManager.Instance = CameraManager.Instance ?? CameraManager.Instance ?? FindObjectOfType<CameraManager>();
+        if (CameraManager.Instance == null)
+        {
+            CameraManager.Instance = FindObjectOfType<CameraManager>();
+        }
+
         var fade = FadeManager.Instance ?? FindObjectOfType<FadeManager>();
         var col = player.GetComponent<Collider2D>();
         var mover = player.GetComponent<PlayerMovement>();

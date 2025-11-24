@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 3562167780973711172}
   - component: {fileID: 593030874630787669}
-  - component: {fileID: 8427373577959544811}
   - component: {fileID: 3016582977324648168}
+  - component: {fileID: 5075835067447163392}
   m_Layer: 8
-  m_Name: Rock
+  m_Name: Rock_Cave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -86,31 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8427373577959544811
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6317455990490287575}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7ed2b0eedf5c2c46b4feac02f623feb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  resourceType: 0
-  maxHp: 1
-  requiredTool: 1
-  minPower: 1
-  dropItem: {fileID: 11400000, guid: 8f199dc065acac1479436eebc3f88c35, type: 2}
-  dropPrefab: {fileID: 3547608915414989261, guid: f39085bcd43fd114288aa688699553f7,
-    type: 3}
-  dropCount: 1
-  scatterRadius: 0.2
-  prefabId: 
-  canSpawnLadder: 0
-  ladderChance: 0.05
-  ladderPrefab: {fileID: 0}
 --- !u!70 &3016582977324648168
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -146,3 +121,28 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &5075835067447163392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6317455990490287575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7645362fbd8ddb3429d13bad5ae7f4cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourceType: 0
+  requiredTool: 1
+  maxHp: 3
+  minPower: 1
+  dropItem: {fileID: 11400000, guid: 8f199dc065acac1479436eebc3f88c35, type: 2}
+  dropPrefab: {fileID: 3547608915414989261, guid: f39085bcd43fd114288aa688699553f7,
+    type: 3}
+  dropCount: 1
+  scatterRadius: 0.2
+  canSpawnLadder: 1
+  ladderChance: 0.5
+  ladderPrefab: {fileID: 3630070718054197051, guid: 5b51c96eff18f314fba10559d360e45b,
+    type: 3}

@@ -12,9 +12,9 @@ public class ResourceNode : MonoBehaviour
     public int minPower = 1;
 
     [Header("Drop Settings")]
-    public Item dropItem;                 // ÀÎº¥Åä¸®¿ë µ¥ÀÌÅÍ(ScriptableObject)
-    public GameObject dropPrefab;         // ¾À¿¡ ¶³¾îÁú ÇÁ¸®ÆÕ(¿¹: StoneDrop.prefab)
-    public int dropCount = 1;             // ¸î °³ ¶³¾î¶ß¸±Áö
+    public Item dropItem;
+    public GameObject dropPrefab;
+    public int dropCount = 1;
     public float scatterRadius = 0.2f;    // »ìÂ¦ Èğ»Ñ¸®±â
 
     public string prefabId;

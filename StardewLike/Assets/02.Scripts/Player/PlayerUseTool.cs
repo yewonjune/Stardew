@@ -236,9 +236,19 @@ public class PlayerUseTool : MonoBehaviour
         if (collider != null)
         {
             ResourceNode resourceNode = collider.GetComponent<ResourceNode>();
+            CaveResourceNode caveNode = collider.GetComponent<CaveResourceNode>();
+
             if (resourceNode != null)
             {
                 resourceNode.Hit(tool);
+                StartToolAction(tool.toolType);
+                playerFatigueController?.AddByTool(tool.toolType);
+                return;
+            }
+
+            if (caveNode != null)
+            {
+                caveNode.Hit(tool);
                 StartToolAction(tool.toolType);
                 playerFatigueController?.AddByTool(tool.toolType);
                 return;
