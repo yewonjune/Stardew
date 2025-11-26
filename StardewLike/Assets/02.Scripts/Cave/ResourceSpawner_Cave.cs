@@ -13,6 +13,7 @@ public class ResourceSpawner_Cave : MonoBehaviour
     [LabelText("Cave Ground Tilemaps")]
     [Required]
     public Tilemap[] caveGroundTilemaps;
+    public GameObject[] caveRoots;
 
     // ================== 프리팹 ==================
     [TitleGroup("Prefabs")]
@@ -34,10 +35,15 @@ public class ResourceSpawner_Cave : MonoBehaviour
     [LabelText("Ore Ratio (0~1)"), Range(0f, 1f)]
     public float oreRatio = 0.1f;
 
-    // ================== 디버그 / 상태 확인 ==================
+    // ================== 상태 확인 ==================
     [TitleGroup("Runtime Info")]
     [ShowInInspector, ReadOnly, LabelText("Current Cave Index")]
     private int currentCaveIndex = -1;
+
+    // ================== Enemy 스폰 ==================
+    [TitleGroup("Enemy Settings")]
+    [LabelText("Enemy Spawner (옵션)")]
+    public EnemySpawner enemySpawner;
 
     // --------------------------------------------------------
 
@@ -61,35 +67,40 @@ public class ResourceSpawner_Cave : MonoBehaviour
     [Button("Spawn For Current Cave")]
     public void SpawnForCurrentCave()
     {
-        // 이번 방문에서 이전에 스폰된 자원(돌/광석/사다리 등) 싹 지우기
         ClearSpawnedResources();
+        enemySpawner.ClearSpawnedEnemies();
 
-        // CaveIndex 업데이트
         currentCaveIndex = CaveStateManager.CurrentCaveIndex;
 
         if (caveGroundTilemaps == null || caveGroundTilemaps.Length == 0)
         {
-            Debug.LogWarning("[CaveSpawner] caveGroundTilemaps가 비었습니다.", this);
             return;
         }
 
         if (currentCaveIndex < 0 || currentCaveIndex >= caveGroundTilemaps.Length)
         {
-            Debug.LogWarning($"[CaveSpawner] 잘못된 CaveIndex: {currentCaveIndex}", this);
             return;
         }
 
-        // 타일맵 활성/비활성 (현재 CaveIndex 것만 켜기)
         for (int i = 0; i < caveGroundTilemaps.Length; i++)
         {
-            if (caveGroundTilemaps[i] != null)
-                caveGroundTilemaps[i].gameObject.SetActive(i == currentCaveIndex);
+            bool isActive = (i == currentCaveIndex);
+
+            if (caveRoots != null && i < caveRoots.Length && caveRoots[i] != null)
+            {
+                caveRoots[i].SetActive(isActive);
+            }
         }
+
 
         Tilemap selectedMap = caveGroundTilemaps[currentCaveIndex];
 
-        // 이 Cave에서 자원 랜덤 스폰
         GenerateRandom(selectedMap);
+
+        if (enemySpawner != null && selectedMap != null)
+        {
+            enemySpawner.SpawnOnTilemap(selectedMap);
+        }
     }
 
     void GenerateRandom(Tilemap map)
@@ -103,11 +114,9 @@ public class ResourceSpawner_Cave : MonoBehaviour
             if (!map.HasTile(pos))
                 continue;
 
-            // 이 칸에 자원을 둘지 말지
             if (Random.value >= spawnProbability)
                 continue;
 
-            // 돌 vs 광석 결정
             GameObject prefab = (Random.value < oreRatio) ? orePrefab : rockPrefab;
             if (!prefab) continue;
 

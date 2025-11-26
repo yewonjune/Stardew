@@ -7,6 +7,7 @@ TagManager:
   - Door
   - FishingZone
   - BlockTool
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -22,7 +23,7 @@ TagManager:
   - Inside
   - NPC
   - Ground
-  - 
+  - Monster
   - 
   - 
   - 

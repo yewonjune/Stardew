@@ -23,6 +23,10 @@ public class PlayerUseTool : MonoBehaviour
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
 
+    [SerializeField] float swordAttackRadius = 0.6f;
+    [SerializeField] int swordDamage = 10;
+    [SerializeField] LayerMask enemyLayer;
+
     void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -203,14 +207,33 @@ public class PlayerUseTool : MonoBehaviour
 
     void AttackWithSword()
     {
-        RaycastHit2D hit = Physics2D.Raycast(useToolPoint.position, Vector2.zero);
+        Collider2D[] hits = Physics2D.OverlapCircleAll(
+            useToolPoint.position,
+            swordAttackRadius,
+            enemyLayer
+        );
 
-        if (hit.collider != null)
+        bool hitSomething = false;
+
+        foreach (var col in hits)
         {
-            Debug.Log("몬스터 공격하기");
+            var enemy = col.GetComponent<EnemyBase>();
+
+            if (enemy != null)
+            {
+                Debug.Log("몬스터 공격하기: " + col.name);
+                enemy.TakeDamage(swordDamage);
+                hitSomething = true;
+            }
+        }
+
+        if (hitSomething)
+        {
             StartToolAction(ToolType.Sword);
+            playerFatigueController?.AddByTool(ToolType.Sword);
         }
     }
+
     void FishingWithFishingrod()
     {
         PlayerFishingController fishingController = GetComponent<PlayerFishingController>();

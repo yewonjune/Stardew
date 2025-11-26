@@ -4587,6 +4587,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de5bebace7c6574408d3b8c47aa71869, type: 2}
   - {fileID: 11400000, guid: d7ef36438c6b43a4dbf5edebad9b123b, type: 2}
   - {fileID: 11400000, guid: 7330b2b7c9345bf4cba4fa0ebb668087, type: 2}
+  - {fileID: 11400000, guid: 885d71842ed8a95439985ee21ed36999, type: 2}
   onlyFillEmpty: 1
 --- !u!114 &964853097
 MonoBehaviour:
@@ -4624,6 +4625,11 @@ MonoBehaviour:
   resourceLayer:
     serializedVersion: 2
     m_Bits: 256
+  swordAttackRadius: 0.6
+  swordDamage: 10
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &964853099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7420,7 +7426,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 7372799
 --- !u!114 &1431356755
 MonoBehaviour:
   m_ObjectHideFlags: 0
