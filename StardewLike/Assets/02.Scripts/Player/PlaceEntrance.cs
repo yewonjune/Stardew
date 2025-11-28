@@ -4,7 +4,10 @@ using UnityEngine;
 public class PlaceEntrance : MonoBehaviour
 {
     public Transform player;
-    public Vector3 playerIndoorPosition;
+
+    [Header("이동할 위치")]
+    public Transform targetTransform;
+    //public Vector3 playerIndoorPosition;
 
     [SerializeField] string targetCamKey = "House";
 
@@ -54,6 +57,8 @@ public class PlaceEntrance : MonoBehaviour
 
     void EnterPlace()
     {
+        if (!player) return;
+
         if (CameraManager.Instance == null)
         {
             CameraManager.Instance = FindObjectOfType<CameraManager>();
@@ -70,15 +75,15 @@ public class PlaceEntrance : MonoBehaviour
 
         System.Action teleport = () =>
         {
-            Vector3 targetPos = playerIndoorPosition;
+            Vector3 targetPos = player.position;
 
+            // 1) 랜덤 동굴 입장용
             if (useRandomSpawnPositions && randomSpawnPositions != null && randomSpawnPositions.Length > 0)
             {
                 int idx = Random.Range(0, randomSpawnPositions.Length);
                 targetPos = randomSpawnPositions[idx].position;
 
                 CaveStateManager.CurrentCaveIndex = idx;
-
                 Debug.Log($"Cave random index = {idx}");
 
                 var spawner = FindObjectOfType<ResourceSpawner_Cave>();
@@ -87,15 +92,24 @@ public class PlaceEntrance : MonoBehaviour
                     spawner.SpawnForCurrentCave();
                 }
             }
+            // 2) 랜덤 스폰 안 쓸 때는 targetTransform으로 이동
+            else if (targetTransform != null)
+            {
+                targetPos = targetTransform.position;
+            }
 
-            CameraManager.Instance.SwitchTo(targetCamKey);
+            if (CameraManager.Instance != null && !string.IsNullOrEmpty(targetCamKey))
+            {
+                CameraManager.Instance.SwitchTo(targetCamKey);
+            }
 
             player.position = targetPos;
 
             StartCoroutine(RestoreNextFrame(rb, col, mover));
         };
 
-        if (fade) fade.FadeOutIn(teleport); else teleport();
+        if (fade) fade.FadeOutIn(teleport);
+        else teleport();
     }
 
     IEnumerator RestoreNextFrame(Rigidbody2D rb, Collider2D col, PlayerMovement mover)
