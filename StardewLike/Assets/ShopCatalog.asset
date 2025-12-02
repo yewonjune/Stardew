@@ -15,25 +15,22 @@ MonoBehaviour:
   shopItemEntries:
   - item: {fileID: 11400000, guid: d7ef36438c6b43a4dbf5edebad9b123b, type: 2}
     buyPrice: 50
-    sellPrice: 20
     stock: -1
   - item: {fileID: 11400000, guid: 7330b2b7c9345bf4cba4fa0ebb668087, type: 2}
     buyPrice: 40
-    sellPrice: 10
     stock: -1
   - item: {fileID: 11400000, guid: 02749f89da0b4424890491bdb2909ed0, type: 2}
     buyPrice: 10
-    sellPrice: 1
     stock: -1
   - item: {fileID: 11400000, guid: 13722fdaf9828c94bac3c9ec9ddfc1b2, type: 2}
     buyPrice: 20
-    sellPrice: 5
     stock: -1
   - item: {fileID: 11400000, guid: 83fbcd61982df7b449a384043a95226c, type: 2}
     buyPrice: 20
-    sellPrice: 5
     stock: -1
   - item: {fileID: 11400000, guid: c8e25fdc2297ceb4886e5f1e78a77fe4, type: 2}
     buyPrice: 1500
-    sellPrice: 5
     stock: 2
+  - item: {fileID: 11400000, guid: 885d71842ed8a95439985ee21ed36999, type: 2}
+    buyPrice: 0
+    stock: -1

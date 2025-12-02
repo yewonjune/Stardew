@@ -3,29 +3,87 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using Sirenix.OdinInspector;
 
 public class PlayerUseTool : MonoBehaviour
 {
+    // ================== 레퍼런스 ==================
+    [TitleGroup("References")]
+    [FoldoutGroup("References/General", Expanded = true)]
+    [LabelText("Hotbar Manager")]
     public HotbarManager hotbarManager;
+
+    [FoldoutGroup("References/General")]
+    [LabelText("Tool Pivot (앞칸 기준점)")]
     public Transform useToolPoint;
 
+    [FoldoutGroup("References/General")]
+    [LabelText("Animator")]
     public Animator animator;
 
+    [FoldoutGroup("References/General")]
+    [LabelText("Player Movement")]
     [SerializeField] PlayerMovement playerMovement;
+
+    [FoldoutGroup("References/General")]
+    [LabelText("Fatigue Controller")]
     [SerializeField] PlayerFatigueController playerFatigueController;
+
+    [FoldoutGroup("References/General")]
+    [LabelText("Soil Tilemap Controller")]
     [SerializeField] SoilTilemapController soilTilemapController;
 
+    // ================== 공통 도구 설정 ==================
+    [TitleGroup("Tool Settings")]
+    [FoldoutGroup("Tool Settings/General", Expanded = true)]
+    [LabelText("마우스로 지점 지정")]
     [SerializeField] bool useMouseTarget = false;
 
+    [FoldoutGroup("Tool Settings/General")]
+    [LabelText("자원 타격 반경")]
+    [MinValue(0f)]
     [SerializeField] float hitRadius = 0.15f;
+
+    [FoldoutGroup("Tool Settings/General")]
+    [LabelText("자원 레이어 (돌/나무 등)")]
     [SerializeField] LayerMask resourceLayer = ~0;
 
+    // ================== 검 설정 ==================
+    [TitleGroup("Sword Settings")]
+    [FoldoutGroup("Sword Settings/Hit", Expanded = true)]
+    [LabelText("검 공격 반경")]
+    [MinValue(0f)]
+    [SerializeField] float swordAttackRadius = 0.6f;
+
+    [FoldoutGroup("Sword Settings/Hit")]
+    [LabelText("검 데미지")]
+    [MinValue(0)]
+    [SerializeField] int swordDamage = 10;
+
+    [FoldoutGroup("Sword Settings/Hit")]
+    [LabelText("몬스터 레이어")]
+    [SerializeField] LayerMask enemyLayer;
+
+    [FoldoutGroup("Sword Settings/Combo", Expanded = true)]
+    [LabelText("콤보 허용 간격(초)")]
+    [MinValue(0f)]
+    [SerializeField] float swordComboMaxGap = 0.4f;
+
+    [FoldoutGroup("Sword Settings/Combo")]
+    [ShowInInspector, ReadOnly]
+    [LabelText("현재 콤보 단계 (1~3)")]
+    int swordCombo = 0;
+
+    [FoldoutGroup("Sword Settings/Combo")]
+    [ShowInInspector, ReadOnly]
+    [LabelText("마지막 검 사용 시간")]
+    float lastSwordClickTime = -999f;
+
+    // ================== 애니메이터 파라미터 (고정값) ==================
     const string ParamToolIndex = "ToolIndex";
     const string TrigStartTool = "StartAction_Tool";
-
-    [SerializeField] float swordAttackRadius = 0.6f;
-    [SerializeField] int swordDamage = 10;
-    [SerializeField] LayerMask enemyLayer;
+    const string TrigSwordAttack = "SwordAttack";
+    const string ParamSwordCombo = "SwordCombo";
 
     void OnEnable()
     {
@@ -86,8 +144,7 @@ public class PlayerUseTool : MonoBehaviour
         {
             if (IsClickOnBlockingUI())
             { 
-                Debug.Log("막아야 하는 UI 위 클릭됨 -> 도구 사용 안 함");
-                return;    // UI 클릭이니까 도구 사용 안 함
+                return;
             }
 
             var fc = GetComponent<PlayerFishingController>();
@@ -151,6 +208,8 @@ public class PlayerUseTool : MonoBehaviour
 
     void DigSoilWithHoe()
     {
+        if (!soilTilemapController) return;
+
         Vector3Int playerCell = soilTilemapController.groundTilemap.WorldToCell(transform.position);
 
         Vector2 d = (playerMovement != null && playerMovement.lastDirection.sqrMagnitude > 0.0001f)
@@ -192,6 +251,8 @@ public class PlayerUseTool : MonoBehaviour
 
     void WaterCropWithWateringCan()
     {
+        if (!soilTilemapController) return;
+
         Vector3 world = GetTargetWorldPos();
         if (soilTilemapController.TryWaterAtWorldPos(world))
         {
@@ -207,31 +268,41 @@ public class PlayerUseTool : MonoBehaviour
 
     void AttackWithSword()
     {
+        float now = Time.time;
+        if (now - lastSwordClickTime > swordComboMaxGap)
+        {
+            swordCombo = 1;
+        }
+        else
+        {
+            swordCombo = Mathf.Clamp(swordCombo + 1, 1, 3);
+        }
+        lastSwordClickTime = now;
+
+        if (animator)
+        {
+            animator.SetInteger(ParamSwordCombo, swordCombo);
+            animator.ResetTrigger(TrigSwordAttack);
+            animator.SetTrigger(TrigSwordAttack);
+        }
+
         Collider2D[] hits = Physics2D.OverlapCircleAll(
             useToolPoint.position,
             swordAttackRadius,
             enemyLayer
         );
 
-        bool hitSomething = false;
-
         foreach (var col in hits)
         {
             var enemy = col.GetComponent<EnemyBase>();
-
             if (enemy != null)
             {
                 Debug.Log("몬스터 공격하기: " + col.name);
                 enemy.TakeDamage(swordDamage);
-                hitSomething = true;
             }
         }
 
-        if (hitSomething)
-        {
-            StartToolAction(ToolType.Sword);
-            playerFatigueController?.AddByTool(ToolType.Sword);
-        }
+        // playerFatigueController?.AddByTool(ToolType.Sword);
     }
 
     void FishingWithFishingrod()
