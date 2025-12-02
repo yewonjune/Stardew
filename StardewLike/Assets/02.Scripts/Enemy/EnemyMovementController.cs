@@ -1,15 +1,53 @@
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMovementController : MonoBehaviour
 {
-    public float idleTime = 0f;
-    Transform player;
-    Rigidbody2D rb;
-    Animator animator;
-    EnemyBase enemy;
-    Vector2 moveDir;
+    // ================== References ==================
+    [FoldoutGroup("References", Expanded = true)]
+    [LabelText("Player Transform")]
+    [ReadOnly] Transform player;
+
+    [FoldoutGroup("References")]
+    [LabelText("Rigidbody2D")]
+    [ReadOnly] public Rigidbody2D rb;
+
+    [FoldoutGroup("References")]
+    [LabelText("Animator")]
+    [ReadOnly] public Animator animator;
+
+    [FoldoutGroup("References")]
+    [LabelText("Enemy Base")]
+    [ReadOnly] public EnemyBase enemy;
+
+    // ================== Movement Settings ==================
+    [FoldoutGroup("Movement Settings", Expanded = true)]
+    [LabelText("정지 시간(미사용)")]
+    [SerializeField] float idleTime = 0f;
+
+    [FoldoutGroup("Movement Settings")]
+    [ReadOnly]
+    [ShowInInspector]
+    [LabelText("현재 이동 방향")]
+    private Vector2 moveDir;
+
+    // ================== Attack Settings ==================
+    [FoldoutGroup("Attack Settings", Expanded = true)]
+    [LabelText("공격 사거리")]
+    [MinValue(0f)]
+    public float attackRange = 1.0f;
+
+    [FoldoutGroup("Attack Settings")]
+    [LabelText("공격 쿨타임")]
+    [MinValue(0f)]
+    public float attackCooldown = 1.5f;
+
+    [FoldoutGroup("Attack Settings")]
+    [ShowInInspector, ReadOnly]
+    [LabelText("마지막 공격 시간")]
+    private float lastAttackTime = -999f;
 
     void Awake()
     {
@@ -25,7 +63,7 @@ public class EnemyMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (player == null || enemy == null || enemy.enabled == false)
+        if (player == null || enemy == null || enemy.enabled == false || enemy.IsKnockback)
         {
             SetIdle();
             return;
@@ -36,13 +74,24 @@ public class EnemyMovementController : MonoBehaviour
 
         float dist = Vector2.Distance(transform.position, player.position);
 
-        if (dist <= radius)
-            moveDir = (player.position - transform.position).normalized;
-        else
+        if (dist > radius)
+        {
             moveDir = Vector2.zero;
+        }
+        else
+        {
+            if (dist <= attackRange)
+            {
+                moveDir = Vector2.zero;
+                TryAttack();
+            }
+            else
+            {
+                moveDir = (player.position - transform.position).normalized;
+            }
+        }
 
         rb.MovePosition(rb.position + moveDir * speed * Time.fixedDeltaTime);
-
         UpdateAnimator(moveDir);
     }
 
@@ -71,5 +120,16 @@ public class EnemyMovementController : MonoBehaviour
         {
             transform.localScale = new Vector3(1, 1, 1);
         }
+    }
+    void TryAttack()
+    {
+        if (Time.time - lastAttackTime < attackCooldown)
+            return;
+
+        lastAttackTime = Time.time;
+
+        animator.ResetTrigger("Attack");
+        animator.SetTrigger("Attack");
+
     }
 }

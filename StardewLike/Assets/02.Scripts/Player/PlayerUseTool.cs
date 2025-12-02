@@ -297,8 +297,8 @@ public class PlayerUseTool : MonoBehaviour
             var enemy = col.GetComponent<EnemyBase>();
             if (enemy != null)
             {
-                Debug.Log("몬스터 공격하기: " + col.name);
-                enemy.TakeDamage(swordDamage);
+                Vector2 hitDir = (enemy.transform.position - transform.position).normalized;
+                enemy.TakeDamage(swordDamage, hitDir);
             }
         }
 
