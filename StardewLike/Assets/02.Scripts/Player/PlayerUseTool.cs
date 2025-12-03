@@ -348,6 +348,17 @@ public class PlayerUseTool : MonoBehaviour
                 return;
             }
         }
+
+        if (tool.toolType == ToolType.Pickaxe && soilTilemapController != null)
+        {
+            Vector3 world = GetTargetWorldPos();
+
+            if (soilTilemapController.TryClearSoilAtWorldPos(world))
+            {
+                StartToolAction(tool.toolType);
+                playerFatigueController?.AddByTool(tool.toolType);
+            }
+        }
     }
 
     void OnDrawGizmosSelected()

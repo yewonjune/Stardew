@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class CaveResourceNode : MonoBehaviour
 {
@@ -19,6 +20,12 @@ public class CaveResourceNode : MonoBehaviour
     public bool canSpawnLadder = true;
     public float ladderChance = 0.05f;
     public GameObject ladderPrefab;
+
+    public float shakeDuration = 0.15f;
+    public float shakeStrength = 0.1f;
+    public int shakeVibrato = 12;
+    public float punchScale = 0.15f;
+    public float punchDuration = 0.2f;
 
     void Awake()
     {
@@ -41,14 +48,37 @@ public class CaveResourceNode : MonoBehaviour
             return;
         }
 
+        transform.DOKill();
+
         hp -= Mathf.Max(1, tool.power);
         Debug.Log($"[Resource] {resourceType} 맞음! 남은 HP = {hp}");
 
-        if (hp <= 0)
+        if(punchScale > 0f)
         {
-            isBroken = true;
-            Break();
+            transform.DOPunchScale(
+                new Vector3(punchScale, punchScale, 0f),
+                punchDuration,
+                8,
+                1f
+            );
         }
+
+        transform.DOShakePosition(
+          shakeDuration,
+          shakeStrength,
+          shakeVibrato,
+          90f,
+          false,
+          true
+      )
+      .OnComplete(() =>
+      {
+          if (hp <= 0 && !isBroken)
+          {
+              isBroken = true;
+              Break();
+          }
+      });
     }
 
     void Break()

@@ -283,18 +283,45 @@ public class SoilTilemapController : MonoBehaviour
 
     public void ForceRebuildFromState()
     {
-        // 현재 타일 초기화
         if (soilTilemap) soilTilemap.ClearAllTiles();
         if (wateredTilemap) wateredTilemap.ClearAllTiles();
+    }
 
-        // 내부 컬렉션들도 깨끗하게
-        // (tilled/watered/plantedCrop 컬렉션이 private이면, 해당 컬렉션을 클리어하는 유틸을 추가하세요)
-        // 여기서는 간단히: 씬의 오브젝트를 파악/정리하고...
+    public bool TryClearSoilAtWorldPos(Vector3 worldPos)
+    {
+        if (groundTilemap == null || soilTilemap == null)
+            return false;
 
-        // WorldStateManager의 SceneState를 기준으로 다시 그리기 (기존 RestoreFromState 재사용)
-        // RestoreFromState()가 private이면, 동일 로직을 public으로 빼서 호출
-        // ex) this.RestoreFromState();
-        // 만약 RestoreFromState가 Start에서만 호출된다면, 그 로직을 함수로 추출하세요.
+        Vector3Int cell = groundTilemap.WorldToCell(worldPos);
+
+        if (!tilled.Contains(cell))
+            return false;
+
+        if (plantedCrop.ContainsKey(cell))
+            return false;
+
+        soilTilemap.SetTile(cell, null);
+        tilled.Remove(cell);
+        RefreshAround(soilTilemap, cell);
+
+        if (watered.Contains(cell))
+        {
+            watered.Remove(cell);
+            if (wateredTilemap != null)
+            {
+                wateredTilemap.SetTile(cell, null);
+                RefreshAround(wateredTilemap, cell);
+            }
+        }
+
+        var worldStateManager = WorldStateManager.Instance;
+        if (worldStateManager != null)
+        {
+            worldStateManager.SetTilled(SceneName, cell, false);
+            worldStateManager.SetWatered(SceneName, cell, false);
+        }
+
+        return true;
     }
 }
 

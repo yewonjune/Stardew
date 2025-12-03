@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class ResourceNode : MonoBehaviour
 {
@@ -16,6 +17,13 @@ public class ResourceNode : MonoBehaviour
     public GameObject dropPrefab;
     public int dropCount = 1;
     public float scatterRadius = 0.2f;    // »ìÂ¦ Èð»Ñ¸®±â
+
+    public float shakeDuration = 0.15f;   // Èçµé¸®´Â ½Ã°£
+    public float shakeStrength = 0.1f;    // Èçµé¸² ¼¼±â
+    public int shakeVibrato = 12;         // Èçµé¸®´Â È½¼ö
+
+    public float punchScale = 0.15f;      // »ìÂ¦ 'Äî' ´­¸®´Â Å©±â
+    public float punchDuration = 0.2f;    // ½ºÄÉÀÏ Æ¢´Â ½Ã°£
 
     public string prefabId;
 
@@ -68,14 +76,39 @@ public class ResourceNode : MonoBehaviour
             return;
         }
 
+        transform.DOKill();
+
         hp -= Mathf.Max(1, tool.power);
         Debug.Log($"[Resource] {resourceType} ¸ÂÀ½! ³²Àº HP = {hp}");
 
-        if (hp <= 0)
+
+        if (punchScale > 0f)
         {
-            isBroken = true;
-            Break();
+            transform.DOPunchScale(
+                new Vector3(punchScale, punchScale, 0f),
+                punchDuration,
+                8,      // Áøµ¿ È½¼ö
+                1f      // Åº¼º
+            );
         }
+
+        transform.DOShakePosition(
+                    shakeDuration,
+                    shakeStrength,
+                    shakeVibrato,
+                    90f,
+                    false,
+                    true
+                )
+                .OnComplete(() =>
+                {
+                    //HP È®ÀÎ ÈÄ ÆÄ±«
+                    if (hp <= 0 && !isBroken)
+                    {
+                        isBroken = true;
+                        Break();
+                    }
+                });
     }
     public void Harvest()
     {
