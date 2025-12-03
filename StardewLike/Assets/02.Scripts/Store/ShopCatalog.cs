@@ -8,8 +8,17 @@ public class ShopItemEntry
 {
     public Item item;
     public int buyPrice = 50;
-    //public int sellPrice = 20;
     public int stock = -1;
+
+    public bool IsAvailableThisSeason(Season currentSeason)
+    {
+        if (item is Seeds seed)
+        {
+            return seed.CanGrowInSeason(currentSeason);
+        }
+
+        return true;
+    }
 }
 
 [CreateAssetMenu(fileName = "ShopCatalog", menuName = "Shop/Shop Catalog")]

@@ -409,6 +409,12 @@ public class PlayerUseTool : MonoBehaviour
             return;
         }
 
+        if (SeasonManager.Instance != null && !seed.CanGrowInSeason(SeasonManager.Instance.currentSeason))
+        {
+            Debug.Log("이 계절에는 이 씨앗을 심을 수 없어요!");
+            return;
+        }
+
         Vector3 world = GetTargetWorldPos();
 
         if (soilTilemapController.TryPlantAtWorldPos(world, seed))

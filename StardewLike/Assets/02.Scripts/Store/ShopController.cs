@@ -86,13 +86,22 @@ public class ShopController : MonoBehaviour
         foreach (var b in spawned) Destroy(b.gameObject);
         spawned.Clear();
 
+        Season currentSeason = SeasonManager.Instance != null
+               ? SeasonManager.Instance.currentSeason
+               : Season.Spring;
+
         foreach (var e in catalog.shopItemEntries)
         {
+            // 현재 계절에 판매하지 않는 아이템이면 스킵
+            if (!e.IsAvailableThisSeason(currentSeason))
+                continue;
+
             var go = Instantiate(shopItemButtonPrefab, shopContent);
             var b = go.GetComponent<ShopItemButton>();
             b.Bind(e, this);
             spawned.Add(b);
         }
+
         RefreshGold();
     }
 

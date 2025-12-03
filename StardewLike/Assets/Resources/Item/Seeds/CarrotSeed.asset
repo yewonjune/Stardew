@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3b4c0278b5ac408d46b9f65c490da, type: 3}
   m_Name: CarrotSeed
   m_EditorClassIdentifier: 
+  itemId: 
   itemName: "\uB2F9\uADFC \uC528\uC557"
   icon: {fileID: -188247391, guid: 338eb9325b511bf4dbf0184fff5f5d9c, type: 3}
   isStackable: 1
   maxStack: 99
+  canSell: 1
+  sellPrice: 10
   worldPrefab: {fileID: 0}
   cropPrefab: {fileID: 5376714211517807391, guid: 54c2903e820b3dd4eb9729b57686eec1,
     type: 3}
@@ -23,3 +26,4 @@ MonoBehaviour:
   harvestItem: {fileID: 11400000, guid: 221e4980db96591459e933d65840233a, type: 2}
   regrowAfterHarvest: 0
   regrowDays: 2
+  growSeasons: 00000000

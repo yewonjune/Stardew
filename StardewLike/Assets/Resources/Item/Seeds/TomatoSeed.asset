@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3b4c0278b5ac408d46b9f65c490da, type: 3}
   m_Name: TomatoSeed
   m_EditorClassIdentifier: 
+  itemId: 
   itemName: "\uD1A0\uB9C8\uD1A0 \uC528\uC557"
   icon: {fileID: -1243415934, guid: 338eb9325b511bf4dbf0184fff5f5d9c, type: 3}
   isStackable: 1
   maxStack: 99
+  canSell: 1
+  sellPrice: 10
   worldPrefab: {fileID: 0}
   cropPrefab: {fileID: 1352728932622244378, guid: b6e1803ddb674514a9b91dc52754ff68,
     type: 3}
@@ -23,3 +26,4 @@ MonoBehaviour:
   harvestItem: {fileID: 11400000, guid: 4ee8ed5cd1190744d8f70b978d40a45a, type: 2}
   regrowAfterHarvest: 1
   regrowDays: 2
+  growSeasons: 0100000002000000

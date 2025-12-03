@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3b4c0278b5ac408d46b9f65c490da, type: 3}
   m_Name: CornSeed
   m_EditorClassIdentifier: 
+  itemId: 
   itemName: "\uC625\uC218\uC218 \uC528\uC557"
   icon: {fileID: -145604749, guid: 338eb9325b511bf4dbf0184fff5f5d9c, type: 3}
   isStackable: 1
   maxStack: 99
+  canSell: 1
+  sellPrice: 10
   worldPrefab: {fileID: 0}
   cropPrefab: {fileID: 977152375315565785, guid: 87a7204ada8cfc34da165264b66b9a4f,
     type: 3}
@@ -23,3 +26,4 @@ MonoBehaviour:
   harvestItem: {fileID: 11400000, guid: 229ea81f6aa3a7e4cb9a43c8f9ff41da, type: 2}
   regrowAfterHarvest: 0
   regrowDays: 2
+  growSeasons: 0100000002000000

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3b4c0278b5ac408d46b9f65c490da, type: 3}
   m_Name: CucumberSeed
   m_EditorClassIdentifier: 
+  itemId: 
   itemName: "\uC624\uC774 \uC528\uC557"
   icon: {fileID: -413163525, guid: 338eb9325b511bf4dbf0184fff5f5d9c, type: 3}
   isStackable: 1
   maxStack: 99
+  canSell: 1
+  sellPrice: 10
   worldPrefab: {fileID: 0}
   cropPrefab: {fileID: 7518937925669243300, guid: f82214cfa62cc0d42b9c108ac8e962eb,
     type: 3}
@@ -23,3 +26,4 @@ MonoBehaviour:
   harvestItem: {fileID: 11400000, guid: 1dd667e665cf79e4b8eb28a3ddb0fb96, type: 2}
   regrowAfterHarvest: 0
   regrowDays: 2
+  growSeasons: 0000000001000000
