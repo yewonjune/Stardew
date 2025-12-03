@@ -28,6 +28,13 @@ public class EnemyBase : MonoBehaviour
         if (isDead) return;
 
         currentHp -= damage;
+        
+        if (currentHp <= 0)
+        {
+            Die();
+            return;
+        }
+
         animator.SetTrigger("Hit");
 
         // DOTween ³Ë¹é

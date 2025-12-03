@@ -64,10 +64,18 @@ public class CaveResourceNode : MonoBehaviour
     {
         if (!dropPrefab) return;
 
+        Transform parent = transform.parent;
+
         for (int i = 0; i < dropCount; i++)
         {
             Vector2 offset = Random.insideUnitCircle * scatterRadius;
-            var go = Instantiate(dropPrefab, transform.position + (Vector3)offset, Quaternion.identity);
+
+            GameObject go;
+            if (parent != null)
+                go = Instantiate(dropPrefab, transform.position + (Vector3)offset, Quaternion.identity, parent);
+            else
+                go = Instantiate(dropPrefab, transform.position + (Vector3)offset, Quaternion.identity);
+
             var pickup = go.GetComponent<ItemPickup>();
             if (pickup != null && dropItem != null)
             {
@@ -106,7 +114,6 @@ public class CaveResourceNode : MonoBehaviour
 
         if (!shouldSpawn) return;
 
-        Transform parent = transform.parent;
         Instantiate(ladderPrefab, transform.position, Quaternion.identity);
     }
 

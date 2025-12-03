@@ -63,6 +63,12 @@ public class EnemyMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (GamePause.isPaused)
+        {
+            SetIdle();
+            return;
+        }
+
         if (player == null || enemy == null || enemy.enabled == false || enemy.IsKnockback)
         {
             SetIdle();

@@ -15,7 +15,7 @@ public class CaveFloorUI : MonoBehaviour
 
     public void UpdateFloorUI()
     {
-        int floor = CaveStateManager.CurrentCaveIndex + 1;
+        int floor = CaveStateManager.CurrentFloor;
 
         if (floorText != null)
         {

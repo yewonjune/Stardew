@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 593030874630787669}
   - component: {fileID: 3016582977324648168}
   - component: {fileID: 5075835067447163392}
+  - component: {fileID: 2928460104041439417}
   m_Layer: 8
   m_Name: Rock_Cave
   m_TagString: Untagged
@@ -146,3 +147,20 @@ MonoBehaviour:
   ladderChance: 0.5
   ladderPrefab: {fileID: 3630070718054197051, guid: 5b51c96eff18f314fba10559d360e45b,
     type: 3}
+--- !u!114 &2928460104041439417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6317455990490287575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ece13887a8287548b4d3b1609555071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  variantSprites:
+  - {fileID: -5495307846630647219, guid: 941a8dfe2bf08444a9ea70297c9ecc00, type: 3}
+  - {fileID: 8061654883636039082, guid: 941a8dfe2bf08444a9ea70297c9ecc00, type: 3}
+  - {fileID: 1324379434378565836, guid: 941a8dfe2bf08444a9ea70297c9ecc00, type: 3}
+  - {fileID: -5198356514698065490, guid: 941a8dfe2bf08444a9ea70297c9ecc00, type: 3}

@@ -37,42 +37,57 @@ public class CaveLadder : MonoBehaviour
     {
         if (!player) return;
 
-        int currentIndex = CaveStateManager.CurrentCaveIndex;
-
-        var spawner = FindObjectOfType<ResourceSpawner_Cave>();
-
-        int newIndex = currentIndex;
-        if (spawner != null && spawner.caveGroundTilemaps != null &&
-            spawner.caveGroundTilemaps.Length > 0)
+        if (FadeManager.Instance != null)
         {
-            int count = spawner.caveGroundTilemaps.Length;
-
-            if (count == 1)
+            FadeManager.Instance.FadeOutIn(() =>
             {
-                newIndex = 0;
-            }
-            else
-            {
-                newIndex = Random.Range(0, count);
+                int currentIndex = CaveStateManager.CurrentCaveIndex;
 
-                if (newIndex == currentIndex)
+                var spawner = FindObjectOfType<ResourceSpawner_Cave>();
+
+                int newIndex = currentIndex;
+                if (spawner != null && spawner.caveGroundTilemaps != null &&
+                    spawner.caveGroundTilemaps.Length > 0)
                 {
-                    newIndex = (newIndex + 1) % count;
+                    int count = spawner.caveGroundTilemaps.Length;
+
+                    CaveStateManager.CurrentFloor++;
+
+                    if (count == 1)
+                    {
+                        newIndex = 0;
+                    }
+                    else
+                    {
+                        newIndex = Random.Range(0, count);
+
+                        if (newIndex == currentIndex)
+                        {
+                            newIndex = (newIndex + 1) % count;
+                        }
+                    }
                 }
-            }
+
+                CaveStateManager.CurrentCaveIndex = newIndex;
+
+                Vector3 spawnPos = CaveSpawnManager.Instance.GetSpawnPosition(newIndex);
+                player.position = spawnPos;
+
+                if (spawner != null)
+                {
+                    spawner.SpawnForCurrentCave();
+                }
+
+                var floorUI = FindObjectOfType<CaveFloorUI>();
+                if (floorUI != null)
+                {
+                    floorUI.UpdateFloorUI();
+                }
+
+                Destroy(gameObject);
+            });
         }
 
-        CaveStateManager.CurrentCaveIndex = newIndex;
-
-        Vector3 spawnPos = CaveSpawnManager.Instance.GetSpawnPosition(newIndex);
-        player.position = spawnPos;
-
-        if (spawner != null)
-        {
-            spawner.SpawnForCurrentCave();
-        }
-
-        Destroy(gameObject);
     }
 
 }
