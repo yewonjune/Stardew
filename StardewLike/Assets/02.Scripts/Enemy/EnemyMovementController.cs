@@ -49,32 +49,6 @@ public class EnemyMovementController : MonoBehaviour
     [LabelText("마지막 공격 시간")]
     private float lastAttackTime = -999f;
 
-    // ================== Hit / Knockback Settings ==================
-    [FoldoutGroup("Hit,Knockback", Expanded = true)]
-    [LabelText("넉백 거리")]
-    [MinValue(0f)]
-    public float knockbackDistance = 0.3f;
-
-    [FoldoutGroup("Hit,Knockback")]
-    [LabelText("넉백 시간")]
-    [MinValue(0f)]
-    public float knockbackDuration = 0.1f;
-
-    [FoldoutGroup("Hit,Knockback")]
-    [LabelText("스턴(멈춤) 시간")]
-    [MinValue(0f)]
-    public float stunDuration = 0.1f;
-
-    [FoldoutGroup("Hit,Knockback")]
-    [LabelText("피격 시 Hit 트리거 사용")]
-    public bool useHitTrigger = true;
-
-    [FoldoutGroup("Hit,Knockback")]
-    [LabelText("Animator Hit 트리거 이름")]
-    [ShowIf("useHitTrigger")]
-    public string hitTriggerName = "Hit";
-
-    Coroutine knockbackRoutine;
 
     void Awake()
     {

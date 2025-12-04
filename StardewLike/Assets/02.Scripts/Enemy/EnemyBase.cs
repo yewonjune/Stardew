@@ -17,6 +17,9 @@ public class EnemyBase : MonoBehaviour
     public float knockbackDistance = 0.3f;
     public float knockbackDuration = 0.1f;
 
+    [Min(0f)]
+    public float stunDuration = 0.1f;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -37,28 +40,49 @@ public class EnemyBase : MonoBehaviour
 
         animator.SetTrigger("Hit");
 
-        // DOTween 넉백
-        if (hitDir.sqrMagnitude > 0.0001f)
+        if (hitDir.sqrMagnitude > 0.0001f && knockbackDuration > 0f && knockbackDistance > 0f)
         {
-            Vector3 startPos = transform.position;
-            Vector3 targetPos = startPos + (Vector3)hitDir.normalized * knockbackDistance;
-
+            // 진행 중인 Tween 정리
             transform.DOKill();
             if (rb != null) rb.velocity = Vector2.zero;
 
-            IsKnockback = true;
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = startPos + (Vector3)hitDir.normalized * knockbackDistance;
+
+            IsKnockback = true;   // Movement 쪽에서 이 동안 멈추게 됨
 
             transform.DOMove(targetPos, knockbackDuration)
                 .SetEase(Ease.OutQuad)
                 .OnComplete(() =>
                 {
                     if (rb != null) rb.velocity = Vector2.zero;
-                    IsKnockback = false;
+
+                    if (stunDuration > 0f)
+                    {
+                        // 넉백 끝난 뒤 잠깐 더 멈추기
+                        StartCoroutine(StunWait());
+                    }
+                    else
+                    {
+                        IsKnockback = false;
+                    }
                 });
         }
+        else
+        {
+            // 넉백은 없지만, 잠깐 스턴만 쓰고 싶을 수도 있음
+            if (stunDuration > 0f)
+            {
+                StartCoroutine(StunWait());
+            }
+        }
+    }
 
-        if (currentHp <= 0)
-            Die();
+    IEnumerator StunWait()
+    {
+        IsKnockback = true;
+        yield return new WaitForSeconds(stunDuration);
+        IsKnockback = false;
     }
 
     protected virtual void Die()
