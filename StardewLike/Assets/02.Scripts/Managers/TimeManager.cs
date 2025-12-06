@@ -126,7 +126,21 @@ public class TimeManager : MonoBehaviour
 
     void UpdateUI()
     {
-        dayText.text = $"Day {day}";
+        int dayOfYear = (day - 1) % 120;   // 0~119
+        int seasonIndex = dayOfYear / 30;  // 0,1,2,3
+        int dayInSeason = (dayOfYear % 30) + 1; // 1~30
+
+        string seasonKorean = "";
+
+        switch ((Season)seasonIndex)
+        {
+            case Season.Spring: seasonKorean = "봄"; break;
+            case Season.Summer: seasonKorean = "여름"; break;
+            case Season.Fall: seasonKorean = "가을"; break;
+            case Season.Winter: seasonKorean = "겨울"; break;
+        }
+
+        dayText.text = $"{seasonKorean} {dayInSeason}일";
 
         int displayMinute = (minute / 10) * 10;
         timeText.text = $"{hour:00}:{displayMinute:00}";
