@@ -20,6 +20,9 @@ public class EnemyBase : MonoBehaviour
     [Min(0f)]
     public float stunDuration = 0.1f;
 
+    // 왼쪽: false / 오른쪽 : true
+    public bool defaultFacingRight = false;
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();

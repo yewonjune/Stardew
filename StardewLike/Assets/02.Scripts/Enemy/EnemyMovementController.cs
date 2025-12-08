@@ -23,10 +23,6 @@ public class EnemyMovementController : MonoBehaviour
     [ReadOnly] public EnemyBase enemy;
 
     // ================== Movement Settings ==================
-    [FoldoutGroup("Movement Settings", Expanded = true)]
-    [LabelText("정지 시간(미사용)")]
-    [SerializeField] float idleTime = 0f;
-
     [FoldoutGroup("Movement Settings")]
     [ReadOnly]
     [ShowInInspector]
@@ -99,6 +95,15 @@ public class EnemyMovementController : MonoBehaviour
         }
 
         rb.MovePosition(rb.position + moveDir * speed * Time.fixedDeltaTime);
+
+        Vector2 animDir = moveDir;
+        if (animDir.sqrMagnitude <= 0.001f)
+        {
+            Vector2 toPlayer = (player.position - transform.position);
+            if (toPlayer.sqrMagnitude > 0.001f)
+                animDir = toPlayer.normalized;
+        }
+
         UpdateAnimator(moveDir);
     }
 
@@ -121,11 +126,15 @@ public class EnemyMovementController : MonoBehaviour
 
         if (dir.x > 0.1f)
         {
-            transform.localScale = new Vector3(-1, 1, 1);
+            transform.localScale = enemy.defaultFacingRight
+                ? new Vector3(1, 1, 1)      // 오른쪽 기본일 때
+                : new Vector3(-1, 1, 1);    // 왼쪽 기본일 때
         }
         else if (dir.x < -0.1f)
         {
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.localScale = enemy.defaultFacingRight
+                ? new Vector3(-1, 1, 1)     // 오른쪽 기본 → 왼쪽 볼 때 뒤집기
+                : new Vector3(1, 1, 1);     // 왼쪽 기본 → 오른쪽 볼 때 뒤집기
         }
     }
     void TryAttack()

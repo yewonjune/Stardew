@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85c4ce982511ff042bf18ebbfc3a94d0, type: 3}
-  m_Name: Slime
+  m_Name: ArcherGoblin
   m_EditorClassIdentifier: 
   maxHp: 20
   moveSpeed: 2
-  detectRadius: 3
+  detectRadius: 5
   attackPower: 5
   deathDestroyDelay: 0.6
