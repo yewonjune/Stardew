@@ -12923,13 +12923,17 @@ MonoBehaviour:
   enemyGroups:
   - enemyPrefab: {fileID: 7632625743960111734, guid: b9ba74827f7f27747bc2a7e1f448ed6c,
       type: 3}
-    minCount: 2
-    maxCount: 6
+    minCount: 0
+    maxCount: 0
   - enemyPrefab: {fileID: 7472453165709692983, guid: f92542cec91ef5d42bd96ac3336c1610,
       type: 3}
-    minCount: 1
-    maxCount: 2
+    minCount: 0
+    maxCount: 0
   - enemyPrefab: {fileID: 6527637622796734065, guid: 7aa48db1ed4de714680958fbe545f751,
+      type: 3}
+    minCount: 0
+    maxCount: 0
+  - enemyPrefab: {fileID: 8232998907010899840, guid: 1db49ad8b5f993b44be40abd20129829,
       type: 3}
     minCount: 1
     maxCount: 5

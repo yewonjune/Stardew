@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 5
   m_Sprite: {fileID: -7856493677412862020, guid: 8b53930cfbad8c147b363b9a4990d6b9,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -206,7 +206,6 @@ MonoBehaviour:
   rb: {fileID: 0}
   animator: {fileID: 0}
   enemy: {fileID: 0}
-  idleTime: 0
   attackRange: 3
   attackCooldown: 1.5
 --- !u!114 &9135669047874563788
