@@ -31,9 +31,16 @@ public class ResourceSpawner_Cave : MonoBehaviour
     [LabelText("Spawn Probability"), Range(0f, 1f)]
     public float spawnProbability = 0.05f;
 
+    [TitleGroup("Spawn Settings")]
+    public bool spawnResources = true;
+
+    [TitleGroup("Spawn Settings")]
+    public bool spawnEnemies = true;
+
     [BoxGroup("Spawn Settings/General")]
     [LabelText("Ore Ratio (0~1)"), Range(0f, 1f)]
     public float oreRatio = 0.1f;
+
 
     // ================== 상태 확인 ==================
     [TitleGroup("Runtime Info")]
@@ -68,7 +75,8 @@ public class ResourceSpawner_Cave : MonoBehaviour
     public void SpawnForCurrentCave()
     {
         ClearSpawnedResources();
-        enemySpawner.ClearSpawnedEnemies();
+
+        if (enemySpawner != null) enemySpawner.ClearSpawnedEnemies();
 
         currentCaveIndex = CaveStateManager.CurrentCaveIndex;
 
@@ -95,12 +103,11 @@ public class ResourceSpawner_Cave : MonoBehaviour
 
         Tilemap selectedMap = caveGroundTilemaps[currentCaveIndex];
 
-        GenerateRandom(selectedMap);
+        if (spawnResources)
+            GenerateRandom(selectedMap);
 
-        if (enemySpawner != null && selectedMap != null)
-        {
+        if (spawnEnemies && enemySpawner != null && selectedMap != null)
             enemySpawner.SpawnOnTilemap(selectedMap);
-        }
     }
 
     void GenerateRandom(Tilemap map)

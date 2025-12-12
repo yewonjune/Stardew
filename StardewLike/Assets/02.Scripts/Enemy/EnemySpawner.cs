@@ -68,7 +68,7 @@ public class EnemySpawner : MonoBehaviour
                     retry++;
                 }
 
-                Instantiate(group.enemyPrefab, spawnPos, Quaternion.identity);
+                Instantiate(group.enemyPrefab, spawnPos, Quaternion.identity, transform);
             }
         }
     }

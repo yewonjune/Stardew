@@ -30,4 +30,8 @@ public class CaveSpawnManager : MonoBehaviour
         var t = caveSpawnPoints[caveIndex];
         return t ? t.position : Vector3.zero;
     }
+    public void SetSpawnPoints(Transform[] newPoints)
+    {
+        caveSpawnPoints = newPoints;
+    }
 }

@@ -19,7 +19,6 @@ public class PlaceEntrance : MonoBehaviour
 
     [Header("Optional: Random Spawn (ex. Cave 1~4)")]
     public bool useRandomSpawnPositions = false;
-    public Transform[] randomSpawnPositions;
 
     void Start()
     {
@@ -75,41 +74,44 @@ public class PlaceEntrance : MonoBehaviour
 
         System.Action teleport = () =>
         {
-            Vector3 targetPos = player.position;
-
             // 1) 랜덤 동굴 입장용
-            if (useRandomSpawnPositions && randomSpawnPositions != null && randomSpawnPositions.Length > 0)
+            if (useRandomSpawnPositions)
             {
-                int idx = Random.Range(0, randomSpawnPositions.Length);
-                targetPos = randomSpawnPositions[idx].position;
+                int startFloor = 1;
 
-                CaveStateManager.CurrentCaveIndex = idx;
-                Debug.Log($"Cave random index = {idx}");
-
-                var spawner = FindObjectOfType<ResourceSpawner_Cave>();
-                if (spawner != null)
+                var floorManager = FindObjectOfType<CaveFloorManager>();
+                if (floorManager != null)
                 {
-                    spawner.SpawnForCurrentCave();
+                    floorManager.EnterFloor(startFloor);
+
+                    int caveIndex = CaveStateManager.CurrentCaveIndex;
+                    Vector3 spawnPos = (CaveSpawnManager.Instance != null)
+                        ? CaveSpawnManager.Instance.GetSpawnPosition(caveIndex)
+                        : Vector3.zero;
+
+                    player.position = spawnPos;
+
+                    StartCoroutine(RestoreNextFrame(rb, col, mover));
+                    return;
                 }
             }
+
             // 2) 랜덤 스폰 안 쓸 때는 targetTransform으로 이동
-            else if (targetTransform != null)
+            if (targetTransform != null)
             {
-                targetPos = targetTransform.position;
+                player.position = targetTransform.position;
             }
 
             if (CameraManager.Instance != null && !string.IsNullOrEmpty(targetCamKey))
             {
                 CameraManager.Instance.SwitchTo(targetCamKey);
             }
-
-            player.position = targetPos;
-
             StartCoroutine(RestoreNextFrame(rb, col, mover));
         };
 
-        if (fade) fade.FadeOutIn(teleport);
-        else teleport();
+            if (fade) fade.FadeOutIn(teleport);
+            else teleport();
+        
     }
 
     IEnumerator RestoreNextFrame(Rigidbody2D rb, Collider2D col, PlayerMovement mover)

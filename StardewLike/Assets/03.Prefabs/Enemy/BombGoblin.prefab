@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -7856493677412862020, guid: 8b53930cfbad8c147b363b9a4990d6b9,
+  m_Sprite: {fileID: 4723107735738678597, guid: dedd22ed49c14b54f94f802851e049cc,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -207,9 +207,14 @@ MonoBehaviour:
   animator: {fileID: 0}
   enemy: {fileID: 0}
   bombAttack: {fileID: 0}
+  wanderSpeedMultiplier: 0.5
+  wanderInterval: {x: 1, y: 3}
+  homeRadius: 3
   attackRange: 3
   attackCooldown: 3
   prepareTime: 0.5
+  fleeDelay: 0.4
+  attackAnimDuration: 0.7
   fleeSpeedMultiplier: 1.5
   fleeDistance: 6
 --- !u!114 &2590536110831725049
@@ -227,6 +232,6 @@ MonoBehaviour:
   bombPrefab: {fileID: 3378309725297665018, guid: 7eb7aabfe3a680348b6fc7b5d66bdb0c,
     type: 3}
   throwPoint: {fileID: 6177848312278309457}
-  throwForce: 5
-  bombLifeTime: 5
+  throwDuration: 0.6
+  jumpPower: 1.2
   bombDamage: 1

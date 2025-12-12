@@ -29,6 +29,22 @@ public class EnemyMovementController : MonoBehaviour
     [LabelText("현재 이동 방향")]
     private Vector2 moveDir;
 
+    [FoldoutGroup("Movement Settings")]
+    [LabelText("배회 속도 배수")]
+    [MinValue(0f)]
+    public float wanderSpeedMultiplier = 0.5f;   // 추격 속도의 절반 정도로 어슬렁
+
+    [FoldoutGroup("Movement Settings")]
+    [LabelText("배회 방향 변경 간격 (최소/최대)")]
+    public Vector2 wanderInterval = new Vector2(1f, 3f); // 1~3초마다 방향 바꿈
+
+    [FoldoutGroup("Movement Settings")]
+    [LabelText("집 기준 배회 반경")]
+    public float homeRadius = 3f;                // 스폰 지점 주변에서만 빙빙
+
+    Vector2 homePos;                 // 스폰 위치
+    float nextWanderChangeTime = 0f; // 다음에 방향 바꿀 시간
+
     // ================== Attack Settings ==================
     [FoldoutGroup("Attack Settings", Expanded = true)]
     [LabelText("공격 사거리")]
@@ -51,11 +67,15 @@ public class EnemyMovementController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         enemy = GetComponent<EnemyBase>();
+
+        homePos = transform.position;
     }
 
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        ScheduleNextWanderChange();
     }
 
     void FixedUpdate()
@@ -79,7 +99,8 @@ public class EnemyMovementController : MonoBehaviour
 
         if (dist > radius)
         {
-            moveDir = Vector2.zero;
+            UpdateWander();
+            speed *= wanderSpeedMultiplier;
         }
         else
         {
@@ -147,5 +168,39 @@ public class EnemyMovementController : MonoBehaviour
         animator.ResetTrigger("Attack");
         animator.SetTrigger("Attack");
 
+    }
+
+    void UpdateWander()
+    {
+        // 일정 시간마다 새로운 랜덤 방향으로 변경
+        if (Time.time >= nextWanderChangeTime || moveDir.sqrMagnitude < 0.001f)
+        {
+            // 기본은 랜덤 방향
+            Vector2 randomDir = Random.insideUnitCircle.normalized;
+
+            // 집에서 너무 멀어지지 않게, 집 쪽으로 약간 당기는 느낌
+            Vector2 toHome = (homePos - (Vector2)transform.position);
+            if (toHome.sqrMagnitude > 0.01f)
+            {
+                // 집 방향 0.4 + 랜덤 0.6 정도로 섞어서 자연스럽게
+                Vector2 homeBias = toHome.normalized * 0.4f;
+                randomDir = (randomDir * 0.6f + homeBias).normalized;
+            }
+
+            moveDir = randomDir;
+            ScheduleNextWanderChange();
+        }
+
+        float distFromHome = Vector2.Distance(transform.position, homePos);
+        if (distFromHome > homeRadius)
+        {
+            moveDir = (homePos - (Vector2)transform.position).normalized;
+        }
+    }
+
+    void ScheduleNextWanderChange()
+    {
+        float t = Random.Range(wanderInterval.x, wanderInterval.y);
+        nextWanderChangeTime = Time.time + t;
     }
 }

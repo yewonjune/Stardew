@@ -7,6 +7,8 @@ public class CaveLadder : MonoBehaviour
     public Transform player;
     public float interactDistance = 1.5f;
 
+    CaveFloorManager floorManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,8 @@ public class CaveLadder : MonoBehaviour
             var go = GameObject.FindGameObjectWithTag("Player");
             if (go) player = go.transform;
         }
+
+        floorManager = FindObjectOfType<CaveFloorManager>();
     }
 
     // Update is called once per frame
@@ -38,56 +42,30 @@ public class CaveLadder : MonoBehaviour
         if (!player) return;
 
         if (FadeManager.Instance != null)
-        {
-            FadeManager.Instance.FadeOutIn(() =>
-            {
-                int currentIndex = CaveStateManager.CurrentCaveIndex;
+            FadeManager.Instance.FadeOutIn(DoGoDown);
+        else
+            DoGoDown();
+    }
 
-                var spawner = FindObjectOfType<ResourceSpawner_Cave>();
+    void DoGoDown()
+    {
+        CaveStateManager.CurrentFloor++;
 
-                int newIndex = currentIndex;
-                if (spawner != null && spawner.caveGroundTilemaps != null &&
-                    spawner.caveGroundTilemaps.Length > 0)
-                {
-                    int count = spawner.caveGroundTilemaps.Length;
+        if (floorManager != null)
+            floorManager.EnterFloor(CaveStateManager.CurrentFloor);
 
-                    CaveStateManager.CurrentFloor++;
+        int caveIndex = CaveStateManager.CurrentCaveIndex;
+        Vector3 spawnPos = (CaveSpawnManager.Instance != null)
+            ? CaveSpawnManager.Instance.GetSpawnPosition(caveIndex)
+            : Vector3.zero;
 
-                    if (count == 1)
-                    {
-                        newIndex = 0;
-                    }
-                    else
-                    {
-                        newIndex = Random.Range(0, count);
+        player.position = spawnPos;
 
-                        if (newIndex == currentIndex)
-                        {
-                            newIndex = (newIndex + 1) % count;
-                        }
-                    }
-                }
+        // UI °»½Å
+        var floorUI = FindObjectOfType<CaveFloorUI>();
+        if (floorUI != null) floorUI.UpdateFloorUI();
 
-                CaveStateManager.CurrentCaveIndex = newIndex;
-
-                Vector3 spawnPos = CaveSpawnManager.Instance.GetSpawnPosition(newIndex);
-                player.position = spawnPos;
-
-                if (spawner != null)
-                {
-                    spawner.SpawnForCurrentCave();
-                }
-
-                var floorUI = FindObjectOfType<CaveFloorUI>();
-                if (floorUI != null)
-                {
-                    floorUI.UpdateFloorUI();
-                }
-
-                Destroy(gameObject);
-            });
-        }
-
+        Destroy(gameObject);
     }
 
 }
