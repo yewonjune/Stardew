@@ -18,7 +18,7 @@ public class PlayerFishingController : MonoBehaviour
     [SerializeField] GameObject exclamationMark;                  // ! 아이콘 (월드 스페이스 UI 등)
     [SerializeField] Vector3 markOffset = new Vector3(0f, 1.6f, 0f);
 
-    [SerializeField] FishCatalog fishCatalog;                     // 캔버스에 올려둔 SO
+    [SerializeField] FishCatalog fishCatalog;
     public UnityEvent<Item, int> OnFishCaught = new UnityEvent<Item, int>();
 
     public bool isFishing;
@@ -33,13 +33,10 @@ public class PlayerFishingController : MonoBehaviour
     bool biteReady;
     bool caught;
 
-    [SerializeField] Inventory inventory;
-
     void Awake()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!feet) feet = transform;
-        if (!inventory) inventory = Inventory.instance;
         if (fishingZoneLayer.value == 0)
             fishingZoneLayer = LayerMask.GetMask("FishingZone");
 
@@ -53,7 +50,6 @@ public class PlayerFishingController : MonoBehaviour
         if (isFishing && biteReady && Input.GetMouseButtonDown(0))
         {
             TryCatch();
-            Debug.Log("[Fishing] TryCatch()");
         }
     }
     void LateUpdate()
@@ -69,6 +65,8 @@ public class PlayerFishingController : MonoBehaviour
     {
         if (isFishing) return;
         if (!IsInFishingZone()) return;
+
+        PlayerActionLock.Lock("Fishing");
 
         if (fishingCo != null) StopCoroutine(fishingCo);
         fishingCo = StartCoroutine(FishRoutine());
@@ -136,29 +134,12 @@ public class PlayerFishingController : MonoBehaviour
         FishData fish = fishCatalog ? fishCatalog.PickRandomFish(reactionTime) : null;
         if (fish == null || fish.item == null)
         {
-            Debug.LogWarning("FishCatalog에 유효한 FishData/Item이 없습니다.");
             return;
         }
 
-        // 개수 규칙: 기본 1개
         int count = 1;
         OnFishCaught?.Invoke(fish.item, count);
 
-        if (inventory != null)
-        {
-            bool added = inventory.AddItem(fish.item, count);
-            if(!added)
-            {
-                return;
-            }
-            else
-            {
-                OnFishCaught?.Invoke(fish.item, count);
-            }
-        }
-
-
-        // 디버그: 크기/가격 참고
         int size = Random.Range(fish.sizeRange.x, fish.sizeRange.y + 1);
         Debug.Log($"잡은 물고기: {fish.item.itemName}, 크기: {size}cm, 예상가: {fish.basePrice}");
     }
@@ -180,6 +161,8 @@ public class PlayerFishingController : MonoBehaviour
             StopCoroutine(fishingCo);
             fishingCo = null;
         }
+
+        PlayerActionLock.Unlock("Fishing");
     }
     void ShowMark()
     {

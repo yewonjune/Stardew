@@ -10,5 +10,7 @@ public class ShopTrigger : MonoBehaviour
     void OnMouseDown()
     {
         shopController.OpenShop();
+
+        PlayerActionLock.Lock("OpenShop");
     }
 }

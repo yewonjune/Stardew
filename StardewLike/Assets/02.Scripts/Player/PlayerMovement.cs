@@ -32,8 +32,6 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GamePause.isPaused || DialogueManager.IsBusy) return;
-
         currentSpeed = Mathf.Lerp(currentSpeed, setSpeed, Time.deltaTime * speedLerp);
     }
 
@@ -44,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Move()
     {
-        if (!canControl)
+        if (!canControl || PlayerActionLock.IsLocked)
         {
             if (player) player.velocity = Vector2.zero;
             if (animator)
@@ -86,7 +84,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void SetSpeed(float value)
     {
-        currentSpeed = value;
+        setSpeed = value;
     }
 
     public void SetControl(bool enable)

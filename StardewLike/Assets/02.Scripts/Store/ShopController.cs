@@ -79,6 +79,7 @@ public class ShopController : MonoBehaviour
         inventoryLayout?.ApplyOriginal();
 
         inventoryUI.HideCursorPreview();
+        PlayerActionLock.Unlock("OpenShop");
     }
 
     void BuildList()

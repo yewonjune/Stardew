@@ -58,6 +58,8 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue(DialogueData data)
     {
+        if (isDialogueActive) return;
+
         DialogueLine[] selected = PickSequenceLines(data);
         if (selected == null || selected.Length == 0)
         {
@@ -87,12 +89,13 @@ public class DialogueManager : MonoBehaviour
         lastAdvanceTime = Time.unscaledTime - advanceCooldown;
 
         FreezePlayer(true);
-        GamePause.Pause();
+        PlayerActionLock.Lock("Dialogue");
     }
 
     public void StartDialogue(DialogueData data, DialogueSequence seq)
     {
         if (data == null || seq == null) return;
+        if (isDialogueActive) return;
 
         isDialogueActive = true;
         currentData = data;
@@ -122,7 +125,7 @@ public class DialogueManager : MonoBehaviour
         lastAdvanceTime = Time.unscaledTime - advanceCooldown;
 
         FreezePlayer(true);
-        GamePause.Pause();
+        PlayerActionLock.Lock("Dialogue");
     }
 
     DialogueLine[] PickSequenceLines(DialogueData data)
@@ -163,14 +166,19 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
+        if (modalOpen) return;
         isDialogueActive = false;
 
         dialoguePanel.SetActive(false);
 
-        FreezePlayer(false);
-        GamePause.Resume();
-    
-}
+        PlayerActionLock.Unlock("Dialogue");
+
+        if (!PlayerActionLock.IsLocked)
+            FreezePlayer(false);
+        else
+            FreezePlayer(true);
+
+    }
     public void OnClickNext()
     {
         if (!isDialogueActive || modalOpen) return;
@@ -194,27 +202,36 @@ public class DialogueManager : MonoBehaviour
 
     public void Confirm(string message, Action onOK, Action onCancel=null, bool pauseGame=true)
     {
-        if(confirmDialog == null)
-        {
-            Debug.LogError("[DialogueManager] ConfirmDialog reference is missing.");
-            return;
-        }
+        if(confirmDialog == null)    return;
 
         modalOpen = true;
         FreezePlayer(true);
+        PlayerActionLock.Lock("DialogueModal");
 
         confirmDialog.Open(
             message,
             onOK: () =>
             {
-                FreezePlayer(false);
+                PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
+
+                if (!PlayerActionLock.IsLocked)
+                    FreezePlayer(false);
+                else
+                    FreezePlayer(true);
+
                 onOK?.Invoke();
             },
             onCancel: () =>
             {
-                FreezePlayer(false);
+                PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
+
+                if (!PlayerActionLock.IsLocked)
+                    FreezePlayer(false);
+                else
+                    FreezePlayer(true);
+
                 onCancel?.Invoke();
             },
             pauseGame: pauseGame
@@ -227,8 +244,12 @@ public class DialogueManager : MonoBehaviour
         {
             isDialogueActive = false;
             modalOpen = false;
-            GamePause.ResetAll();
-            FreezePlayer(false);
+
+            PlayerActionLock.Unlock("Dialogue");
+            PlayerActionLock.Unlock("DialogueModal");
+
+            if (!PlayerActionLock.IsLocked)
+                FreezePlayer(false);
         }
     }
 }

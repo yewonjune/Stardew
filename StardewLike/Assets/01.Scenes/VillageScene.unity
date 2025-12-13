@@ -181,7 +181,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 4797f7b36668d2747bb46873148af08c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -237,7 +237,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.052062154, y: 0.31236982}
@@ -267,6 +267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerTag: Player
   interactKey: 101
+  interactDistance: 1.2
 --- !u!1 &31123624
 GameObject:
   m_ObjectHideFlags: 0
@@ -2816,7 +2817,6 @@ MonoBehaviour:
   interactDistance: 0.78
   entranceLayerName: Entrance
   useRandomSpawnPositions: 0
-  randomSpawnPositions: []
 --- !u!212 &274041112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -38239,7 +38239,6 @@ MonoBehaviour:
   interactDistance: 0.78
   entranceLayerName: Entrance
   useRandomSpawnPositions: 0
-  randomSpawnPositions: []
 --- !u!212 &1854534143
 SpriteRenderer:
   m_ObjectHideFlags: 0

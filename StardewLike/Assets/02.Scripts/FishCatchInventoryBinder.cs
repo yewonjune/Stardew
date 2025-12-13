@@ -50,11 +50,6 @@ public class FishCatchInventoryBinder : MonoBehaviour
         {
             Debug.Log("[FishCatchInventoryBinder] 인벤토리가 가득 차서 추가하지 못했습니다.");
 
-            // 가득 찼을 때 임시로 커서 프리뷰에 올려줌(사용자가 직접 슬롯에 두게)
-            if (inventoryUI && previewCursorOnCatch)
-                inventoryUI.ShowCursorPreview(item, count);
-
-            // TODO: 월드 드랍 시스템 있으면 여기에서 스폰 처리
             return;
         }
 

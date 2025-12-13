@@ -136,7 +136,8 @@ public class PlayerUseTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GamePause.isPaused || DialogueManager.IsBusy) return;
+        if (DialogueManager.IsBusy) return;
+        if (PlayerActionLock.IsLocked) return;
 
         UpdateUseToolPoint();
 
