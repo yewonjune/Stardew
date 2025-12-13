@@ -18,11 +18,11 @@ public class PlayerFatigueController : MonoBehaviour
     public List<ToolFatigue> toolFatigues = new()
     {
         new ToolFatigue{ toolType = ToolType.Hoe,         amount = 2f },
-        new ToolFatigue{ toolType = ToolType.Pickaxe,     amount = 4f },
-        new ToolFatigue{ toolType = ToolType.Axe,         amount = 4f },
-        new ToolFatigue{ toolType = ToolType.Scythe,      amount = 1.5f },
-        new ToolFatigue{ toolType = ToolType.WateringCan, amount = 1.2f },
-        new ToolFatigue{ toolType = ToolType.Sword,       amount = 2.5f },
+        new ToolFatigue{ toolType = ToolType.Pickaxe,     amount = 2f },
+        new ToolFatigue{ toolType = ToolType.Axe,         amount = 2f },
+        new ToolFatigue{ toolType = ToolType.Scythe,      amount = 0f },
+        new ToolFatigue{ toolType = ToolType.WateringCan, amount = 1f },
+        new ToolFatigue{ toolType = ToolType.Sword,       amount = 0f },
         new ToolFatigue{ toolType = ToolType.Fishingrod,  amount = 2f },
     };
     public bool IsFull => current >= maxFatigue;

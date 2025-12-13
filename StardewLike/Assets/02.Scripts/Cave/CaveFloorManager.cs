@@ -13,10 +13,6 @@ public class CaveFloorManager : MonoBehaviour
         public Tilemap[] caveGroundTilemaps;
         public EnemySpawner.EnemySpawnEntry[] enemyGroups;
         public Transform[] caveSpawnPoints;
-
-        public GameObject treasureRoot;
-        public Tilemap treasureGroundTilemap;
-        public Transform treasureSpawnPoint;
     }
 
     [System.Serializable]
@@ -37,15 +33,21 @@ public class CaveFloorManager : MonoBehaviour
     public int caveCountPerStage = 4;
 
 
-    public void EnterFloor(int floor)
+    public bool EnterFloor(int floor)
     {
         CaveStateManager.CurrentFloor = floor;
 
         if (TryEnterTreasureRoom(floor))
-            return;
+            return true;
 
         int stageIndex = GetStageIndex(floor);
-        int caveIndex = Random.Range(0, caveCountPerStage);
+        var stage = stagePack[stageIndex];
+
+        int caveMax = (stage.caveRoots != null && stage.caveRoots.Length > 0)
+            ? stage.caveRoots.Length
+            : caveCountPerStage;
+
+        int caveIndex = Random.Range(0, caveMax);
         CaveStateManager.CurrentCaveIndex = caveIndex;
 
         ApplyStage(stageIndex, caveIndex);
@@ -62,23 +64,39 @@ public class CaveFloorManager : MonoBehaviour
             for (int i = 0; i < treasureRooms.Length; i++)
                 if (treasureRooms[i].roomRoot) treasureRooms[i].roomRoot.SetActive(false);
         }
+
+        return false;
     }
 
     bool TryEnterTreasureRoom(int floor)
     {
         if (treasureRooms == null) return false;
 
+        if (CaveSpawnManager.Instance != null)
+            CaveSpawnManager.Instance.SetSpawnPoints(null);
+
         if (stagePack != null)
         {
             for (int i = 0; i < stagePack.Length; i++)
             {
-                if (stagePack[i].stageRoot) stagePack[i].stageRoot.SetActive(false);
+                var stage = stagePack[i];
+                if (stage.stageRoot) stage.stageRoot.SetActive(false);
+
+                if (stage.caveRoots != null)
+                {
+                    for (int j = 0; j < stage.caveRoots.Length; j++)
+                    {
+                        if (stage.caveRoots[j] != null)
+                            stage.caveRoots[j].SetActive(false);
+                    }
+                }
             }
         }
 
         for (int i = 0; i < treasureRooms.Length; i++)
         {
-            if (treasureRooms[i].roomRoot) treasureRooms[i].roomRoot.SetActive(false);
+            if (treasureRooms[i].roomRoot)
+                treasureRooms[i].roomRoot.SetActive(false);
         }
 
         TreasureRoom tr = null;
@@ -122,8 +140,16 @@ public class CaveFloorManager : MonoBehaviour
     void ApplyStage(int stageIndex, int caveIndex)
     {
         if (stagePack == null || stagePack.Length == 0) return;
+
         stageIndex = Mathf.Clamp(stageIndex, 0, stagePack.Length - 1);
-        caveIndex = Mathf.Clamp(caveIndex, 0, caveCountPerStage - 1);
+        var stage = stagePack[stageIndex];
+
+        int caveMax = (stage.caveRoots != null && stage.caveRoots.Length > 0)
+                ? stage.caveRoots.Length
+                : caveCountPerStage;
+
+        caveIndex = Mathf.Clamp(caveIndex, 0, caveMax - 1);
+        CaveStateManager.CurrentCaveIndex = caveIndex;
 
         if (CaveSpawnManager.Instance != null)
             CaveSpawnManager.Instance.SetSpawnPoints(stagePack[stageIndex].caveSpawnPoints);
@@ -134,7 +160,6 @@ public class CaveFloorManager : MonoBehaviour
                 stagePack[i].stageRoot.SetActive(i == stageIndex);
         }
 
-        var stage = stagePack[stageIndex];
         if (stage.caveRoots != null && stage.caveRoots.Length > 0)
         {
             for (int i = 0; i < stage.caveRoots.Length; i++)

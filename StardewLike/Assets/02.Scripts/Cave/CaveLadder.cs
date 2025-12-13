@@ -51,17 +51,22 @@ public class CaveLadder : MonoBehaviour
     {
         CaveStateManager.CurrentFloor++;
 
+        bool isTreasure = false;
+
         if (floorManager != null)
-            floorManager.EnterFloor(CaveStateManager.CurrentFloor);
+            isTreasure = floorManager.EnterFloor(CaveStateManager.CurrentFloor);
 
-        int caveIndex = CaveStateManager.CurrentCaveIndex;
-        Vector3 spawnPos = (CaveSpawnManager.Instance != null)
-            ? CaveSpawnManager.Instance.GetSpawnPosition(caveIndex)
-            : Vector3.zero;
+        if (!isTreasure)
+        {
+            int caveIndex = CaveStateManager.CurrentCaveIndex;
+            Vector3 spawnPos = (CaveSpawnManager.Instance != null)
+                ? CaveSpawnManager.Instance.GetSpawnPosition(caveIndex)
+                : Vector3.zero;
 
-        player.position = spawnPos;
+            player.position = spawnPos;
 
-        // UI °»½Å
+        }
+
         var floorUI = FindObjectOfType<CaveFloorUI>();
         if (floorUI != null) floorUI.UpdateFloorUI();
 

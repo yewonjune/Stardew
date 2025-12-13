@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using DG.Tweening;
 
 public class PlayerFishingController : MonoBehaviour
 {
@@ -23,19 +24,26 @@ public class PlayerFishingController : MonoBehaviour
     public bool isFishing;
     public bool inLoopPhase;
 
+    Tween markTween;
+    Vector3 markBaseLocalPos;
+
     readonly Collider2D[] _hits = new Collider2D[4];
 
     Coroutine fishingCo;
     bool biteReady;
     bool caught;
 
+    [SerializeField] Inventory inventory;
+
     void Awake()
     {
         if (!animator) animator = GetComponentInChildren<Animator>();
         if (!feet) feet = transform;
-
+        if (!inventory) inventory = Inventory.instance;
         if (fishingZoneLayer.value == 0)
             fishingZoneLayer = LayerMask.GetMask("FishingZone");
+
+        if(exclamationMark) markBaseLocalPos = exclamationMark.transform.localPosition;
 
         HideMark();
     }
@@ -136,6 +144,20 @@ public class PlayerFishingController : MonoBehaviour
         int count = 1;
         OnFishCaught?.Invoke(fish.item, count);
 
+        if (inventory != null)
+        {
+            bool added = inventory.AddItem(fish.item, count);
+            if(!added)
+            {
+                return;
+            }
+            else
+            {
+                OnFishCaught?.Invoke(fish.item, count);
+            }
+        }
+
+
         // 디버그: 크기/가격 참고
         int size = Random.Range(fish.sizeRange.x, fish.sizeRange.y + 1);
         Debug.Log($"잡은 물고기: {fish.item.itemName}, 크기: {size}cm, 예상가: {fish.basePrice}");
@@ -165,15 +187,37 @@ public class PlayerFishingController : MonoBehaviour
         exclamationMark.SetActive(true);
 
         Vector3 basePos = feet ? feet.position : transform.position;
-        exclamationMark.transform.position = basePos + markOffset;
+        var t = exclamationMark.transform;
 
-        exclamationMark.transform.localScale = Vector3.one * 1.15f;
-        Debug.Log("[Fishing] ! shown → biteReady=true");
+        t.position = basePos + markOffset;
+
+        markTween?.Kill();
+        t.DOKill();
+
+        t.localScale = Vector3.zero;
+        t.localPosition = markBaseLocalPos;
+
+        markTween = DOTween.Sequence()
+        .Append(t.DOScale(1.25f, 0.10f).SetEase(Ease.OutBack))
+        .Append(t.DOScale(1.05f, 0.08f).SetEase(Ease.InOutSine))
+        // 살짝 튐(로컬로 위로 0.15f)
+        .Join(t.DOLocalMoveY(markBaseLocalPos.y + 0.15f, 0.10f).SetEase(Ease.OutQuad))
+        .Append(t.DOLocalMoveY(markBaseLocalPos.y, 0.08f).SetEase(Ease.InQuad))
+        // “지금 클릭!” 느낌의 미세 펌핑(반응시간 동안 반복)
+        .Append(t.DOScale(1.12f, 0.18f).SetEase(Ease.InOutSine))
+        .Append(t.DOScale(1.05f, 0.18f).SetEase(Ease.InOutSine))
+        .SetLoops(Mathf.Max(1, Mathf.CeilToInt(reactionTime / 0.36f)), LoopType.Restart);
     }
 
     void HideMark()
     {
-        if (exclamationMark) exclamationMark.SetActive(false);
+        if (!exclamationMark) return;
+
+        markTween?.Kill();
+        markTween = null;
+
+        exclamationMark.transform.DOKill();
+        exclamationMark.SetActive(false);
     }
     void OnDrawGizmosSelected()
     {
