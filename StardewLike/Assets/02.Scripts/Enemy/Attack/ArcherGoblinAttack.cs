@@ -77,15 +77,9 @@ public class ArrowBehavior : MonoBehaviour
 
         if (collision.CompareTag("Player"))
         {
-            // PlayerDamageController 같은 곳에 데미지 전달
-            //collision.GetComponent<PlayerHealth>()?.TakeDamage(damage);
+            collision.GetComponent<PlayerHealthController>()?.TakeDamage(damage);
 
             Destroy(gameObject);
         }
-
-        //if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        //{
-        //    Destroy(gameObject);
-        //}
     }
 }

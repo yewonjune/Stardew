@@ -11,6 +11,9 @@ public class Bomb : MonoBehaviour
     public float preFlashDelay = 0.7f;      // FuseShort → PreFlash까지 대기
     public float explodeDelay = 0.4f;       // PreFlash → Explode까지 대기
 
+    [SerializeField] float radius = 1.5f;
+    [SerializeField] LayerMask playerLayer;
+
     Animator animator;
     bool exploded = false;
 
@@ -50,12 +53,10 @@ public class Bomb : MonoBehaviour
         // 폭발 애니메이션 재생
         animator.SetTrigger("Explode");
 
-        // 여기서 주변에 데미지 주고 싶으면 OverlapCircle 등 사용
-        // Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 1.5f, playerLayer);
-        // ...
+        var hits = Physics2D.OverlapCircleAll(transform.position, radius, playerLayer);
+        foreach (var h in hits)
+            h.GetComponent<PlayerHealthController>()?.TakeDamage(damage);
 
-        // 실제 오브젝트 삭제는 애니메이션 이벤트에서 호출
-        // (마지막 프레임에서 BombBehavior.OnExplosionEnd 호출)
     }
 
     // 애니메이션 마지막 프레임에서 이벤트로 호출
