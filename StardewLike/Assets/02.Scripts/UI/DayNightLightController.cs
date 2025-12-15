@@ -13,14 +13,24 @@ public class DayNightLightController : MonoBehaviour
 
     [SerializeField] float lerpSpeed = 5f;
 
+    TimeManager _timeManager;
+    float _nextFindTime = 0f;
+
     float DayRatio()
     {
-        var timgManager = FindObjectOfType<TimeManager>(true);
-        if(!timgManager) return 0f;
+        // TimeManager가 없으면 0.5초에 한 번만 다시 찾기(매 프레임 탐색 방지)
+        if (_timeManager == null && Time.unscaledTime >= _nextFindTime)
+        {
+            _timeManager = FindObjectOfType<TimeManager>(true);
+            _nextFindTime = Time.unscaledTime + 0.5f;
+        }
 
-        float totalMin = timgManager.hour * 60f + timgManager.minute;
-        return Mathf.Repeat(totalMin / 1440f, 1f); // 0~1
+        if (_timeManager == null) return 0f;
+
+        float totalMin = _timeManager.hour * 60f + _timeManager.minute;
+        return Mathf.Repeat(totalMin / 1440f, 1f);
     }
+
     void Reset()
     {
         intensityCurve = new AnimationCurve(

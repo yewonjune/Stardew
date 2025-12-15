@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c23c0392b651f448eba1725f66b5e5, type: 3}
   m_Name: Aquamarine
   m_EditorClassIdentifier: 
-  itemName: 
+  itemId: Aquamarine
+  itemName: "\uC544\uCFE0\uC544\uB9C8\uB9B0"
   icon: {fileID: 1969484138, guid: 0c66aa529a220014d8cf4a84a708face, type: 3}
   isStackable: 1
-  resourceType: 5
+  maxStack: 99
+  canSell: 1
   sellPrice: 120
+  worldPrefab: {fileID: 0}
+  resourceType: 5

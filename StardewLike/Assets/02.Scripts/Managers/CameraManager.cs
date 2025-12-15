@@ -21,33 +21,38 @@ public class CameraManager : MonoBehaviour
 
     void Awake()
     {
+        if(Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         Instance = this;
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneEvent;
         SceneManager.activeSceneChanged += OnActiveSceneChanged;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneEvent;
         SceneManager.activeSceneChanged -= OnActiveSceneChanged;
     }
 
-    void OnSceneLoaded(Scene s, LoadSceneMode m)
-    {
-        RebindFollowTarget();
-        RescanAndRegisterAll();
-        if (!string.IsNullOrEmpty(currentKey)) SwitchTo(currentKey);
-    }
+    void OnSceneEvent(Scene s, LoadSceneMode m) => RefreshBindings();
+    void OnActiveSceneChanged(Scene prev, Scene next) => RefreshBindings();
 
-    void OnActiveSceneChanged(Scene prev, Scene next)
+    void RefreshBindings()
     {
         RebindFollowTarget();
+        CleanupDeadVCams();
         RescanAndRegisterAll();
-        if (!string.IsNullOrEmpty(currentKey)) SwitchTo(currentKey);
+
+        if (!string.IsNullOrEmpty(currentKey))
+            SwitchTo(currentKey);
     }
 
     public void RegisterVCam(string key, CinemachineVirtualCamera vcam)
@@ -84,7 +89,6 @@ public class CameraManager : MonoBehaviour
 
         if (!vcams.TryGetValue(k, out target) || !target)
         {
-            Debug.LogWarning($"[CameraManager] No VCam registered for '{k}'.");
             DebugPrintRegisteredKeys();
             return false;
         }
@@ -100,6 +104,8 @@ public class CameraManager : MonoBehaviour
 
     void RebindFollowTarget()
     {
+        followTarget = null;
+
         var playerGO = GameObject.FindGameObjectWithTag(playerTag);
         if (!playerGO) return;
 
@@ -125,6 +131,17 @@ public class CameraManager : MonoBehaviour
     {
         if (vcam && vcam.Priority != p) vcam.Priority = p;
     }
+    void CleanupDeadVCams()
+    {
+        // 파괴되었거나 null인 값 정리
+        var deadKeys = new List<string>();
+        foreach (var kv in vcams)
+            if (!kv.Value) deadKeys.Add(kv.Key);
+
+        for (int i = 0; i < deadKeys.Count; i++)
+            vcams.Remove(deadKeys[i]);
+    }
+
     public void RescanAndRegisterAll()
     {
         var regs = GameObject.FindObjectsOfType<VCamRegister>(true);

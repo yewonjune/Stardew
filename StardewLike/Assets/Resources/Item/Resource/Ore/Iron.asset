@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c23c0392b651f448eba1725f66b5e5, type: 3}
   m_Name: Iron
   m_EditorClassIdentifier: 
-  itemId: 
-  itemName: 
+  itemId: Iron
+  itemName: "\uCCA0"
   icon: {fileID: 1267103209, guid: 572bb35294ab715449c4c06f31b1fa55, type: 3}
   isStackable: 1
   maxStack: 99

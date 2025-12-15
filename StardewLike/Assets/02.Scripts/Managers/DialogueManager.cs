@@ -33,6 +33,11 @@ public class DialogueManager : MonoBehaviour
 
     void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
 
         if (dialoguePanel) dialoguePanel.SetActive(false);
@@ -167,6 +172,12 @@ public class DialogueManager : MonoBehaviour
     public void EndDialogue()
     {
         if (modalOpen) return;
+        if (!isDialogueActive) return;
+
+        if (currentData != null && currentData.npcData != null)
+        {
+            QuestManager.I?.OnTalkedTo(currentData.npcData.npcId);
+        }
         isDialogueActive = false;
 
         dialoguePanel.SetActive(false);

@@ -12,10 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9c23c0392b651f448eba1725f66b5e5, type: 3}
   m_Name: Stone
   m_EditorClassIdentifier: 
-  itemName: 
+  itemId: Stone
+  itemName: "\uB3CC"
   icon: {fileID: -367686186, guid: 0c66aa529a220014d8cf4a84a708face, type: 3}
   isStackable: 1
+  maxStack: 99
+  canSell: 1
+  sellPrice: 5
   worldPrefab: {fileID: 3547608915414989261, guid: f39085bcd43fd114288aa688699553f7,
     type: 3}
   resourceType: 0
-  sellPrice: 5

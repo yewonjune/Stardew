@@ -1,9 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using DG.Tweening;
-using static Unity.Collections.AllocatorManager;
 
 public class FadeManager : MonoBehaviour
 {
@@ -12,16 +9,30 @@ public class FadeManager : MonoBehaviour
     public CanvasGroup fadeCanvasGroup;
     public float fadeDuration = 1f;
 
+    Sequence _seq;
+
     void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+    }
 
+    void OnDisable()
+    {
+        _seq?.Kill();
+        _seq = null;
     }
 
     public void FadeOutIn(System.Action onFadeMiddle)
     {
         if (!fadeCanvasGroup) return;
+
+        _seq?.Kill();
+        _seq = null;
 
         fadeCanvasGroup.gameObject.SetActive(true);
         fadeCanvasGroup.blocksRaycasts = true;

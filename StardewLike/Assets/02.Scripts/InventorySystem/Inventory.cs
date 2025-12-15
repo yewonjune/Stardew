@@ -101,6 +101,9 @@ public class Inventory : MonoBehaviour
 
         items[idx] = new ItemStack(item, amount);
         onInventoryChanged?.Invoke();
+
+        QuestManager.I?.OnItemAdded(item.itemId, amount);
+
         return true;
     }
 

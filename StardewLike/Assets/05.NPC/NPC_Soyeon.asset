@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e41d3ddaf8ab30d478da4f87f9f25b23, type: 3}
-  m_Name: NPC1
+  m_Name: NPC_Soyeon
   m_EditorClassIdentifier: 
   npcData: {fileID: 11400000, guid: 7fd25ce53f02968429bb1d66e0526874, type: 2}
   sequences:

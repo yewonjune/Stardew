@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b01f6e04a5adc6d4095a2ff8b980077e, type: 3}
-  m_Name: NPC1_Data
+  m_Name: NPC_Miso_Data
   m_EditorClassIdentifier: 
-  npcId: Soyeon
-  displayName: "\uC18C\uC5F0"
-  defaultPortrait: {fileID: -727164244, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
-  happyPortrait: {fileID: -1358220341, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
-  angryPortrait: {fileID: -865682468, guid: aa65d5030ca534c4baba1f9fec77142b, type: 3}
-  surprisedPortrait: {fileID: 1947812678, guid: aa65d5030ca534c4baba1f9fec77142b,
+  npcId: Miso
+  displayName: "\uBBF8\uC18C"
+  defaultPortrait: {fileID: 356813160, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  happyPortrait: {fileID: 416084649, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  angryPortrait: {fileID: 701538050, guid: d0c48f4aaab6fa04cbdb1b0438b0971f, type: 3}
+  surprisedPortrait: {fileID: 1317701476, guid: d0c48f4aaab6fa04cbdb1b0438b0971f,
     type: 3}
   maxAffection: 100
   currentAffection: 0

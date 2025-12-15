@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c4ce982511ff042bf18ebbfc3a94d0, type: 3}
   m_Name: Slime
   m_EditorClassIdentifier: 
+  enemyId: Slime
   maxHp: 20
   moveSpeed: 2
   detectRadius: 3

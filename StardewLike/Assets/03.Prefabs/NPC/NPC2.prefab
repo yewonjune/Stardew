@@ -81,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &2366177315346230248
@@ -193,4 +193,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1090f2acde1568429fc7f7c9ff1c312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcId: Miso
   dialogueData: {fileID: 11400000, guid: a5eec7293572bd34c9ae4ebd20814d21, type: 2}
+  speed: 2.5
+  arriveDist: 0.05
+  wayPoints: []
+  autoLoopWayPoints: 1
+  startWithDefaultPath: 0
+  loadProgressOnStart: 1
+  autoSaveOnArrive: 1
+  autoSavePosition: 1
+  positionSaveInterval: 2

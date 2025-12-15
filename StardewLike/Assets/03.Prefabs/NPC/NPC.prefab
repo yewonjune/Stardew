@@ -109,10 +109,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1090f2acde1568429fc7f7c9ff1c312, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  npcId: Soyeon
   dialogueData: {fileID: 11400000, guid: 66ba338c8dd4ec940bc3e01c4cccd210, type: 2}
   speed: 0
-  target: {x: 0, y: 0, z: 0}
-  hasTarget: 0
+  arriveDist: 0.05
+  wayPoints: []
+  autoLoopWayPoints: 1
+  startWithDefaultPath: 0
+  loadProgressOnStart: 1
+  autoSaveOnArrive: 1
+  autoSavePosition: 1
+  positionSaveInterval: 2
 --- !u!1 &8961172874882226436
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,6 +201,6 @@ SpriteRenderer:
   m_Size: {x: 2, y: 2}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0

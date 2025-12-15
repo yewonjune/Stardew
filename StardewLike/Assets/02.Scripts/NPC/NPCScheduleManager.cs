@@ -5,7 +5,8 @@ using UnityEngine;
 public class NPCScheduleManager : MonoBehaviour
 {
     public TimeManager timeManager;
-    public NPCScheduleHolder[] npcs;
+
+    private readonly List<NPCScheduleHolder> npcs = new();
 
     void OnEnable()
     {
@@ -16,6 +17,7 @@ public class NPCScheduleManager : MonoBehaviour
 
         if (timeManager != null)
         {
+            timeManager.OnMinuteChanged -= OnMinuteChanged;
             timeManager.OnMinuteChanged += OnMinuteChanged;
         }
     }
@@ -27,21 +29,33 @@ public class NPCScheduleManager : MonoBehaviour
             timeManager.OnMinuteChanged -= OnMinuteChanged;
         }
     }
+    public void Register(NPCScheduleHolder holder)
+    {
+        if (holder == null) return;
+        if (!npcs.Contains(holder)) npcs.Add(holder);
+    }
+
+    public void Unregister(NPCScheduleHolder holder)
+    {
+        if (holder == null) return;
+        npcs.Remove(holder);
+    }
 
     void OnMinuteChanged(int hour, int minute)
     {
-        // 모든 NPC 검사
-        foreach (var holder in npcs)
+        for (int i = 0; i < npcs.Count; i++)
         {
+            var holder = npcs[i];
             if (holder == null || holder.schedules == null) continue;
 
             foreach (var entry in holder.schedules)
             {
-                    if (entry.hour == hour && entry.minute == minute && holder.movement != null && entry.path != null && entry.path.Length > 0)
-                    {
-                        holder.movement.SetPath(entry.path, false);
-                        break;
-                    }
+                if (entry.hour == hour && entry.minute == minute &&
+                    holder.movement != null && entry.path != null && entry.path.Length > 0)
+                {
+                    holder.movement.SetPath(entry.path, false);
+                    break;
+                }
             }
         }
     }

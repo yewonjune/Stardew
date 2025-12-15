@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Copper
   m_EditorClassIdentifier: 
   itemId: Copper
-  itemName: Copper
+  itemName: "\uAD6C\uB9AC"
   icon: {fileID: 2140948208, guid: 572bb35294ab715449c4c06f31b1fa55, type: 3}
   isStackable: 1
   maxStack: 99

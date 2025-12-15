@@ -28,7 +28,6 @@ public class NPCStateManager : MonoBehaviour
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     // --- 내부: 디스크 저장/로드 ---

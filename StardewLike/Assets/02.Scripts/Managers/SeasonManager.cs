@@ -28,7 +28,6 @@ public class SeasonManager : MonoBehaviour
         }
 
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     public void SetSeason(Season season)

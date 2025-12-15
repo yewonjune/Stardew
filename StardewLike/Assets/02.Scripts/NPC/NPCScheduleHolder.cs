@@ -14,4 +14,15 @@ public class NPCScheduleHolder : MonoBehaviour
 {
     public NPCMovement movement;
     public Schedule[] schedules;
+    NPCScheduleManager mgr;
+    void OnEnable()
+    {
+        mgr = FindObjectOfType<NPCScheduleManager>();
+        if (mgr != null) mgr.Register(this);
+    }
+
+    void OnDisable()
+    {
+        if (mgr != null) mgr.Unregister(this);
+    }
 }

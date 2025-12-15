@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41d3b4c0278b5ac408d46b9f65c490da, type: 3}
   m_Name: TomatoSeed
   m_EditorClassIdentifier: 
-  itemId: 
+  itemId: TomatoSeed
   itemName: "\uD1A0\uB9C8\uD1A0 \uC528\uC557"
   icon: {fileID: -1243415934, guid: 338eb9325b511bf4dbf0184fff5f5d9c, type: 3}
   isStackable: 1

@@ -19,7 +19,6 @@ public class PlayerWallet : MonoBehaviour
             return;
         }
         Instance = this;
-        DontDestroyOnLoad(gameObject);
     }
 
     void Start()

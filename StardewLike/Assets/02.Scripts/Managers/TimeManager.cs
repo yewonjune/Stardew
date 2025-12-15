@@ -59,10 +59,8 @@ public class TimeManager : MonoBehaviour
             AdvanceMinute();
         }
 
-
-        UpdateUI();
-
-        UpdateClockHand();
+        if (dayText && timeText) UpdateUI();
+        if (ClockHand) UpdateClockHand();
     }
 
     private void AdvanceMinute()
@@ -103,9 +101,7 @@ public class TimeManager : MonoBehaviour
             playerFatigueController.RecoverOnSleep(recoverAmount: 60f, fullRecover: false);
         }
 
-        Debug.Log($"Day {day} Ω√¿€!");
-
-        SoundManager.instance.PlaySFX("Chicken");
+        SoundManager.instance?.PlaySFX("Chicken");
 
         if (soilTilemapController) soilTilemapController.NewDay();
 
@@ -126,6 +122,8 @@ public class TimeManager : MonoBehaviour
 
     void UpdateUI()
     {
+        if (dayText == null || timeText == null) return;
+
         int dayOfYear = (day - 1) % 120;   // 0~119
         int seasonIndex = dayOfYear / 30;  // 0,1,2,3
         int dayInSeason = (dayOfYear % 30) + 1; // 1~30

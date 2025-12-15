@@ -91,6 +91,12 @@ public class EnemyBase : MonoBehaviour
     protected virtual void Die()
     {
         isDead = true;
+
+        if (stats != null)
+        {
+            QuestManager.I?.OnEnemyKilled(stats.enemyId);
+        }
+
         if (animator)
             animator.SetTrigger("Die");
 
