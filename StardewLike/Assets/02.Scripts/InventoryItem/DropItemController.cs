@@ -77,4 +77,12 @@ public class DropItemController : MonoBehaviour
     {
         canCollect = true;
     }
+
+    public void OnCollectFailed()
+    {
+        canCollect = false;
+        enableAutoCollect = false;
+
+        if (rb) rb.simulated = true;
+    }
 }

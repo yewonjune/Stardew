@@ -9,6 +9,12 @@ public class HealthBarUI : MonoBehaviour
     [SerializeField] PlayerHealthController playerHealthController;
     [SerializeField] Image fill;
 
+    private void Awake()
+    {
+        if(playerHealthController == null) 
+            playerHealthController = FindObjectOfType<PlayerHealthController>();
+    }
+
     void OnEnable()
     {
         if (playerHealthController)

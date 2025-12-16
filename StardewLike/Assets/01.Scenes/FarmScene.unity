@@ -31452,7 +31452,7 @@ GameObject:
   - component: {fileID: 973111620}
   - component: {fileID: 973111619}
   m_Layer: 0
-  m_Name: BlockedResourceTilemap
+  m_Name: noSpawnTilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41804,6 +41804,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundTilemap: {fileID: 1906559862}
+  noSpawnTilemap: {fileID: 973111620}
   rockPrefab: {fileID: 6317455990490287575, guid: 188a5a682b6ae114f8bec7b96b162ff3,
     type: 3}
   stumpPrefab: {fileID: 588474896257262439, guid: 17aaf935204ae4644a2c032d90cd9f19,

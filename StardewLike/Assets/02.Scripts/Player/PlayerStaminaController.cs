@@ -18,6 +18,8 @@ public class PlayerStaminaController : MonoBehaviour
     bool isRunning;
     bool exhausted;
 
+    public bool IsRunningUI => isRunning;
+
     void Awake()
     {
         if (!playerMovement) playerMovement = GetComponent<PlayerMovement>();

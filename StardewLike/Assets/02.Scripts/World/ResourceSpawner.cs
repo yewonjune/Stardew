@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class ResourceSpawner : MonoBehaviour
 {
     public Tilemap groundTilemap;
+    public Tilemap noSpawnTilemap;
 
     public GameObject rockPrefab;
     public GameObject stumpPrefab;
@@ -37,6 +38,9 @@ public class ResourceSpawner : MonoBehaviour
             if (!groundTilemap.HasTile(pos))
                 continue;
 
+            if (noSpawnTilemap != null && noSpawnTilemap.HasTile(pos))
+                continue;
+
             if (Random.value >= spawnProbability)
                 continue;
 
@@ -61,6 +65,10 @@ public class ResourceSpawner : MonoBehaviour
     {
         foreach (ResourceSave r in state.resources)
         {
+            var cell = groundTilemap.WorldToCell(r.position);
+            if (noSpawnTilemap != null && noSpawnTilemap.HasTile(cell))
+                continue;
+
             if (r.harvestedOrRemoved)
                 continue;
 

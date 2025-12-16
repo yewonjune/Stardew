@@ -37,6 +37,11 @@ public class ItemPickup : MonoBehaviour
             {
                 Destroy(gameObject);
             }
+            else
+            {
+                var drop = GetComponent<DropItemController>();
+                if (drop != null) drop.OnCollectFailed();
+            }
         }
     }
 }

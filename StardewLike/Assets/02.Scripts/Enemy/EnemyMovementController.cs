@@ -61,6 +61,11 @@ public class EnemyMovementController : MonoBehaviour
     [LabelText("마지막 공격 시간")]
     private float lastAttackTime = -999f;
 
+    public GameObject attackHitbox; // 인스펙터에 연결
+
+    public void Anim_AttackHitboxOn() { if (attackHitbox) attackHitbox.SetActive(true); }
+    public void Anim_AttackHitboxOff() { if (attackHitbox) attackHitbox.SetActive(false); }
+
 
     void Awake()
     {

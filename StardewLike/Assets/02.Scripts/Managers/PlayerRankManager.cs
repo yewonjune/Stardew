@@ -19,7 +19,7 @@ public class PlayerRankManager : MonoBehaviour
     bool initialized = false;
 
     [Header("UI - Panels")]
-    public GameObject coopPanel;
+    public GameObject farmboardPanel;
 
     [Header("UI - Gold Rank (위)")]
     public Text goldRankTitleText;
@@ -82,9 +82,8 @@ public class PlayerRankManager : MonoBehaviour
 
     public async void OpenRankPanel()
     {
-        // 1. 먼저 패널부터 켜기
-        if (coopPanel != null)
-            coopPanel.SetActive(true);
+        if (farmboardPanel != null)
+            farmboardPanel.SetActive(true);
         else
             Debug.LogWarning("[Rank] coopPanel 이 바인딩되어 있지 않음");
 
@@ -103,7 +102,7 @@ public class PlayerRankManager : MonoBehaviour
 
     public void CloseRankPanel()
     {
-        if (coopPanel) coopPanel.SetActive(false);
+        if (farmboardPanel) farmboardPanel.SetActive(false);
     }
 
     private async Task EnsureUserDoc()
@@ -363,7 +362,7 @@ public class PlayerRankManager : MonoBehaviour
 )
     {
         // FarmScene에서 보내준 UI 레퍼런스를 여기 저장
-        this.coopPanel = coopPanel;
+        this.farmboardPanel = coopPanel;
         this.emailText = emailText;
         this.nicknameText = nicknameText;
         this.farmNameText = farmNameText;

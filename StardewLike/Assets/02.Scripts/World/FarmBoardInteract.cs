@@ -35,7 +35,7 @@ public class FarmBoardInteract : MonoBehaviour
         if (rank == null)  return;
 
 
-        if (rank.coopPanel != null && rank.coopPanel.activeSelf)
+        if (rank.farmboardPanel != null && rank.farmboardPanel.activeSelf)
         {
             // 이미 열려 있으면 닫기
             rank.CloseRankPanel();

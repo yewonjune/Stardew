@@ -125,6 +125,10 @@ MonoBehaviour:
   fuseShortenDelay: 0.5
   preFlashDelay: 0.7
   explodeDelay: 0.4
+  radius: 1.5
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!58 &3533978007487769948
 CircleCollider2D:
   m_ObjectHideFlags: 0
