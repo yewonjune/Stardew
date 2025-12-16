@@ -75,4 +75,13 @@ public class CloudSaveService : MonoBehaviour
         if (!snap.Exists) return null;
         return JsonUtility.FromJson<SaveData>(snap.GetRawJsonValue());
     }
+
+    public async Task DeleteAsync(string slot)
+    {
+        if (!IsReady) await InitTask;
+        if (!IsReady || root == null) throw new NullReferenceException("Firebase DB not ready.");
+
+        await root.Child(SlotPath(slot)).RemoveValueAsync();
+        Debug.Log($"[CloudSave] Deleted -> {slot}");
+    }
 }

@@ -13,21 +13,36 @@ public class GameBootLoader : MonoBehaviour
 
         await svc.InitTask;
 
-        var tm = FindObjectOfType<TimeManager>();
+        var tm = FindObjectOfType<TimeManager>(); 
+        
+        string slot = BootParam.Slot;
 
-        var data = await svc.LoadAsync("slot1");
-        if (data != null)
+        // 1) 처음부터: 리셋(삭제 + 기본 저장)
+        if (BootParam.ForceNewGameReset)
         {
-            SaveBuilder.Apply(data, tm);
+            BootParam.ForceNewGameReset = false;
 
-            // 현재 씬의 타일/오브젝트를 즉시 반영하고 싶다면:
-            //   - 씬 리로드
-            //   - 또는 SoilTilemapController에 "ForceRebuildFromState()" 같은 메서드를 만들어 호출
-            foreach (var soil in FindObjectsOfType<SoilTilemapController>())
-            {
-                soil.ForceRebuildFromState();
-                soil.RestoreFromState();
-            }
+            await svc.DeleteAsync(slot);
+
+            var newData = SaveBuilder.BuildNewGameDefault();
+            await svc.SaveAsync(slot, newData);
+        }
+
+        // 2) 이어하기: 로드(없으면 기본 생성)
+        var data = await svc.LoadAsync(slot);
+        if (data == null)
+        {
+            Debug.LogWarning($"[Boot] No save found at {slot}. Creating default.");
+            data = SaveBuilder.BuildNewGameDefault();
+            await svc.SaveAsync(slot, data);
+        }
+
+        SaveBuilder.Apply(data, tm);
+
+        foreach (var soil in FindObjectsOfType<SoilTilemapController>())
+        {
+            soil.ForceRebuildFromState();
+            soil.RestoreFromState();
         }
     }
 

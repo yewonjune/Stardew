@@ -40,23 +40,39 @@ public class MenuController : MonoBehaviour
 
         if (startBtn != null)
             startBtn.onClick.AddListener(OnStartBtnClicked);
+        
+        if (exitBtn != null)
+            exitBtn.onClick.AddListener(OnExitClicked);
 
     }
     void OnNewGameClicked()
     {
-        newGamePanel.gameObject.SetActive(true);
+        //newGamePanel.gameObject.SetActive(true);
 
-        mainMenuPanel.DOAnchorPosX(mainMenuHideX, transitionDuration);
-        newGamePanel.DOAnchorPosX(newGameTargetX, transitionDuration);
+        //mainMenuPanel.DOAnchorPosX(mainMenuHideX, transitionDuration);
+        //newGamePanel.DOAnchorPosX(newGameTargetX, transitionDuration);
+
+        BootParam.ForceNewGameReset = true;
+        SceneManager.LoadScene("ManagerScene");
     }
 
     void OnStartBtnClicked()
     {
+        BootParam.ForceNewGameReset = false;
         SceneManager.LoadScene("ManagerScene");
     }
 
+    void OnExitClicked()
+    {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
+    }
 
-    public void ResetToDefault()
+
+public void ResetToDefault()
     {
         if (mainMenuPanel != null)
             mainMenuPanel.anchoredPosition = mainMenuStartPos;
@@ -66,10 +82,5 @@ public class MenuController : MonoBehaviour
             newGamePanel.anchoredPosition = newGameStartPos;
             newGamePanel.gameObject.SetActive(false);
         }
-    }
-
-    void OnCoopPanelCancelBtnClicked()
-    {
-        ResetToDefault();
     }
 }

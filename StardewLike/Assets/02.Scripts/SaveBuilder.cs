@@ -221,4 +221,40 @@ public static class SaveBuilder
             wsm.ReplaceAll(map);
         }
     }
+    public static SaveData BuildNewGameDefault()
+    {
+        var data = new SaveData();
+
+        data.meta = new MetaDTO
+        {
+            day = 1,
+            hour = 6,
+            minute = 0,
+            lastScene = "FarmScene",   // 너 구조상 FarmScene부터 시작이면 고정해도 OK
+            posX = 0f,
+            posY = 0f,
+            gold = 0,
+            nickname = "Player",
+            farmName = "MyFarm"
+        };
+
+        data.player = new PlayerDTO();
+
+        // 인벤토리: 너 프로젝트 기본 슬롯 수에 맞춰 변경해도 됨
+        int slotCnt = 24;
+        data.inventory = new InventoryDTO
+        {
+            slotCnt = slotCnt,
+            slots = new ItemStackDTO[slotCnt]
+        };
+        for (int i = 0; i < slotCnt; i++)
+            data.inventory.slots[i] = new ItemStackDTO { itemId = null, count = 0 };
+
+        // 월드/상점 초기화
+        data.world = new WorldDTO { scenes = System.Array.Empty<SceneEntryDTO>() };
+        data.store = new StoreDTO { items = System.Array.Empty<StoreItemDTO>() };
+
+        return data;
+    }
+
 }
