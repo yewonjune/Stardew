@@ -86,6 +86,8 @@ public class PlayerDeathFlow : MonoBehaviour
 
         CameraManager.Instance?.SwitchTo("House");
 
+        CaveStateManager.ResetToEntrance();
+
         yield return UnloadSceneIfLoaded("CaveScene");
 
         if (hp != null)
