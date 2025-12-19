@@ -20,8 +20,13 @@ public class CloudSaveService : MonoBehaviour
     public bool IsReady { get; private set; }
     public Task InitTask { get; private set; }
 
+    public static CloudSaveService Instance;
+
     void Awake()
     {
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
         InitTask = InitializeAsync();
     }
 
@@ -54,7 +59,12 @@ public class CloudSaveService : MonoBehaviour
         }
     }
 
-    string SlotPath(string slot) => $"users/{auth.CurrentUser.UserId}/saves/{slot}";
+    string SlotPath(string slot)
+    {
+        if (auth == null || auth.CurrentUser == null)
+            throw new InvalidOperationException("Auth user not ready.");
+        return $"users/{auth.CurrentUser.UserId}/saves/{slot}";
+    }
 
     public async Task SaveAsync(string slot, SaveData data)
     {

@@ -1,49 +1,61 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameBootLoader : MonoBehaviour
 {
+    static bool ran;
+
     async void Start()
     {
-        var svc = FindObjectOfType<CloudSaveService>();
-        if (svc == null) { Debug.LogError("CloudSaveService missing"); return; }
+        if (ran) { Destroy(gameObject); return; }
+        ran = true;
 
-        await svc.InitTask;
-
-        var tm = FindObjectOfType<TimeManager>(); 
-        
-        string slot = BootParam.Slot;
-
-        // 1) 처음부터: 리셋(삭제 + 기본 저장)
-        if (BootParam.ForceNewGameReset)
+        try
         {
-            BootParam.ForceNewGameReset = false;
+            var svc = FindObjectOfType<CloudSaveService>(true);
+            if (svc == null) { Debug.LogError("[Boot] CloudSaveService missing"); return; }
 
-            await svc.DeleteAsync(slot);
+            await svc.InitTask;
 
-            var newData = SaveBuilder.BuildNewGameDefault();
-            await svc.SaveAsync(slot, newData);
+            var tm = FindObjectOfType<TimeManager>(true);
+            if (tm == null) { Debug.LogError("[Boot] TimeManager missing"); return; }
+
+            string slot = BootParam.Slot;
+
+            if (BootParam.ForceNewGameReset)
+            {
+                BootParam.ForceNewGameReset = false;
+
+                await svc.DeleteAsync(slot);
+
+                var newData = SaveBuilder.BuildNewGameDefault();
+                await svc.SaveAsync(slot, newData);
+            }
+
+            var data = await svc.LoadAsync(slot);
+            if (data == null)
+            {
+                Debug.LogWarning($"[Boot] No save found at {slot}. Creating default.");
+                data = SaveBuilder.BuildNewGameDefault();
+                await svc.SaveAsync(slot, data);
+            }
+
+            SaveBuilder.Apply(data, tm);
+
+            // 씬 로드 타이밍에 따라 없을 수 있으니 비활성 포함
+            foreach (var soil in FindObjectsOfType<SoilTilemapController>(true))
+            {
+                soil.ForceRebuildFromState();
+                soil.RestoreFromState();
+            }
         }
-
-        // 2) 이어하기: 로드(없으면 기본 생성)
-        var data = await svc.LoadAsync(slot);
-        if (data == null)
+        catch (Exception e)
         {
-            Debug.LogWarning($"[Boot] No save found at {slot}. Creating default.");
-            data = SaveBuilder.BuildNewGameDefault();
-            await svc.SaveAsync(slot, data);
+            Debug.LogException(e);
         }
-
-        SaveBuilder.Apply(data, tm);
-
-        foreach (var soil in FindObjectsOfType<SoilTilemapController>())
+        finally
         {
-            soil.ForceRebuildFromState();
-            soil.RestoreFromState();
+            Destroy(gameObject);
         }
     }
-
 }
