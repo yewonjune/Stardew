@@ -12,10 +12,15 @@ public class GameBootLoader : MonoBehaviour
 
         try
         {
+            Debug.Log("[Boot] Start begin");
+
             var svc = FindObjectOfType<CloudSaveService>(true);
             if (svc == null) { Debug.LogError("[Boot] CloudSaveService missing"); return; }
 
             await svc.InitTask;
+            if (this == null) return;   // BootLoader가 파괴됐으면 중단
+            if (svc == null) return;    // svc가 파괴됐으면 중단
+            Debug.Log("[Boot] Firebase ready");
 
             var tm = FindObjectOfType<TimeManager>(true);
             if (tm == null) { Debug.LogError("[Boot] TimeManager missing"); return; }
@@ -26,6 +31,7 @@ public class GameBootLoader : MonoBehaviour
             {
                 BootParam.ForceNewGameReset = false;
 
+                Debug.Log("[Boot] ForceNewGameReset -> delete & create default");
                 await svc.DeleteAsync(slot);
 
                 var newData = SaveBuilder.BuildNewGameDefault();
@@ -33,6 +39,8 @@ public class GameBootLoader : MonoBehaviour
             }
 
             var data = await svc.LoadAsync(slot);
+            Debug.Log("[Boot] Load done. data=" + (data != null));
+
             if (data == null)
             {
                 Debug.LogWarning($"[Boot] No save found at {slot}. Creating default.");
@@ -40,14 +48,21 @@ public class GameBootLoader : MonoBehaviour
                 await svc.SaveAsync(slot, data);
             }
 
+            Debug.Log("[Boot] Apply begin");
             SaveBuilder.Apply(data, tm);
+            Debug.Log("[Boot] Apply end");
 
-            // 씬 로드 타이밍에 따라 없을 수 있으니 비활성 포함
+            // 씬/오브젝트 교체가 있을 수 있어서 한 프레임 늦추면 더 안전
+            await System.Threading.Tasks.Task.Yield();
+
+            Debug.Log("[Boot] Soil rebuild begin");
             foreach (var soil in FindObjectsOfType<SoilTilemapController>(true))
             {
+                if (!soil) continue;
                 soil.ForceRebuildFromState();
                 soil.RestoreFromState();
             }
+            Debug.Log("[Boot] Soil rebuild end");
         }
         catch (Exception e)
         {

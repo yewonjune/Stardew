@@ -53,12 +53,15 @@ public class MenuController : MonoBehaviour
         //newGamePanel.DOAnchorPosX(newGameTargetX, transitionDuration);
 
         BootParam.ForceNewGameReset = true;
+        BootParam.PlayIntroCutscene = true;
         SceneManager.LoadScene("ManagerScene");
     }
 
     void OnStartBtnClicked()
     {
         BootParam.ForceNewGameReset = false;
+        BootParam.PlayIntroCutscene = false;
+
         SceneManager.LoadScene("ManagerScene");
     }
 
