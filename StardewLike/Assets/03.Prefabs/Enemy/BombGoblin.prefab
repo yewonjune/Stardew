@@ -191,6 +191,9 @@ MonoBehaviour:
   knockbackDuration: 0.1
   stunDuration: 0.1
   defaultFacingRight: 1
+  damagePopupPrefab: {fileID: 1958868615534708261, guid: 667e83e0897e946499653891b7f37012,
+    type: 3}
+  damagePopupOffset: {x: 0, y: 0.8, z: 0}
 --- !u!114 &765182440504170709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,8 +215,6 @@ MonoBehaviour:
   homeRadius: 3
   attackRange: 3
   attackCooldown: 3
-  prepareTime: 0.5
-  fleeDelay: 0.4
   attackAnimDuration: 0.7
   fleeSpeedMultiplier: 1.5
   fleeDistance: 6

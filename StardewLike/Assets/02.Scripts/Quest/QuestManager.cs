@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class QuestManager : MonoBehaviour
@@ -41,6 +42,25 @@ public class QuestManager : MonoBehaviour
         return true;
     }
 
+    public List<QuestData> GetRandomQuests(int count)
+    {
+        if (questDB == null) return new List<QuestData>();
+
+        var candidates = questDB
+            .Where(q => q != null && !active.ContainsKey(q.questId))
+            .ToList();
+
+        int take = Mathf.Min(count, candidates.Count);
+
+        for (int i = 0; i < candidates.Count; i++)
+        {
+            int j = UnityEngine.Random.Range(i, candidates.Count);
+            (candidates[i], candidates[j]) = (candidates[j], candidates[i]);
+        }
+
+        return candidates.Take(take).ToList();
+    }
+
     public void OnItemAdded(string itemId, int amount)
         => HandleEvent(ObjectiveType.Collect, itemId, amount);
 
@@ -78,12 +98,15 @@ public class QuestManager : MonoBehaviour
 
                 int cur = state.currentCounts[i];
                 int next = Mathf.Min(obj.requiredCount, cur + delta);
+
                 if (next != cur)
                 {
                     state.currentCounts[i] = next;
                     changed = true;
+                    anyChanged = true;
                 }
             }
+
 
             if (changed && IsQuestComplete(data, state))
             {
@@ -113,4 +136,21 @@ public class QuestManager : MonoBehaviour
 
     private QuestData GetData(string questId)
     => questDB.Find(q => q.questId == questId);
+
+    public QuestData GetRandomQuest()
+    {
+        if (questDB == null || questDB.Count == 0) return null;
+
+        // 후보 만들기 (수락한 건 제외)
+        List<QuestData> candidates = new();
+        foreach (var q in questDB)
+        {
+            if (q == null) continue;
+            if (active.ContainsKey(q.questId)) continue;
+            candidates.Add(q);
+        }
+
+        if (candidates.Count == 0) return null;
+        return candidates[UnityEngine.Random.Range(0, candidates.Count)];
+    }
 }

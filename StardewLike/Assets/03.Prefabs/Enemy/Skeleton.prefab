@@ -304,6 +304,9 @@ MonoBehaviour:
   knockbackDuration: 0.1
   stunDuration: 0.1
   defaultFacingRight: 1
+  damagePopupPrefab: {fileID: 1958868615534708261, guid: 667e83e0897e946499653891b7f37012,
+    type: 3}
+  damagePopupOffset: {x: 0, y: 0.8, z: 0}
   reviveDelay: 5
   dieStateName: SkeletonDie
   dieClip: {fileID: 7400000, guid: 8834fb67563d65546a7e2faeddeeac74, type: 2}

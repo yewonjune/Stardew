@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
+using UnityEngine.Tilemaps;
 
 public class PlayerUseTool : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class PlayerUseTool : MonoBehaviour
     [LabelText("Soil Tilemap Controller")]
     [SerializeField] SoilTilemapController soilTilemapController;
 
+    [FoldoutGroup("References/General")]
+    [LabelText("Tile Placement Service")]
+    [SerializeField] TilePlacer tilePlacer;
+
     // ================== 공통 도구 설정 ==================
     [TitleGroup("Tool Settings")]
     [FoldoutGroup("Tool Settings/General", Expanded = true)]
@@ -47,6 +52,14 @@ public class PlayerUseTool : MonoBehaviour
     [FoldoutGroup("Tool Settings/General")]
     [LabelText("자원 레이어 (돌/나무 등)")]
     [SerializeField] LayerMask resourceLayer = ~0;
+
+    [FoldoutGroup("Tool Settings/General")]
+    [LabelText("울타리 부수면 돌려줄 아이템(울타리 Placeable)")]
+    [SerializeField] PlaceableTileData fencePlaceableItem;
+
+    [FoldoutGroup("Tool Settings/General")]
+    [LabelText("울타리 부수기 도구 허용(곡괭이/도끼)")]
+    [SerializeField] bool allowBreakFenceWithPickaxe = true;
 
     // ================== 검 설정 ==================
     [TitleGroup("Sword Settings")]
@@ -90,6 +103,7 @@ public class PlayerUseTool : MonoBehaviour
         SceneManager.sceneLoaded += OnSceneLoaded;
         SceneManager.activeSceneChanged += OnActiveSceneChanged;
         RebindSoilController();
+        RebindTilePlacer();
     }
 
     void OnDisable()
@@ -101,12 +115,16 @@ public class PlayerUseTool : MonoBehaviour
     void OnActiveSceneChanged(Scene prev, Scene next)
     {
         RebindSoilController();
+        RebindTilePlacer();
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         if (scene == SceneManager.GetActiveScene())
+        { 
             RebindSoilController();
+            RebindTilePlacer();
+        }
     }
 
     void RebindSoilController()
@@ -161,6 +179,18 @@ public class PlayerUseTool : MonoBehaviour
             {
                 TryPlantSeed(seed);
             }
+            else if (selectedItem is PlaceableTileData placeable)
+            {
+                if (tilePlacer == null) RebindTilePlacer();
+                if (tilePlacer == null) return;
+
+                // 플레이어 앞칸 셀
+                Vector3Int targetCell = GetFrontCellByTarget(placeable.target);
+                bool ok = tilePlacer.TryPlaceAtCell(placeable, targetCell);
+
+                if (ok)
+                    Inventory.instance?.RemoveItem(placeable, 1);
+            }
             else
             {
                 TryHarvestAtTarget();
@@ -183,25 +213,21 @@ public class PlayerUseTool : MonoBehaviour
                 DigSoilWithHoe();
                 break;
 
-            case ToolType.Pickaxe:      // 돌 깨기
-
-            case ToolType.Axe:          // 나무 베기
-            case ToolType.Scythe:       // 작물 베기(?)
+            case ToolType.Pickaxe:
+            case ToolType.Axe:
+           // case ToolType.Scythe:
                 BreakResourceWithTool(tool);
                 break;
 
             case ToolType.WateringCan:
-                // 물 뿌리기
                 WaterCropWithWateringCan();
                 break;
 
             case ToolType.Sword:
-                // 공격
                 AttackWithSword();
                 break;
 
             case ToolType.Fishingrod:
-                //낚시
                 FishingWithFishingrod();
                 break;
         }
@@ -229,6 +255,7 @@ public class PlayerUseTool : MonoBehaviour
         mouseWorld.z = 0f;
         Vector3Int clickedCell = soilTilemapController.groundTilemap.WorldToCell(mouseWorld);
 
+        // 방향 기준 허용 범위 안에서만 갈기 허용
         int range = 1;
         int dx = clickedCell.x - targetCell.x;
         int dy = clickedCell.y - targetCell.y;
@@ -302,8 +329,6 @@ public class PlayerUseTool : MonoBehaviour
                 enemy.TakeDamage(swordDamage, hitDir);
             }
         }
-
-        // playerFatigueController?.AddByTool(ToolType.Sword);
     }
 
     void FishingWithFishingrod()
@@ -327,6 +352,7 @@ public class PlayerUseTool : MonoBehaviour
 
     void BreakResourceWithTool(Tools tool)
     {
+        // "물리 콜라이더가 있는 자원(돌/나무/광산자원)"을 때림
         Collider2D collider = Physics2D.OverlapCircle(useToolPoint.position, hitRadius, resourceLayer);
         if (collider != null)
         {
@@ -350,14 +376,26 @@ public class PlayerUseTool : MonoBehaviour
             }
         }
 
+        // 울타리 부수기
+        if ((tool.toolType == ToolType.Pickaxe && allowBreakFenceWithPickaxe) || tool.toolType == ToolType.Axe)
+        {
+            if (TryBreakFenceAtFront())
+            {
+                StartToolAction(tool.toolType);
+                playerFatigueController?.AddByTool(tool.toolType);
+                return;
+            }
+        }
+
+        // 갈린 땅 복구
         if (tool.toolType == ToolType.Pickaxe && soilTilemapController != null)
         {
             Vector3 world = GetTargetWorldPos();
-
             if (soilTilemapController.TryClearSoilAtWorldPos(world))
             {
                 StartToolAction(tool.toolType);
                 playerFatigueController?.AddByTool(tool.toolType);
+                return;
             }
         }
     }
@@ -472,5 +510,84 @@ public class PlayerUseTool : MonoBehaviour
         }
 
         return false;
+    }
+    void RebindTilePlacer()
+    {
+        tilePlacer = null;
+
+        var all = FindObjectsOfType<TilePlacer>(includeInactive: true);
+        if (all == null || all.Length == 0) return;
+
+        float best = float.PositiveInfinity;
+        TilePlacer bestPlacer = null;
+        Vector3 p = transform.position;
+
+        foreach (var t in all)
+        {
+            if (t == null) continue;
+            if (!t.gameObject.scene.isLoaded) continue; // 로드된 씬만
+            float d = (t.transform.position - p).sqrMagnitude;
+            if (d < best) { best = d; bestPlacer = t; }
+        }
+
+        tilePlacer = bestPlacer ?? all[0];
+    }
+
+    Vector3Int GetFrontCellByTarget(PlaceTarget target)
+    {
+        Tilemap refMap = null;
+        if (tilePlacer != null)
+        {
+            if (target == PlaceTarget.Fence) refMap = tilePlacer.fenceTilemap;
+            else if (target == PlaceTarget.Path) refMap = tilePlacer.pathTilemap;
+            else if (target == PlaceTarget.Decor) refMap = tilePlacer.decorTilemap;
+        }
+
+        if (refMap == null)
+        {
+            return Vector3Int.zero;
+        }
+
+        Vector3Int playerCell = refMap.WorldToCell(transform.position);
+
+        Vector2 d = (playerMovement != null && playerMovement.lastDirection.sqrMagnitude > 0.0001f)
+            ? playerMovement.lastDirection
+            : Vector2.down;
+
+        Vector3Int offset;
+        if (Mathf.Abs(d.x) >= Mathf.Abs(d.y))
+            offset = (d.x >= 0) ? Vector3Int.right : Vector3Int.left;
+        else
+            offset = (d.y >= 0) ? Vector3Int.up : Vector3Int.down;
+
+        return playerCell + offset;
+    }
+
+    bool TryBreakFenceAtFront()
+    {
+        if (tilePlacer == null) RebindTilePlacer();
+        if (tilePlacer == null) return false;
+        if (tilePlacer.fenceTilemap == null) return false;
+
+        Vector3Int cell = GetFrontCellByTarget(PlaceTarget.Fence);
+
+        // fenceTilemap에 타일이 있어야만 부숨
+        if (tilePlacer.fenceTilemap.GetTile(cell) == null) return false;
+
+        tilePlacer.fenceTilemap.SetTile(cell, null);
+        tilePlacer.fenceTilemap.RefreshTile(cell);
+
+        // 저장 상태(WorldState)에서도 반드시 제거
+        if (WorldStateManager.Instance != null)
+        {
+            string sceneName = tilePlacer.fenceTilemap.gameObject.scene.name;
+            WorldStateManager.Instance.RemoveFenceCell(sceneName, cell);
+        }
+
+        // 아이템 반환
+        if (fencePlaceableItem != null)
+            Inventory.instance?.AddItem(fencePlaceableItem, 1);
+
+        return true;
     }
 }

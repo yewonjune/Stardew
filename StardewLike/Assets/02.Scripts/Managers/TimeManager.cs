@@ -108,11 +108,25 @@ public class TimeManager : MonoBehaviour
         // === 여기서 저장 ===
         try
         {
-            var svc = FindObjectOfType<CloudSaveService>();
-            var player = FindObjectOfType<PlayerMovement>()?.transform ?? this.transform;
+            var svc = CloudSaveService.Instance ?? FindObjectOfType<CloudSaveService>(true);
+            if (svc == null) { Debug.LogError("[EndDay] CloudSaveService missing"); return; }
+            await svc.InitTask;
+
+            var inv = Inventory.instance;
+            if (inv == null) { Debug.LogError("[EndDay] Inventory.instance missing"); return; }
+
+            if (PlayerWallet.Instance == null) { Debug.LogError("[EndDay] PlayerWallet.Instance missing"); return; }
+
+            if (WorldStateManager.Instance == null) { Debug.LogError("[EndDay] WorldStateManager.Instance missing"); return; }
+
+            var player = GameObject.FindGameObjectWithTag("Player")?.transform
+                         ?? FindObjectOfType<PlayerMovement>(true)?.transform;
+            if (player == null) { Debug.LogError("[EndDay] Player transform missing"); return; }
 
             var data = SaveBuilder.Build(this, player);
-            await svc.SaveAsync("slot1", data);
+            await svc.SaveAsync(BootParam.Slot, data);
+
+            Debug.Log("[EndDay] Save OK");
         }
         catch (System.Exception ex)
         {

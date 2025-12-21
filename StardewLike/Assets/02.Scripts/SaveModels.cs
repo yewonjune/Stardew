@@ -65,6 +65,7 @@ public class SceneStateDTO
     public CellDTO[] watered;
     public CropDTO[] crops;
     public ResourceDTO[] resources;
+    public CellDTO[] fences;
     public bool initialSpawnDone;
 }
 

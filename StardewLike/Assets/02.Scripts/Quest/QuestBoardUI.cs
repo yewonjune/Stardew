@@ -38,7 +38,7 @@ public class QuestBoardUI : MonoBehaviour
 
     public void Open()
     {
-        if (quest == null || QuestManager.I == null) return;
+        if (quest == null) return;
 
         if (!isOpen) //처음 열 때만 Lock
         {
@@ -46,12 +46,20 @@ public class QuestBoardUI : MonoBehaviour
             panel.SetActive(true);
             PlayerActionLock.Lock("QuestBoard");
         }
+        quest = QuestManager.I.GetRandomQuest();
 
         RefreshUI();
     }
 
     void RefreshUI()
     {
+        if (quest == null)
+        {
+            if (questDescText) questDescText.text = "현재 수락 가능한 퀘스트가 없어.";
+            if (acceptBtn) acceptBtn.interactable = false;
+            return;
+        }
+
         if (questDescText) questDescText.text = quest.description;
 
         bool alreadyAccepted = QuestManager.I.Active.ContainsKey(quest.questId);

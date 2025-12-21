@@ -31,6 +31,6 @@ MonoBehaviour:
   - item: {fileID: 11400000, guid: c8e25fdc2297ceb4886e5f1e78a77fe4, type: 2}
     buyPrice: 1500
     stock: 2
-  - item: {fileID: 11400000, guid: 885d71842ed8a95439985ee21ed36999, type: 2}
-    buyPrice: 0
+  - item: {fileID: 11400000, guid: b7c1e49d6804abc4b98840e76ab50cba, type: 2}
+    buyPrice: 1
     stock: -1

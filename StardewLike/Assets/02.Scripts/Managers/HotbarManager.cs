@@ -116,4 +116,6 @@ public class HotbarManager : MonoBehaviour
     {
         return selectedIndex;
     }
+
+
 }

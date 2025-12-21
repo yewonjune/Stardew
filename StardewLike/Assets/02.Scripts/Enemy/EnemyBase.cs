@@ -23,6 +23,9 @@ public class EnemyBase : MonoBehaviour
     // ¿ÞÂÊ: false / ¿À¸¥ÂÊ : true
     public bool defaultFacingRight = false;
 
+    [SerializeField] DamagePopup damagePopupPrefab;
+    [SerializeField] Vector3 damagePopupOffset = new Vector3(0f, 0.8f, 0f);
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
@@ -34,7 +37,13 @@ public class EnemyBase : MonoBehaviour
         if (isDead) return;
 
         currentHp -= damage;
-        
+
+        if (damagePopupPrefab != null)
+        {
+            var popup = Instantiate(damagePopupPrefab, transform.position + damagePopupOffset, Quaternion.identity);
+            popup.Play(damage, isCrit: false);
+        }
+
         if (currentHp <= 0)
         {
             Die();

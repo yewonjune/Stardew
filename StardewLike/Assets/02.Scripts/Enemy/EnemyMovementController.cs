@@ -61,6 +61,11 @@ public class EnemyMovementController : MonoBehaviour
     [LabelText("마지막 공격 시간")]
     private float lastAttackTime = -999f;
 
+    [FoldoutGroup("Attack Settings")]
+    [ShowInInspector, ReadOnly]
+    [LabelText("공격 중")]
+    private bool isAttacking;
+
     public GameObject attackHitbox; // 인스펙터에 연결
 
     public void Anim_AttackHitboxOn() { if (attackHitbox) attackHitbox.SetActive(true); }
@@ -91,7 +96,7 @@ public class EnemyMovementController : MonoBehaviour
             return;
         }
 
-        if (player == null || enemy == null || enemy.enabled == false || enemy.IsKnockback)
+        if (player == null || enemy == null || enemy.enabled == false || enemy.IsKnockback || isAttacking)
         {
             SetIdle();
             return;
@@ -165,6 +170,8 @@ public class EnemyMovementController : MonoBehaviour
     }
     void TryAttack()
     {
+        if (isAttacking) return;
+
         if (Time.time - lastAttackTime < attackCooldown)
             return;
 
@@ -207,5 +214,19 @@ public class EnemyMovementController : MonoBehaviour
     {
         float t = Random.Range(wanderInterval.x, wanderInterval.y);
         nextWanderChangeTime = Time.time + t;
+    }
+
+    public void Anim_AttackStart()
+    {
+        isAttacking = true;
+        moveDir = Vector2.zero;
+
+        if (rb != null) rb.velocity = Vector2.zero; // 미끄러짐(관성) 끊기
+    }
+
+    public void Anim_AttackEnd()
+    {
+        isAttacking = false;
+        if (attackHitbox) attackHitbox.SetActive(false); // 혹시 켜진 채로 남는 경우 방지
     }
 }

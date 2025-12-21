@@ -52,7 +52,6 @@ public class GameBootLoader : MonoBehaviour
             SaveBuilder.Apply(data, tm);
             Debug.Log("[Boot] Apply end");
 
-            // 씬/오브젝트 교체가 있을 수 있어서 한 프레임 늦추면 더 안전
             await System.Threading.Tasks.Task.Yield();
 
             Debug.Log("[Boot] Soil rebuild begin");
@@ -61,6 +60,12 @@ public class GameBootLoader : MonoBehaviour
                 if (!soil) continue;
                 soil.ForceRebuildFromState();
                 soil.RestoreFromState();
+            }
+
+            foreach (var placer in FindObjectsOfType<TilePlacer>(true))
+            {
+                if (!placer) continue;
+                placer.RestoreFencesFromState();
             }
             Debug.Log("[Boot] Soil rebuild end");
         }

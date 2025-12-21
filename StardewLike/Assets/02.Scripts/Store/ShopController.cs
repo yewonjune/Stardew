@@ -25,6 +25,8 @@ public class ShopController : MonoBehaviour
 
     List<ShopItemButton> spawned = new List<ShopItemButton>();
 
+    public bool IsOpen { get; private set; }
+
     void Awake()
     {
         if (!inventoryLayout)
@@ -42,6 +44,9 @@ public class ShopController : MonoBehaviour
 
     public void OpenShop(ShopCatalog data = null)
     {
+        if (IsOpen) return;
+        IsOpen = true;
+
         if (data) catalog = data;
         BuildList();
 
@@ -66,6 +71,9 @@ public class ShopController : MonoBehaviour
 
     public void CloseShop()
     {
+        if (!IsOpen) return;
+        IsOpen = false;
+
         if (shopPanel) shopPanel.SetActive(false);
         if (inventoryUI) inventoryUI.Show(false);
 
@@ -284,5 +292,11 @@ public class ShopController : MonoBehaviour
         wallet.Earn(price * amount);
         RefreshGold();
         hintText.text = $"[{stack.item.itemName}] {amount}°³ ÆÇ¸Å! (+{price * amount}°ñµå)";
+    }
+
+    void OnDisable()
+    {
+        if (IsOpen) CloseShop();
+        else PlayerActionLock.Unlock("OpenShop");
     }
 }

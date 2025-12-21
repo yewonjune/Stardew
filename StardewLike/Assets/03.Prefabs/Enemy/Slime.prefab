@@ -284,6 +284,9 @@ MonoBehaviour:
   knockbackDuration: 0.5
   stunDuration: 0.5
   defaultFacingRight: 0
+  damagePopupPrefab: {fileID: 1958868615534708261, guid: 667e83e0897e946499653891b7f37012,
+    type: 3}
+  damagePopupOffset: {x: 0, y: 0.8, z: 0}
 --- !u!114 &9213885425411284756
 MonoBehaviour:
   m_ObjectHideFlags: 0

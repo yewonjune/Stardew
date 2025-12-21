@@ -28,6 +28,7 @@ public class SceneState
     public HashSet<Vector3Int> watered = new();     // 물 준 타일
     public Dictionary<Vector3Int, CropSave> crops = new(); // 심은 작물
     public List<ResourceSave> resources = new();    // 바위/그루터기 등
+    public HashSet<Vector3Int> fences = new();
     public bool initialSpawnDone;                   // 랜덤 스폰 1회 제한 플래그
 }
 
@@ -114,6 +115,19 @@ public class WorldStateManager : MonoBehaviour
         var s = GetOrCreate(sceneName);
         var idx = s.resources.FindIndex(r => (r.position - position).sqrMagnitude < 0.0001f);
         if (idx >= 0) s.resources[idx].harvestedOrRemoved = true;
+    }
+
+    // Fence
+    public void AddFenceCell(string scene, Vector3Int cell)
+    {
+        var st = GetOrCreate(scene);
+        st.fences.Add(new Vector3Int(cell.x, cell.y, 0));
+    }
+
+    public void RemoveFenceCell(string scene, Vector3Int cell)
+    {
+        var st = GetOrCreate(scene);
+        st.fences.Remove(new Vector3Int(cell.x, cell.y, 0));
     }
 
     // --- Scene load hook: 복원 트리거 -----------------------------------

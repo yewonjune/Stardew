@@ -69,6 +69,7 @@ public static class SaveBuilder
                 watered = ToCells(st.watered),
                 crops = ToCrops(st.crops),
                 resources = ToResources(st.resources),
+                fences = ToCells(st.fences),
                 initialSpawnDone = st.initialSpawnDone
             };
             sceneList.Add(new SceneEntryDTO { scene = scene, state = dto });
@@ -214,6 +215,10 @@ public static class SaveBuilder
                         });
                     }
 
+                if(e.state.fences != null)
+                    foreach(var c in e.state.fences)
+                        st.fences.Add(new Vector3Int(c.x, c.y, 0));
+
                 st.initialSpawnDone = e.state.initialSpawnDone;
                 map[e.scene] = st;
             }
@@ -230,18 +235,17 @@ public static class SaveBuilder
             day = 1,
             hour = 6,
             minute = 0,
-            lastScene = "FarmScene",   // 너 구조상 FarmScene부터 시작이면 고정해도 OK
+            lastScene = "FarmScene",
             posX = 0f,
             posY = 0f,
-            gold = 0,
+            gold = 500,
             nickname = "Player",
             farmName = "MyFarm"
         };
 
         data.player = new PlayerDTO();
 
-        // 인벤토리: 너 프로젝트 기본 슬롯 수에 맞춰 변경해도 됨
-        int slotCnt = 24;
+        int slotCnt = 10;
         data.inventory = new InventoryDTO
         {
             slotCnt = slotCnt,
@@ -249,6 +253,13 @@ public static class SaveBuilder
         };
         for (int i = 0; i < slotCnt; i++)
             data.inventory.slots[i] = new ItemStackDTO { itemId = null, count = 0 };
+
+        data.inventory.slots[0] = new ItemStackDTO { itemId = "Hoe", count = 1 };
+        data.inventory.slots[1] = new ItemStackDTO { itemId = "WateringCan", count = 1 };
+        data.inventory.slots[2] = new ItemStackDTO { itemId = "Axe", count = 1 };
+        data.inventory.slots[3] = new ItemStackDTO { itemId = "Pickaxe", count = 1 };
+        data.inventory.slots[4] = new ItemStackDTO { itemId = "Sword", count = 1 };
+        data.inventory.slots[5] = new ItemStackDTO { itemId = "Fishingrod", count = 1 };
 
         // 월드/상점 초기화
         data.world = new WorldDTO { scenes = System.Array.Empty<SceneEntryDTO>() };

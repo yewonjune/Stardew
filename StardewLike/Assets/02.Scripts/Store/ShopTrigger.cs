@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ShopTrigger : MonoBehaviour
 {
@@ -9,8 +10,12 @@ public class ShopTrigger : MonoBehaviour
 
     void OnMouseDown()
     {
-        shopController.OpenShop();
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+            return;
 
-        PlayerActionLock.Lock("OpenShop");
+        if (shopController == null) return;
+        if (shopController.IsOpen) return;
+
+        shopController.OpenShop(shopCatalog);
     }
 }

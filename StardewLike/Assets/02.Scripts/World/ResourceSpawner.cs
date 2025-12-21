@@ -10,8 +10,9 @@ public class ResourceSpawner : MonoBehaviour
 
     public GameObject rockPrefab;
     public GameObject stumpPrefab;
+    public GameObject[] treePrefabs;
 
-    public float spawnProbability = 0.05f;
+    public float spawnProbability = 0.1f;
     public LayerMask resourceLayer;
 
     // Start is called before the first frame update
@@ -44,11 +45,32 @@ public class ResourceSpawner : MonoBehaviour
             if (Random.value >= spawnProbability)
                 continue;
 
-            GameObject resoucePrefab = (Random.value < 0.5f) ? rockPrefab : stumpPrefab;
+            float r = Random.value;
+            GameObject resourcePrefab = null;
+
+            if (r < 0.5f)      // 50%
+            {
+                if (treePrefabs != null && treePrefabs.Length > 0)
+                {
+                    int idx = Random.Range(0, treePrefabs.Length);
+                    resourcePrefab = treePrefabs[idx];
+                }
+
+            }
+            else if (r < 0.8f)
+            {
+                resourcePrefab = rockPrefab;      // 30%
+            }
+            else
+            {
+                resourcePrefab = stumpPrefab;     // 20%
+            }
+
+            if (resourcePrefab == null) return;
 
             Vector3 worldPos = groundTilemap.GetCellCenterWorld(pos);
-            GameObject go = Instantiate(resoucePrefab, worldPos, Quaternion.identity, transform);
-            string id = resoucePrefab.name;
+            GameObject go = Instantiate(resourcePrefab, worldPos, Quaternion.identity, transform);
+            string id = resourcePrefab.name;
 
             WorldStateManager.Instance.AddResource(
                 gameObject.scene.name,
