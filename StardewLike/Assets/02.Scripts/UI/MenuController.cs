@@ -54,7 +54,7 @@ public class MenuController : MonoBehaviour
 
         BootParam.ForceNewGameReset = true;
         BootParam.PlayIntroCutscene = true;
-        SceneManager.LoadScene("ManagerScene");
+        SceneManager.LoadScene("OpeningScene");
     }
 
     void OnStartBtnClicked()
