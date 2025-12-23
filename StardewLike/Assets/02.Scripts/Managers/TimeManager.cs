@@ -93,6 +93,7 @@ public class TimeManager : MonoBehaviour
         hour = 6;
         minute = 0;
 
+        CheckWeatherByDate();
         SeasonManager.Instance?.OnNewDay(day);
 
         PlayerFatigueController playerFatigueController = FindObjectOfType<PlayerFatigueController>(true);
@@ -216,5 +217,38 @@ public class TimeManager : MonoBehaviour
         float angle = Mathf.Lerp(-90f, 90f, t);
 
         ClockHand.rectTransform.localRotation = Quaternion.Euler(0, 0, angle);
+    }
+
+    void CheckWeatherByDate()
+    {
+        int dayOfYear = (day - 1) % 120;
+        int seasonIndex = dayOfYear / 30;   // 0=º½, 1=¿©¸§, 2=°¡À», 3=°Ü¿ï
+        int dayInSeason = (dayOfYear % 30) + 1;
+
+        var weather = WeatherController.Instance;
+        if (weather == null) return;
+
+        // º½ 4ÀÏÂ÷¿¡ ºñ ¹«Á¶°Ç
+        if ((Season)seasonIndex == Season.Spring && dayInSeason == 4)
+        {
+            weather.SetRain(true);
+            return;
+        }
+
+        // °Ü¿ï¿¡ ´«
+        if ((Season)seasonIndex == Season.Winter)
+        {
+            weather.SetSnow(true);
+            return;
+        }
+
+        // º½ 5ÀÏÂ÷¿¡ ²ÉÀÙ ¹«Á¶°Ç
+        if ((Season)seasonIndex == Season.Spring && dayInSeason == 5)
+        {
+            weather.SetPetals(true);
+            return;
+        }
+
+        weather.ClearAllWeather();
     }
 }
