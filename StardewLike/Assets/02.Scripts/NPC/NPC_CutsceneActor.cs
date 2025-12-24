@@ -30,7 +30,6 @@ public class NPC_CutsceneActor : MonoBehaviour
 
     IEnumerator CoMoveTo(Vector3 target, System.Action onArrive)
     {
-        // Z 고정(2D) 원하면 유지
         target.z = transform.position.z;
 
         while (true)
@@ -38,8 +37,7 @@ public class NPC_CutsceneActor : MonoBehaviour
             Vector3 delta = target - transform.position;
             float dist = delta.magnitude;
 
-            if (dist <= 0.02f)
-                break;
+            if (dist <= 0.02f) break;
 
             Vector2 dir = ((Vector2)delta).normalized;
             SetWalking(true, dir);
@@ -63,7 +61,6 @@ public class NPC_CutsceneActor : MonoBehaviour
 
         animator.SetBool("IsMoving", walking);
 
-        // 방향 파라미터를 쓰는 타입이면 업데이트
         if (dir.sqrMagnitude > 0.0001f)
         {
             animator.SetFloat("MoveX", dir.x);
@@ -76,7 +73,6 @@ public class NPC_CutsceneActor : MonoBehaviour
         Vector2 dir = ((Vector2)(worldPos - transform.position)).normalized;
         if (dir.sqrMagnitude < 0.0001f) return;
 
-        // 방향만 잡고 Idle 유지
         SetWalking(false, dir);
     }
 }

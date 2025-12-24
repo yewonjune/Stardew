@@ -6,6 +6,7 @@ public class CutTrigger : MonoBehaviour
 {
     [SerializeField] string cutsceneId;
     [SerializeField] bool once = true;
+    [SerializeField] CutsceneManager cutsceneManager;
 
     bool fired;
 
@@ -15,6 +16,13 @@ public class CutTrigger : MonoBehaviour
         if(once && fired) return;
 
         fired = true;
-        //CutsceneManager..TryPlay(cutsceneId);
+
+        if (!cutsceneManager)
+            cutsceneManager = FindObjectOfType<CutsceneManager>(true);
+
+        if (cutsceneManager)
+            cutsceneManager.PlayCutscene();
+        else
+            Debug.LogError("[CutTrigger] CutsceneManager not found");
     }
 }

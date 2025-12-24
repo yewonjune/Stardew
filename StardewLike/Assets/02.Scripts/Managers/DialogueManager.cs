@@ -25,6 +25,8 @@ public class DialogueManager : MonoBehaviour
     float lastAdvanceTime;
     const float advanceCooldown = 0.05f;
 
+    Action onDialogueComplete;
+
     [SerializeField] PlayerMovement playerMovement;
     [SerializeField] MonoBehaviour[] extraToDisable;
 
@@ -61,51 +63,37 @@ public class DialogueManager : MonoBehaviour
             EndDialogue();
     }
 
-    public void StartDialogue(DialogueData data)
+    // 일반 대화
+    public void StartDialogue(DialogueData data, Action onComplete = null)
     {
         if (isDialogueActive) return;
 
         DialogueLine[] selected = PickSequenceLines(data);
-        if (selected == null || selected.Length == 0)
-        {
-            return;
-        }
+        if (selected == null || selected.Length == 0) return;
 
-        isDialogueActive = true;
-        currentData = data;
-        lines = selected;
-        index = 0;
-
-        dialoguePanel.SetActive(true);
-
-        nameText.text = (data.npcData != null && !string.IsNullOrEmpty(data.npcData.displayName))
-                ? data.npcData.displayName
-                : "???";
-
-        if (portraitImage != null)
-        {
-            Sprite s = (data.npcData != null) ? data.npcData.defaultPortrait : null;
-            portraitImage.sprite = s;
-            portraitImage.enabled = (s != null);
-        }
-
-        ShowLine();
+        SetupDialogue(data, selected, onComplete);
 
         lastAdvanceTime = Time.unscaledTime - advanceCooldown;
-
-        FreezePlayer(true);
-        PlayerActionLock.Lock("Dialogue");
     }
 
-    public void StartDialogue(DialogueData data, DialogueSequence seq)
+    // 특정 대화 (선물 받았을 때)
+    public void StartDialogue(DialogueData data, DialogueSequence seq, Action onComplete = null)
     {
         if (data == null || seq == null) return;
         if (isDialogueActive) return;
 
+        SetupDialogue(data, seq.lines, onComplete);
+
+        lastAdvanceTime = Time.unscaledTime - advanceCooldown;
+    }
+
+    void SetupDialogue(DialogueData data, DialogueLine[] selectedLines, Action onComplete)
+    {
         isDialogueActive = true;
         currentData = data;
-        lines = seq.lines;
+        lines = selectedLines;
         index = 0;
+        onDialogueComplete = onComplete;
 
         dialoguePanel.SetActive(true);
 
@@ -127,9 +115,7 @@ public class DialogueManager : MonoBehaviour
 
         ShowLine();
 
-        lastAdvanceTime = Time.unscaledTime - advanceCooldown;
-
-        FreezePlayer(true);
+        //FreezePlayer(true);
         PlayerActionLock.Lock("Dialogue");
     }
 
@@ -178,16 +164,19 @@ public class DialogueManager : MonoBehaviour
         {
             QuestManager.I?.OnTalkedTo(currentData.npcData.npcId);
         }
-        isDialogueActive = false;
 
+        isDialogueActive = false;
         dialoguePanel.SetActive(false);
+
+        onDialogueComplete?.Invoke();
+        onDialogueComplete = null;
 
         PlayerActionLock.Unlock("Dialogue");
 
-        if (!PlayerActionLock.IsLocked)
-            FreezePlayer(false);
-        else
-            FreezePlayer(true);
+        //if (!PlayerActionLock.IsLocked)
+        //    FreezePlayer(false);
+        //else
+        //    FreezePlayer(true);
 
     }
     public void OnClickNext()
@@ -200,23 +189,23 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    void FreezePlayer(bool freeze)
-    {
-        if (playerMovement) playerMovement.SetControl(!freeze);
+    //void FreezePlayer(bool freeze)
+    //{
+    //    if (playerMovement) playerMovement.SetControl(!freeze);
 
-        if (extraToDisable != null)
-        {
-            foreach (var comp in extraToDisable)
-                if (comp) comp.enabled = !freeze;
-        }
-    }
+    //    if (extraToDisable != null)
+    //    {
+    //        foreach (var comp in extraToDisable)
+    //            if (comp) comp.enabled = !freeze;
+    //    }
+    //}
 
     public void Confirm(string message, Action onOK, Action onCancel=null, bool pauseGame=true)
     {
         if(confirmDialog == null)    return;
 
         modalOpen = true;
-        FreezePlayer(true);
+        //FreezePlayer(true);
         PlayerActionLock.Lock("DialogueModal");
 
         confirmDialog.Open(
@@ -226,10 +215,10 @@ public class DialogueManager : MonoBehaviour
                 PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
 
-                if (!PlayerActionLock.IsLocked)
-                    FreezePlayer(false);
-                else
-                    FreezePlayer(true);
+                //if (!PlayerActionLock.IsLocked)
+                //    FreezePlayer(false);
+                //else
+                //    FreezePlayer(true);
 
                 onOK?.Invoke();
             },
@@ -238,10 +227,10 @@ public class DialogueManager : MonoBehaviour
                 PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
 
-                if (!PlayerActionLock.IsLocked)
-                    FreezePlayer(false);
-                else
-                    FreezePlayer(true);
+                //if (!PlayerActionLock.IsLocked)
+                //    FreezePlayer(false);
+                //else
+                //    FreezePlayer(true);
 
                 onCancel?.Invoke();
             },
@@ -259,8 +248,8 @@ public class DialogueManager : MonoBehaviour
             PlayerActionLock.Unlock("Dialogue");
             PlayerActionLock.Unlock("DialogueModal");
 
-            if (!PlayerActionLock.IsLocked)
-                FreezePlayer(false);
+            //if (!PlayerActionLock.IsLocked)
+            //    FreezePlayer(false);
         }
     }
 }

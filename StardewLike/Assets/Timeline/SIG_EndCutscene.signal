@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7eb106655a9b3249b91a8f4c4e0b298, type: 3}
-  m_Name: Intro
+  m_Script: {fileID: 11500000, guid: d6fa2d92fc1b3f34da284357edf89c3b, type: 3}
+  m_Name: SIG_EndCutscene
   m_EditorClassIdentifier: 
-  entries:
-  - id: Intro
-    timeline: {fileID: 11400000, guid: c846c60d718f8ef42aedff726e8c27d0, type: 2}
