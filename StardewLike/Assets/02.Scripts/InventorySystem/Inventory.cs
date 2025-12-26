@@ -22,6 +22,7 @@ public class Inventory : MonoBehaviour
 {
     #region Singleton
     public static Inventory instance;
+    public PickupToastUI toastUI;
 
     void Awake()
     {
@@ -87,6 +88,9 @@ public class Inventory : MonoBehaviour
                 {
                     s.count += amount;
                     onInventoryChanged?.Invoke();
+
+                    toastUI?.Show(item.itemId, item.icon, item.itemName, amount);
+                    QuestManager.I?.OnItemAdded(item.itemId, amount);
                     return true;
                 }
             }
@@ -102,6 +106,7 @@ public class Inventory : MonoBehaviour
         items[idx] = new ItemStack(item, amount);
         onInventoryChanged?.Invoke();
 
+        toastUI?.Show(item.itemId, item.icon, item.itemName, amount);
         QuestManager.I?.OnItemAdded(item.itemId, amount);
 
         return true;
