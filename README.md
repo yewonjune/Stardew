@@ -1,5 +1,7 @@
 # 🌱 StardewLike (Unity)
 
+![StartScene](https://github.com/user-attachments/assets/eb0d94e1-d950-40ac-86f7-db9fa150a180)
+
 Unity 2D 기반 스타듀밸리 스타일 농장 & 생활 시뮬레이션 게임
 
 농사, 전투, NPC 상호작용, 컷신, 세이브/로드까지 실제 상용 게임 구조를 목표로 개발한 개인 프로젝트입니다.
