@@ -181,11 +181,4 @@ public class CaveFloorManager : MonoBehaviour
             enemySpawner.enemyGroups = stage.enemyGroups;
         }
     }
-
-    void SpawnNormal(int stageIndex, int caveIndex)
-    {
-        if (resourceSpawner != null)
-            resourceSpawner.SpawnForCurrentCave();
-    }
-
 }

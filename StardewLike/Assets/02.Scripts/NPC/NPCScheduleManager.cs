@@ -19,6 +19,8 @@ public class NPCScheduleManager : MonoBehaviour
         {
             timeManager.OnMinuteChanged -= OnMinuteChanged;
             timeManager.OnMinuteChanged += OnMinuteChanged;
+
+            OnMinuteChanged(timeManager.hour, timeManager.minute);
         }
     }
 
@@ -43,20 +45,32 @@ public class NPCScheduleManager : MonoBehaviour
 
     void OnMinuteChanged(int hour, int minute)
     {
+        int now = hour * 60 + minute;
+
         for (int i = 0; i < npcs.Count; i++)
         {
             var holder = npcs[i];
-            if (holder == null || holder.schedules == null) continue;
+            if (holder == null || holder.schedules == null || holder.movement == null) continue;
+
+            Schedule best = null;
+            int bestTime = -1;
 
             foreach (var entry in holder.schedules)
             {
-                if (entry.hour == hour && entry.minute == minute &&
-                    holder.movement != null && entry.path != null && entry.path.Length > 0)
+                if (entry == null || entry.path == null || entry.path.Length == 0) continue;
+
+                int t = entry.hour * 60 + entry.minute;
+                if (t <= now && t > bestTime)
                 {
-                    holder.movement.SetPath(entry.path, false);
-                    break;
+                    bestTime = t;
+                    best = entry;
                 }
             }
+
+                if (best != null)
+                {
+                    holder.movement.SetPath(best.path, false);
+                }
         }
     }
 }

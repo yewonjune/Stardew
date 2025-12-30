@@ -25,7 +25,6 @@ public class NPCAffection : MonoBehaviour
 
     void Start()
     {
-        // 혹시나 로드 실패 시에도 범위 보정
         currentAffection = Mathf.Clamp(currentAffection, 0, maxAffection);
     }
 

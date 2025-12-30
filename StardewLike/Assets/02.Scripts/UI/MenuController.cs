@@ -14,10 +14,6 @@ public class MenuController : MonoBehaviour
     public RectTransform mainMenuPanel;
     public RectTransform newGamePanel;
 
-    [Header("New Game Slide")]
-    public float mainMenuHideX = 2000f;
-    public float newGameTargetX = 0f;
-
     public float transitionDuration = 1f;
 
     Vector2 mainMenuStartPos;
@@ -26,14 +22,14 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (mainMenuPanel != null)
-            mainMenuStartPos = mainMenuPanel.anchoredPosition;
+        //if (mainMenuPanel != null)
+        //    mainMenuStartPos = mainMenuPanel.anchoredPosition;
 
-        if (newGamePanel != null)
-        {
-            newGameStartPos = newGamePanel.anchoredPosition;
-            newGamePanel.gameObject.SetActive(false);
-        }
+        //if (newGamePanel != null)
+        //{
+        //    newGameStartPos = newGamePanel.anchoredPosition;
+        //    newGamePanel.gameObject.SetActive(false);
+        //}
 
         if (newBtn != null)
             newBtn.onClick.AddListener(OnNewGameClicked);
@@ -47,11 +43,6 @@ public class MenuController : MonoBehaviour
     }
     void OnNewGameClicked()
     {
-        //newGamePanel.gameObject.SetActive(true);
-
-        //mainMenuPanel.DOAnchorPosX(mainMenuHideX, transitionDuration);
-        //newGamePanel.DOAnchorPosX(newGameTargetX, transitionDuration);
-
         BootParam.ForceNewGameReset = true;
         BootParam.PlayIntroCutscene = true;
         SceneManager.LoadScene("OpeningScene");
@@ -61,7 +52,6 @@ public class MenuController : MonoBehaviour
     {
         BootParam.ForceNewGameReset = false;
         BootParam.PlayIntroCutscene = false;
-
         SceneManager.LoadScene("ManagerScene");
     }
 

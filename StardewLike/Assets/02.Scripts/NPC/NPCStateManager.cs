@@ -170,7 +170,7 @@ public class NPCStateManager : MonoBehaviour
         SetState(npcId, s, persist: true);
     }
 
-    // 하루 초기화 유틸(선택)
+    // 하루 초기화
     public void ResetAllForNewDay(bool keepAffection = true)
     {
         var keys = new List<string>(_states.Keys);
@@ -180,13 +180,12 @@ public class NPCStateManager : MonoBehaviour
             if (!keepAffection)
             {
                 s.affection = 0;
-                s.hasAffectionSaved = true; // 0으로 초기화된 값도 저장
+                s.hasAffectionSaved = true;
             }
             s.waypointIndex = 0;
             s.hasWaypointProgress = false;
             s.hasPosition = false;
 
-            // 메모리와 디스크 모두에 반영
             _states[id] = s;
             SaveToPrefs(id, s);
         }
@@ -194,7 +193,6 @@ public class NPCStateManager : MonoBehaviour
 
     void OnApplicationQuit()
     {
-        // 혹시 모를 누락 방지: 메모리에 있는 것들 전부 동기화
         foreach (var kv in _states)
             SaveToPrefs(kv.Key, kv.Value);
     }

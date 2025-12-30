@@ -66,7 +66,7 @@ public class ResourceSpawner : MonoBehaviour
                 resourcePrefab = stumpPrefab;     // 20%
             }
 
-            if (resourcePrefab == null) return;
+            if (resourcePrefab == null) continue;
 
             Vector3 worldPos = groundTilemap.GetCellCenterWorld(pos);
             GameObject go = Instantiate(resourcePrefab, worldPos, Quaternion.identity, transform);
@@ -111,6 +111,8 @@ public class ResourceSpawner : MonoBehaviour
 
         if (stumpPrefab != null && stumpPrefab.name == id)
             return stumpPrefab;
+
+        foreach (var t in treePrefabs) if (t.name == id) return t;
 
         return null;
     }

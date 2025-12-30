@@ -40,7 +40,7 @@ public class NPCMovement : MonoBehaviour
 
     Coroutine posSaver;
 
-    // ★ 외부(스케줄/타 시스템)에서 경로를 강제로 지정했음을 나타내는 플래그
+    // 외부(스케줄/타 시스템)에서 경로를 강제로 지정했음을 나타내는 플래그
     bool _pathForcedExternally = false;
 
     void Awake()
@@ -60,7 +60,9 @@ public class NPCMovement : MonoBehaviour
             );
 
             var savedScene = NPCStateManager.Instance.LoadScene(npcId, null);
-            if (!string.IsNullOrEmpty(savedScene) && savedScene == SceneManager.GetActiveScene().name)
+            string npcScene = gameObject.scene.name;
+
+            if (!string.IsNullOrEmpty(savedScene) && savedScene == npcScene)
             {
                 if (NPCStateManager.Instance.TryLoadPosition(npcId, out var savedPos))
                 {
@@ -89,7 +91,6 @@ public class NPCMovement : MonoBehaviour
                 wayPointIndex = 0;
                 SetTarget(wayPoints[0].position);
             }
-            // else: 스케줄을 기다림(아무 것도 하지 않음)
         }
 
         // 3) 위치 자동 저장 루프
@@ -307,7 +308,7 @@ public class NPCMovement : MonoBehaviour
     {
         if (NPCStateManager.Instance == null || string.IsNullOrEmpty(npcId)) return;
         NPCStateManager.Instance.SavePosition(npcId, transform.position);
-        NPCStateManager.Instance.SaveScene(npcId, SceneManager.GetActiveScene().name);
+        NPCStateManager.Instance.SaveScene(npcId, gameObject.scene.name);
     }
 
     void SafePersistState()

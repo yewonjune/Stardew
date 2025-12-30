@@ -40,10 +40,9 @@ public class PlayerFatigueController : MonoBehaviour
 
     float GetAmount(ToolType type)
     {
-        foreach (var tf in toolFatigues)
-        {
-            if (tf.toolType == type) return tf.amount;
-        }
+        if (dict != null && dict.TryGetValue(type, out float amount))
+            return amount;
+
         return defaultToolFatigue;
     }
 

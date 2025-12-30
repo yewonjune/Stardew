@@ -32,11 +32,6 @@ public static class SaveBuilder
             farmName = farmName
         };
 
-        data.player = new PlayerDTO
-        {
-            //stamina = 0 // PlayerStaminaController 있으면 채우기
-        };
-
         // Inventory
         var inv = Inventory.instance;
         int n = inv.items.Count;

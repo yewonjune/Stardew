@@ -19,7 +19,6 @@ public class PlayerHealthController : MonoBehaviour
         OnHpChanged?.Invoke(currentHp, maxHP);
     }
 
-
     public void TakeDamage(int damage)
     {
         if (deadFlowStarted) return;
