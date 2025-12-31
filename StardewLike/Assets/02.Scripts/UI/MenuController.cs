@@ -16,21 +16,12 @@ public class MenuController : MonoBehaviour
 
     public float transitionDuration = 1f;
 
-    Vector2 mainMenuStartPos;
-    Vector2 newGameStartPos;
+    //Vector2 mainMenuStartPos;
+    //Vector2 newGameStartPos;
 
     // Start is called before the first frame update
     void Start()
     {
-        //if (mainMenuPanel != null)
-        //    mainMenuStartPos = mainMenuPanel.anchoredPosition;
-
-        //if (newGamePanel != null)
-        //{
-        //    newGameStartPos = newGamePanel.anchoredPosition;
-        //    newGamePanel.gameObject.SetActive(false);
-        //}
-
         if (newBtn != null)
             newBtn.onClick.AddListener(OnNewGameClicked);
 
@@ -64,16 +55,15 @@ public class MenuController : MonoBehaviour
         #endif
     }
 
+//public void ResetToDefault()
+//    {
+//        if (mainMenuPanel != null)
+//            mainMenuPanel.anchoredPosition = mainMenuStartPos;
 
-public void ResetToDefault()
-    {
-        if (mainMenuPanel != null)
-            mainMenuPanel.anchoredPosition = mainMenuStartPos;
-
-        if (newGamePanel != null)
-        {
-            newGamePanel.anchoredPosition = newGameStartPos;
-            newGamePanel.gameObject.SetActive(false);
-        }
-    }
+//        if (newGamePanel != null)
+//        {
+//            newGamePanel.anchoredPosition = newGameStartPos;
+//            newGamePanel.gameObject.SetActive(false);
+//        }
+//    }
 }

@@ -34,8 +34,6 @@ public class InventoryUI : MonoBehaviour
         for (int i = 0; i < slots.Length; i++)
         {
             slots[i].SetIndex(i);
-            //slots[i].onClick = OnSlotClick;
-
             slots[i].onClick = (si, btn, shift) => HandleSlotClick(si, btn, shift);
 
         }
@@ -136,7 +134,6 @@ public class InventoryUI : MonoBehaviour
                 return;
             }
 
-            // 손에 있고, 같은 아이템이면 1개 합치기(스택 가능 가정)
             if (cursorItem != null && slotItem == cursorItem && cursorItem.isStackable)
             {
                 slotStack.count += 1;
@@ -150,8 +147,7 @@ public class InventoryUI : MonoBehaviour
             return;
         }
 
-        // ---- 좌클릭: 전량/절반 ----
-        bool splitHalf = shift; // Shift+좌클릭 → 절반 나누기
+        bool splitHalf = shift; // Shift+좌클릭 : 절반 나누기
 
         if (cursorItem == null)
         {
