@@ -147,10 +147,10 @@ TextureImporter:
       name: Azure Butterfly_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 3
-        width: 9
-        height: 8
+        x: 0
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -168,10 +168,10 @@ TextureImporter:
       name: Azure Butterfly_1
       rect:
         serializedVersion: 2
-        x: 20
-        y: 3
-        width: 7
-        height: 9
+        x: 16
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -189,10 +189,10 @@ TextureImporter:
       name: Azure Butterfly_2
       rect:
         serializedVersion: 2
-        x: 35
-        y: 3
-        width: 9
-        height: 8
+        x: 32
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -210,10 +210,10 @@ TextureImporter:
       name: Azure Butterfly_3
       rect:
         serializedVersion: 2
-        x: 51
-        y: 4
-        width: 9
-        height: 9
+        x: 48
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -231,10 +231,10 @@ TextureImporter:
       name: Azure Butterfly_4
       rect:
         serializedVersion: 2
-        x: 67
-        y: 3
-        width: 9
-        height: 8
+        x: 64
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -252,10 +252,10 @@ TextureImporter:
       name: Azure Butterfly_5
       rect:
         serializedVersion: 2
-        x: 84
-        y: 3
-        width: 7
-        height: 9
+        x: 80
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -273,10 +273,10 @@ TextureImporter:
       name: Azure Butterfly_6
       rect:
         serializedVersion: 2
-        x: 99
-        y: 4
-        width: 9
-        height: 9
+        x: 96
+        y: 0
+        width: 16
+        height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -293,7 +293,7 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: fbfb3382669edf6489ea02f6b57dac1f
     internalID: 0
     vertices: []
     indices: 
