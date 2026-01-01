@@ -157,8 +157,8 @@ public class ShopController : MonoBehaviour
 
         if (inventoryUI) inventoryUI.ShowCursorPreview(entry.item, pendingCount);
 
-        hintText.text = $"[{entry.item.itemName}] {pendingCount}개 구매 준비됨 " +
-                             $"(예상 비용: {pendingCount * entry.buyPrice}골드)\n" +
+        hintText.text = $"[{entry.item.itemName}] {pendingCount}개" +
+                             $"({pendingCount * entry.buyPrice}골드)\n" +
                                             "→ 넣을 인벤토리 슬롯을 클릭하세요.";
     }
 
