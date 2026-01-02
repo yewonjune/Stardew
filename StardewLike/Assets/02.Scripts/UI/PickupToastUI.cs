@@ -26,8 +26,16 @@ public class PickupToastUI : MonoBehaviour
         var ui = Instantiate(toastPrefab, root);
         if(newestOnTop) ui.transform.SetAsFirstSibling();
 
+        active[itemId] = ui;
         ui.Setup(icon, name, amount);
-        StartCoroutine(RemoveWhenDestroyed(itemId, ui));
+
+        ui.onDestroyed = () =>
+        {
+            if (active.TryGetValue(itemId, out var cur) && cur == ui)
+                active.Remove(itemId);
+        };
+
+        Trim();
     }
     
     void Trim()
@@ -38,11 +46,5 @@ public class PickupToastUI : MonoBehaviour
             var child = root.GetChild(idx);
             Destroy(child.gameObject);
         }
-    }
-
-    IEnumerator RemoveWhenDestroyed(string itemId, PickupToastItemUI ui)
-    {
-        while (ui != null) yield return null;
-        if (active.ContainsKey(itemId)) active.Remove(itemId);
     }
 }

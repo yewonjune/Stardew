@@ -20,6 +20,7 @@ public class PickupToastItemUI : MonoBehaviour
     public RectTransform animTarget;
 
     int amount = 1;
+    public System.Action onDestroyed;
     Sequence seq;
 
     private void Awake()
@@ -93,5 +94,10 @@ public class PickupToastItemUI : MonoBehaviour
         {
             Destroy(gameObject);
         });
+    }
+
+    private void OnDestroy()
+    {
+        onDestroyed?.Invoke();
     }
 }
