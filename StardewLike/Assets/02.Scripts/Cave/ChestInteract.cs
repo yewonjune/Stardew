@@ -15,7 +15,10 @@ public class ChestInteract : MonoBehaviour
     public Item rewardItem;
     public int rewardCount = 1;
 
-    // 보상 아이템
+    public Transform lootFxPoint;
+    public ChestRewardFx rewardFxPrefab;
+    public PickupToastUI toastUI;
+
 
     void Awake()
     {
@@ -73,6 +76,16 @@ public class ChestInteract : MonoBehaviour
             opened = false;
             rewardGiven = false;
         }
+
+        if (rewardFxPrefab != null)
+        {
+            var pos = lootFxPoint ? lootFxPoint.position : transform.position + Vector3.up * 0.8f;
+            var fx = Instantiate(rewardFxPrefab, pos, Quaternion.identity);
+            fx.Play(rewardItem.icon);
+        }
+
+        if (toastUI != null)
+            toastUI.Show(rewardItem.name, rewardItem.icon, rewardItem.name, rewardCount);
     }
 
     }

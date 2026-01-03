@@ -54,7 +54,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 1b58076dcc20da341975f7b3c1092462, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,10 +107,12 @@ MonoBehaviour:
     type: 3}
   dropCount: 1
   scatterRadius: 0.2
+  shakeDuration: 0.15
+  shakeStrength: 0.1
+  shakeVibrato: 12
+  punchScale: 0.15
+  punchDuration: 0.2
   prefabId: 
-  canSpawnLadder: 0
-  ladderChance: 0.05
-  ladderPrefab: {fileID: 0}
 --- !u!70 &3016582977324648168
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

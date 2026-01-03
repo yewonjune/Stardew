@@ -18,6 +18,6 @@ MonoBehaviour:
   objectives:
   - type: 1
     targetId: Slime
-    requiredCount: 1
+    requiredCount: 3
   reward:
     gold: 50
