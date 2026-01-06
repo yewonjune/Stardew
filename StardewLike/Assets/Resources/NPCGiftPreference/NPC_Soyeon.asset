@@ -16,6 +16,6 @@ MonoBehaviour:
   lovedItemIds:
   - Carrot
   likedItemIds:
-  - Corn
+  - Wood
   dislikedItemIds:
-  - Tomato
+  - Stone

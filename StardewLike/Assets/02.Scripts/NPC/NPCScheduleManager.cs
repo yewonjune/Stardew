@@ -57,7 +57,7 @@ public class NPCScheduleManager : MonoBehaviour
 
             foreach (var entry in holder.schedules)
             {
-                if (entry == null || entry.path == null || entry.path.Length == 0) continue;
+                if (entry.path == null || entry.path.Length == 0) continue;
 
                 int t = entry.hour * 60 + entry.minute;
                 if (t <= now && t > bestTime)
@@ -67,10 +67,12 @@ public class NPCScheduleManager : MonoBehaviour
                 }
             }
 
-                if (best != null)
-                {
-                    holder.movement.SetPath(best.path, false);
-                }
+            if (best == null) continue;
+
+            if (holder.lastAppliedBestTime == bestTime) continue;
+
+            holder.lastAppliedBestTime = bestTime;
+            holder.movement.SetPath(best.path, false);
         }
     }
 }

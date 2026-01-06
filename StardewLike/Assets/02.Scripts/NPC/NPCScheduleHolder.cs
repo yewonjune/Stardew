@@ -15,6 +15,9 @@ public class NPCScheduleHolder : MonoBehaviour
     public NPCMovement movement;
     public Schedule[] schedules;
     NPCScheduleManager mgr;
+
+    [HideInInspector] public int lastAppliedBestTime = -1;
+
     void OnEnable()
     {
         mgr = FindObjectOfType<NPCScheduleManager>();

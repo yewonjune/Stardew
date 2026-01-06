@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcId: Miso
   lovedItemIds:
-  - Carrot
+  - CarrotSeed
   likedItemIds:
   - Corn
   dislikedItemIds:

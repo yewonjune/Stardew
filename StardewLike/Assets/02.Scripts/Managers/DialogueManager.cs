@@ -76,7 +76,7 @@ public class DialogueManager : MonoBehaviour
         lastAdvanceTime = Time.unscaledTime - advanceCooldown;
     }
 
-    // 특정 대화 (선물 받았을 때)
+    // 선물 받았을 때
     public void StartDialogue(DialogueData data, DialogueSequence seq, Action onComplete = null)
     {
         if (data == null || seq == null) return;
@@ -173,10 +173,6 @@ public class DialogueManager : MonoBehaviour
 
         PlayerActionLock.Unlock("Dialogue");
 
-        //if (!PlayerActionLock.IsLocked)
-        //    FreezePlayer(false);
-        //else
-        //    FreezePlayer(true);
 
     }
     public void OnClickNext()
@@ -188,17 +184,6 @@ public class DialogueManager : MonoBehaviour
             ShowLine();
         }
     }
-
-    //void FreezePlayer(bool freeze)
-    //{
-    //    if (playerMovement) playerMovement.SetControl(!freeze);
-
-    //    if (extraToDisable != null)
-    //    {
-    //        foreach (var comp in extraToDisable)
-    //            if (comp) comp.enabled = !freeze;
-    //    }
-    //}
 
     public void Confirm(string message, Action onOK, Action onCancel=null, bool pauseGame=true)
     {
@@ -215,22 +200,12 @@ public class DialogueManager : MonoBehaviour
                 PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
 
-                //if (!PlayerActionLock.IsLocked)
-                //    FreezePlayer(false);
-                //else
-                //    FreezePlayer(true);
-
                 onOK?.Invoke();
             },
             onCancel: () =>
             {
                 PlayerActionLock.Unlock("DialogueModal");
                 modalOpen = false;
-
-                //if (!PlayerActionLock.IsLocked)
-                //    FreezePlayer(false);
-                //else
-                //    FreezePlayer(true);
 
                 onCancel?.Invoke();
             },
@@ -248,8 +223,6 @@ public class DialogueManager : MonoBehaviour
             PlayerActionLock.Unlock("Dialogue");
             PlayerActionLock.Unlock("DialogueModal");
 
-            //if (!PlayerActionLock.IsLocked)
-            //    FreezePlayer(false);
         }
     }
 }
