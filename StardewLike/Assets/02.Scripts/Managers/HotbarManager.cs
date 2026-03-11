@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Inventory;
 
 public class HotbarManager : MonoBehaviour
 {
@@ -18,7 +19,7 @@ public class HotbarManager : MonoBehaviour
         if (inventory != null)
         {
             inventory.onInventoryChanged += RefreshFromInventory;
-            inventory.onSlotCountChange += _ => RefreshFromInventory();
+            inventory.onSlotCountChange += OnSlotCountChanged;
         }
 
         RefreshFromInventory();
@@ -31,7 +32,7 @@ public class HotbarManager : MonoBehaviour
         if (inventory != null)
         {
             inventory.onInventoryChanged -= RefreshFromInventory;
-            inventory.onSlotCountChange -= _ => RefreshFromInventory();
+            inventory.onSlotCountChange -= OnSlotCountChanged;
         }
     }
 
@@ -86,6 +87,8 @@ public class HotbarManager : MonoBehaviour
         selectedIndex = Mathf.Clamp(selectedIndex, 0, maxHotbar - 1);
         HighlightSlot(selectedIndex);
     }
+
+    void OnSlotCountChanged(int _) => RefreshFromInventory();
 
     void SelectSlot(int index)
     {
