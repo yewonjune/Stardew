@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3888853787674451987}
   - component: {fileID: 5156263629937994147}
   - component: {fileID: 4907502153277245341}
+  - component: {fileID: 2541001064525464056}
   m_Layer: 12
   m_Name: NPC_Soyeon
   m_TagString: Untagged
@@ -242,6 +243,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+  lastAppliedBestTime: -1
 --- !u!114 &5156263629937994147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -277,3 +279,30 @@ MonoBehaviour:
   lovedBonus: 15
   likedBonus: 8
   dislikedPenalty: -5
+--- !u!114 &2541001064525464056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419237702045521286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1068a2b7530442d429a1b37a17460c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personality: {fileID: 11400000, guid: 4a54bfed2add27b43bcb3b1c8ccd05b8, type: 2}
+  npcData: {fileID: 11400000, guid: 7fd25ce53f02968429bb1d66e0526874, type: 2}
+  affection: {fileID: 5156263629937994147}
+  OnNPCResponded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnThinkingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnThinkingEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnErrorOccurred:
+    m_PersistentCalls:
+      m_Calls: []

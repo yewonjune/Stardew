@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 2212105871993389124}
   - component: {fileID: 6422103283213399424}
   - component: {fileID: 262044552261509873}
+  - component: {fileID: 9026050629607637404}
   m_Layer: 12
   m_Name: NPC_Miso
   m_TagString: Untagged
@@ -232,6 +233,7 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
+  lastAppliedBestTime: -1
 --- !u!114 &6422103283213399424
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,3 +269,30 @@ MonoBehaviour:
   lovedBonus: 15
   likedBonus: 8
   dislikedPenalty: -5
+--- !u!114 &9026050629607637404
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2181438404584692299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1068a2b7530442d429a1b37a17460c7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  personality: {fileID: 11400000, guid: a75eedecba26a5c4c8ebd225217e9132, type: 2}
+  npcData: {fileID: 11400000, guid: 29040cf6fc73d5a43bced706b55ab2e6, type: 2}
+  affection: {fileID: 6422103283213399424}
+  OnNPCResponded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnThinkingStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnThinkingEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnErrorOccurred:
+    m_PersistentCalls:
+      m_Calls: []

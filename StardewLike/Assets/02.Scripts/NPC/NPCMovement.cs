@@ -205,6 +205,17 @@ public class NPCMovement : MonoBehaviour
 
     public void Interact()
     {
+        var aiDialogue = GetComponent<NPCAIDialogue>();
+        if (aiDialogue != null)
+        {
+            var ui = FindObjectOfType<NPCAIDialogueUI>(true);
+            if (ui != null)
+            {
+                ui.OpenDialogue(aiDialogue, aiDialogue.npcData);
+                return;
+            }
+        }
+
         if (dialogueData)
             DialogueManager.Instance.StartDialogue(dialogueData);
     }
