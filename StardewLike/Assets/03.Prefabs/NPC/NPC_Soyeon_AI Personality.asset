@@ -35,11 +35,17 @@ MonoBehaviour:
   emotionKeywords:
   - emotion: 1
     keywords:
-    - "\uC88B\uC544\uC694, \uAE30\uBED0\uC694, \uAC10\uC0AC, \uBC18\uAC00\uC6CC,
-      \uC2E0\uB098, \uD589\uBCF5"
+    - "\uC88B\uC544"
+    - "\uAE30\uBED0"
+    - "\uD589\uBCF5"
   - emotion: 2
     keywords:
-    - "\uC2EB\uC5B4\uC694, \uD654\uB098, \uC9DC\uC99D, \uACE4\uB780"
+    - "\uC2EB\uC5B4"
+    - "\uD654\uB098"
+    - "\uC9DC\uC99D"
   - emotion: 3
     keywords:
-    - "\uC815\uB9D0\uC694, \uC5B4\uBA38, \uC138\uC0C1\uC5D0, \uAE5C\uC9DD, \uC9C4\uC9DC\uC694"
+    - "\uC815\uB9D0\uC694"
+    - "\uC5B4\uBA38"
+    - "\uC138\uC0C1\uC5D0"
+    - "\uAE5C\uC9DD"

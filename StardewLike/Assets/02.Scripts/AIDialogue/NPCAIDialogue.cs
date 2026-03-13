@@ -78,6 +78,12 @@ public class NPCAIDialogue : MonoBehaviour
         }
 
         string responseText = ParseResponse(uwr.downloadHandler.text);
+
+        // 토큰 사용량 측정
+        string inputTokens = ExtractJson(uwr.downloadHandler.text, "input_tokens");
+        string outputTokens = ExtractJson(uwr.downloadHandler.text, "output_tokens");
+        Debug.Log($"[토큰 사용량] 입력: {inputTokens} / 출력: {outputTokens}");
+
         if (string.IsNullOrEmpty(responseText))
         {
             OnErrorOccurred?.Invoke("응답을 받지 못했어요.");
@@ -190,5 +196,15 @@ public class NPCAIDialogue : MonoBehaviour
             }
         }
         return sb.Append('"').ToString();
+    }
+
+    string ExtractJson(string json, string key)
+    {
+        string marker = $"\"{key}\":";
+        int start = json.IndexOf(marker);
+        if (start < 0) return "?";
+        start += marker.Length;
+        int end = json.IndexOfAny(new char[] { ',', '}' }, start);
+        return json.Substring(start, end - start).Trim();
     }
 }

@@ -28,16 +28,22 @@ MonoBehaviour:
   highAffectionStyle: "\uCE5C\uD55C \uCE5C\uAD6C\uC5D0\uAC8C \uD558\uB4EF \uAC70\uB9AC\uB08C\uC5C6\uC774
     \uC194\uC9C1\uD558\uAC8C \uB9D0\uD558\uBA70 \uC7A5\uB09C\uB3C4 \uCE69\uB2C8\uB2E4."
   lowAffectionThreshold: 30
-  highAffectionThreshold: 70
+  highAffectionThreshold: 0
   maxHistoryTurns: 6
   maxTokens: 150
   emotionKeywords:
   - emotion: 1
     keywords:
-    - "\uC88B\uC544, \uC644\uC804, \uC778\uC815, \u314B\u314B, \uC7AC\uBC0C"
+    - "\u314B\u314B"
+    - "\uC88B"
   - emotion: 2
     keywords:
-    - "\uC9C4\uC9DC, \uC5B4\uC774\uC5C6, \uADC0\uCC2E, \uBCC4\uB85C, \uC2EB"
+    - "\uC2EB"
+    - "\uC9DC\uC99D"
+    - "\uB098\uC058"
   - emotion: 3
     keywords:
-    - "\uD5D0, \uB300\uBC15, \uC9C4\uC9DC\uC694, \uBBF8\uCCE4\uB2E4, \uC5B4\uBA38"
+    - "\uD5D0"
+    - "\uB300\uBC15"
+    - "\uB180\uB790"
+    - "\uC5B4\uBA38"
