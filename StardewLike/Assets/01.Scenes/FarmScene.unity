@@ -2278,6 +2278,7 @@ MonoBehaviour:
   director: {fileID: 776224081}
   dialogueData: {fileID: 11400000, guid: 609e0d4d438e1384c8f9a370cbe4c776, type: 2}
   npcCutsceneRoot: {fileID: 1419237701354383892}
+  cutsceneId: Intro
 --- !u!4 &212794264
 Transform:
   m_ObjectHideFlags: 0
@@ -47601,7 +47602,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cutsceneId: Intro
   once: 1
-  cutsceneManager: {fileID: 0}
+  cutsceneManager: {fileID: 212794263}
 --- !u!1 &1278721594
 GameObject:
   m_ObjectHideFlags: 0

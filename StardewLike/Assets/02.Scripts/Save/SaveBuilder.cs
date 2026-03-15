@@ -29,7 +29,8 @@ public static class SaveBuilder
             posY = player.position.y,
             gold = wallet != null ? wallet.gold : 0,
             nickname = nickname,
-            farmName = farmName
+            farmName = farmName,
+            firedCutscenes = CutsceneRecord.GetAll()
         };
 
         // Inventory
@@ -131,6 +132,8 @@ public static class SaveBuilder
             tm.hour = data.meta.hour;
             tm.minute = data.meta.minute;
         }
+
+        CutsceneRecord.ReplaceAll(data.meta.firedCutscenes);
 
         if (PlayerWallet.Instance != null)
         {
