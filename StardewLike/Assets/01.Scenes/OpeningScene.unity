@@ -264,12 +264,12 @@ MonoBehaviour:
   arrowIcon: {fileID: 736037196}
   dialogueText: {fileID: 1718517864}
   lines:
+  - "\uCC3D\uBC16\uC758 \uD48D\uACBD\uC774 \uBCC0\uD558\uAE30 \uC2DC\uC791\uD588\uB2E4"
   - "\uB192\uC740 \uAC74\uBB3C \uB300\uC2E0, \uC775\uC219\uD558\uC9C0 \uC54A\uC740
     \uB4E4\uD310\uACFC \uD558\uB298"
-  - "\uC5EC\uAE30\uC11C\uC758 \uC2DC\uAC04\uC740, \uC870\uAE08 \uB290\uB9AC\uAC8C
-    \uD750\uB97C \uAC83 \uAC19\uB2E4."
-  - "\uC544\uBB34\uB3C4 \uC7AC\uCD09\uD558\uC9C0 \uC54A\uB294 \uACF3"
-  - "\uB4DC\uB514\uC5B4 \uC774\uACF3\uC5D0 \uB3C4\uCC29\uD588\uB2E4"
+  - "\uC5F4\uCC28\uB294 \uC57D\uC18D\uB41C \uC2DC\uAC04\uC5D0 \uB9DE\uCDB0 \uC18D\uB3C4\uB97C
+    \uC904\uC778\uB2E4"
+  - "\uB4DC\uB514\uC5B4, \uB3C4\uCC29\uD588\uB2E4"
   charInterval: 0.03
   lineStartDelay: 0.05
 --- !u!4 &242185892
@@ -931,8 +931,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC624\uD504\uB2DD \uB300\uC0AC"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8bd8d7251a9eec14e9ecdbbe49bc7f5c, type: 2}
-  m_sharedMaterial: {fileID: -3653791572348730210, guid: 8bd8d7251a9eec14e9ecdbbe49bc7f5c,
+  m_fontAsset: {fileID: 11400000, guid: 910a9efe038e1434a832edfeb4b84050, type: 2}
+  m_sharedMaterial: {fileID: -2471601962084543166, guid: 910a9efe038e1434a832edfeb4b84050,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -957,8 +957,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 53
+  m_fontSizeBase: 53
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

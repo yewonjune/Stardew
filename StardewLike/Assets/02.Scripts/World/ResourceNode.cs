@@ -29,6 +29,8 @@ public class ResourceNode : MonoBehaviour
 
     bool isBroken = false;
 
+    [HideInInspector] public bool isRestoredFromSave = false;
+
     private void Awake()
     {
         hp = maxHp;
@@ -49,7 +51,12 @@ public class ResourceNode : MonoBehaviour
 
         var st = worldStateManager.GetOrCreate(gameObject.scene.name);
 
-        if (!st.resources.Exists(r => r.prefabId == prefabId && (r.position - transform.position).sqrMagnitude < 0.0001f))
+        if (isRestoredFromSave) return;
+
+        bool alreadyRegistered = st.resources.Exists(r => r.prefabId == prefabId &&
+                                                         (r.position - transform.position).sqrMagnitude < 0.0001f);
+
+        if (!alreadyRegistered)
         {
             worldStateManager.AddResource(gameObject.scene.name, new ResourceSave
             {

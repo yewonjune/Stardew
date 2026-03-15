@@ -5,7 +5,7 @@ public class CutsceneManager : MonoBehaviour
 {
     [SerializeField] PlayableDirector director;
     [SerializeField] DialogueData dialogueData;      // 3줄짜리 대사
-    [SerializeField] GameObject npcCutsceneRoot;     // NPC_Cutscene 오브젝트(끝나면 끄고 싶으면)
+    [SerializeField] GameObject npcCutsceneRoot;
     [SerializeField] string cutsceneId;
 
     bool playing;

@@ -69,17 +69,7 @@ public class ResourceSpawner : MonoBehaviour
             if (resourcePrefab == null) continue;
 
             Vector3 worldPos = groundTilemap.GetCellCenterWorld(pos);
-            GameObject go = Instantiate(resourcePrefab, worldPos, Quaternion.identity, transform);
-            string id = resourcePrefab.name;
-
-            WorldStateManager.Instance.AddResource(
-                gameObject.scene.name,
-                new ResourceSave
-                {
-                    prefabId = id,
-                    position = worldPos,
-                    harvestedOrRemoved = false
-                });
+            Instantiate(resourcePrefab, worldPos, Quaternion.identity, transform);
         }
     }
 
@@ -87,20 +77,22 @@ public class ResourceSpawner : MonoBehaviour
     {
         foreach (ResourceSave r in state.resources)
         {
-            var cell = groundTilemap.WorldToCell(r.position);
-            if (noSpawnTilemap != null && noSpawnTilemap.HasTile(cell))
-                continue;
+            if (r.harvestedOrRemoved) continue;
 
-            if (r.harvestedOrRemoved)
-                continue;
+            var cell = groundTilemap.WorldToCell(r.position);
+            if (noSpawnTilemap != null && noSpawnTilemap.HasTile(cell)) continue;
 
             Collider2D hit = Physics2D.OverlapPoint(r.position, resourceLayer);
-            if (hit != null)
-                continue;
+            if (hit != null) continue;
 
             GameObject prefab = ChoosePrefabById(r.prefabId);
-            if (prefab != null)
-                Instantiate(prefab, r.position, Quaternion.identity, transform);
+            if (prefab == null) continue;
+
+            var go = Instantiate(prefab, r.position, Quaternion.identity, transform);
+
+            //    ResourceNode.Start()의 AddResource가 중복 등록하지 않도록 태그
+            var node = go.GetComponent<ResourceNode>();
+            if (node != null) node.isRestoredFromSave = true;
         }
     }
 
