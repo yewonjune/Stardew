@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlaceEntrance : MonoBehaviour
+public class PlaceEntrance : MonoBehaviour, IInteractable
 {
     public Transform player;
 
@@ -19,6 +19,10 @@ public class PlaceEntrance : MonoBehaviour
 
     [Header("Optional: Random Spawn (ex. Cave 1~4)")]
     public bool useRandomSpawnPositions = false;
+
+    public string InteractLabel => "들어가기";
+
+    public void Interact() => EnterPlace();
 
     void Start()
     {
@@ -39,9 +43,6 @@ public class PlaceEntrance : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && InRange())
-            EnterPlace();
-
         if (Input.GetMouseButtonDown(0) && selfCol)
         {
             var cam = Camera.main;

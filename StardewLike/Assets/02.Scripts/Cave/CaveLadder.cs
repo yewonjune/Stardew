@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CaveLadder : MonoBehaviour
+public class CaveLadder : MonoBehaviour, IInteractable
 {
     public Transform player;
     public float interactDistance = 1.5f;
 
     CaveFloorManager floorManager;
+    public string InteractLabel => "내려가기";
+    public void Interact() => GoDown();
 
     // Start is called before the first frame update
     void Start()
@@ -19,15 +21,6 @@ public class CaveLadder : MonoBehaviour
         }
 
         floorManager = FindObjectOfType<CaveFloorManager>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && InRange())
-        {
-            GoDown();
-        }
     }
 
     bool InRange()

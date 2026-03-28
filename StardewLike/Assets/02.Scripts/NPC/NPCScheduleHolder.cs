@@ -17,6 +17,7 @@ public class NPCScheduleHolder : MonoBehaviour
     NPCScheduleManager mgr;
 
     [HideInInspector] public int lastAppliedBestTime = -1;
+    [HideInInspector] public bool isReturningToScene = false;
 
     void OnEnable()
     {

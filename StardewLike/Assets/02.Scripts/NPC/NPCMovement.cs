@@ -2,10 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class NPCMovement : MonoBehaviour
+public class NPCMovement : MonoBehaviour, IInteractable
 {
     [Header("Identity")]
     public string npcId;
+    public string InteractLabel => "대화하기";
 
     [Header("Dialogue")]
     public DialogueData dialogueData;
@@ -96,6 +97,9 @@ public class NPCMovement : MonoBehaviour
         // 3) 위치 자동 저장 루프
         if (autoSavePosition && positionSaveInterval > 0f)
             posSaver = StartCoroutine(CoAutoSavePosition());
+
+        var holder = GetComponent<NPCScheduleHolder>();
+        if (holder != null) holder.isReturningToScene = true;
     }
 
     void OnDisable()
@@ -265,23 +269,31 @@ public class NPCMovement : MonoBehaviour
         SetTarget(wayPoints[wayPointIndex].position);
     }
 
-    public void SetPath(Transform[] newPoints, bool autoLoop = false)
+    public void SetPath(Transform[] newPoints, bool autoLoop = false, bool warpToEnd = false)
     {
         wayPoints = newPoints;
         autoLoopWayPoints = autoLoop;
-        wayPointIndex = 0;
+        _pathForcedExternally = true;
+        _lastDoorA = null; _lastDoorB = null;
 
-        _pathForcedExternally = true;         // ★ 외부 강제 경로 지정됨
-        _lastDoorA = null; _lastDoorB = null; // ★ 문 워프 루프가드 초기화
-
-        if (wayPoints != null && wayPoints.Length > 0)
+        if (wayPoints == null || wayPoints.Length == 0)
         {
+            Stop();
+            return;
+        }
+
+        if (warpToEnd)
+        {
+            // 경로 마지막 지점으로 즉시 워프 (이동 없이)
+            wayPointIndex = wayPoints.Length - 1;
             SaveWaypointIndex();
-            SetTarget(wayPoints[0].position);
+            Warp(wayPoints[wayPointIndex].position);
         }
         else
         {
-            Stop();
+            wayPointIndex = 0;
+            SaveWaypointIndex();
+            SetTarget(wayPoints[0].position);
         }
     }
 

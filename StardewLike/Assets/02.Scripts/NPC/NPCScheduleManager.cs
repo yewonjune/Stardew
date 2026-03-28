@@ -71,8 +71,10 @@ public class NPCScheduleManager : MonoBehaviour
 
             if (holder.lastAppliedBestTime == bestTime) continue;
 
+            bool shouldWarp = holder.isReturningToScene;
+            holder.isReturningToScene = false;          // 플래그 소비
             holder.lastAppliedBestTime = bestTime;
-            holder.movement.SetPath(best.path, false);
+            holder.movement.SetPath(best.path, false, warpToEnd: shouldWarp);
         }
     }
 }

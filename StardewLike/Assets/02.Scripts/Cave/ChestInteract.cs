@@ -19,6 +19,12 @@ public class ChestInteract : MonoBehaviour
     public ChestRewardFx rewardFxPrefab;
     public PickupToastUI toastUI;
 
+    public string InteractLabel => "¿­±â";
+
+    public void Interact()
+    {
+        if (!opened) Open();
+    }
 
     void Awake()
     {
@@ -26,17 +32,6 @@ public class ChestInteract : MonoBehaviour
 
         var go = GameObject.FindGameObjectWithTag("Player");
         if (go) player = go.transform;
-    }
-
-    void Update()
-    {
-        if (opened) return;
-        if (!player) return;
-
-        if (Input.GetKeyDown(openKey) && InRange())
-        {
-            Open();
-        }
     }
 
     void Open()
