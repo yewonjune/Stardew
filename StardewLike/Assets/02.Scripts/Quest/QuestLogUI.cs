@@ -32,9 +32,11 @@ public class QuestLogUI : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
+        // 설정창 등 다른 UI가 열려있으면 Q키 무시
+        if (Input.GetKeyDown(KeyCode.Q) && !PlayerActionLock.IsLocked)
             Toggle();
 
+        // 자기 패널이 열려있을 때만 ESC 처리
         if (panel != null && panel.activeSelf && Input.GetKeyDown(KeyCode.Escape))
             Toggle();
     }
